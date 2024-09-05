@@ -62,12 +62,24 @@ Open the `server` and `client` in separate VSCode workspaces or open the combine
 
 ### Purpose
 
-2-5 sentences describing what the system does
+CardWise is a tool that utilises cards for learning purposes. The user creates decks of cards which contain the subject they wish to learn. The user can add cards to the deck and practise/test himself. CardWise has features to motivate users throughout their learning.
 
 ### Pages
 
-* Home: 1-3 sentences describing what the page displays and what a user can do
-* Shopping cart: ...
+**Registration page** - User enters their username and password to create an account for future usage of the tool.
+
+
+**Login page** - User enters their username and password to get access to the rest of the application.
+
+
+**Profile page** - Displays the logged in users account information, overall statistic of the account (online daily streak, amount of decks, account registration date).
+
+
+**Homepage** - Shows the carddecks that the user has created aswell as a navigation bar on the left hand side of the computer screen and at the top for the mobile version. The navigation bar can navigate to the profile page. Users can add or delete decks on this page.
+
+
+**Card deck page** - Shows all the cards in the deck aswell as buttons for starting a practice round or starting a test. It has buttons for creating and deleting cards. It also shows the users current progression of the deck as a percentage.
+
 
 ### Entity-Relationship (ER) Diagram
 
