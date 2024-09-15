@@ -11,6 +11,9 @@ router.post('/api/decks', async function(req, res, next) {
     var deck = new Deck(req.body);
     try {
         await deck.save();
+        if (deck == null) {
+            res.status(404).json({"message": "Cannot create a null deck."})
+        }
     } catch (error) {
         return next(error);
     }
@@ -80,7 +83,7 @@ router.patch('/api/decks/:id', async function(req, res, next) {
 router.delete('/api/decks', async function(req, res, next) {
     try {
         const result = await Deck.deleteMany({});
-        res.json({
+        res.status(204).json({
             message: result.deletedCount + " " + "deck(s) deleted.",
             result: result
         });
