@@ -7,34 +7,215 @@
 	},
 	"item": [
 		{
-			"name": "GET /api",
+			"name": "Create new user",
 			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let currentDate = new Date().toISOString();",
+							"pm.environment.set(\"registrationDate\", currentDate);",
+							"pm.environment.set(\"lastLoginDate\", currentDate);",
+							"pm.environment.set(\"username\", \"user1\");",
+							"pm.environment.set(\"password\", \"password1\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(pm.response.text());",
+							"var userID = jsonData._id;",
+							"pm.environment.set(\"userID\", userID);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"Response contains user ID\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"_id\");",
+							"});",
+							"pm.test(\"Response contains username\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"username\", \"user1\");",
+							"});",
+							"pm.test(\"Response contains password\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"password\", \"password1\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\",\n    \"registrationDate\": \"{{registrationDate}}\",\n    \"lastLoginDate\": \"{{lastLoginDate}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/user",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user information",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = JSON.parse(pm.response.text());",
+							"",
+							"pm.test(\"Username is updated\", function () {",
+							"    pm.expect(jsonData.username).to.eql(\"user2\");",
+							"});",
+							"",
+							"pm.test(\"Password is updated\", function () {",
+							"    pm.expect(jsonData.password).to.eql(\"password2\");",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"user2\",\n    \"password\": \"password2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/user/{{userID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = JSON.parse(pm.response.text());",
+							"",
+							"pm.test(\"Username is updated\", function () {",
+							"    pm.expect(jsonData.username).to.eql(\"user3\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"user3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/user/{{userID}}/username",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"{{userID}}",
+						"username"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User account has been deleted (200 OK)\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
 				{
 					"listen": "prerequest",
 					"script": {
 						"exec": [
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
 			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
+				"method": "DELETE",
+				"header": [],
 				"url": {
-					"raw": "{{host}}/api",
+					"raw": "{{host}}/api/user/{{userID}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"api"
+						"api",
+						"user",
+						"{{userID}}"
 					]
 				}
 			},
