@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6df2a59b-b4ab-48f3-bf7a-4f40092d50b9",
+		"_postman_id": "210f4cee-fed9-4c81-b8ab-df6b0d9b2a40",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "38095200"
@@ -13,7 +13,9 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							""
+							"let currentDate = new Date().toISOString();",
+							"pm.environment.set(\"registrationDate\", currentDate);",
+							"pm.environment.set(\"lastLoginDate\", currentDate);"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -23,29 +25,22 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"// variable to store current date and time",
-							"let currentDate = new Date().toISOString();",
-							"",
 							"var jsonData = JSON.parse(pm.response.text());",
 							"var userID = jsonData._id;",
 							"pm.environment.set(\"userID\", userID);",
-							"pm.environment.set(\"lastLoginDate\", currentDate);",
-							"pm.environment.set(\"username\", \"user1\");",
-							"pm.environment.set(\"registrationDate\", currentDate);",
-							"pm.environment.set(\"password\", \"password1\");",
 							"",
 							"pm.test(\"Status code is 201\", function () {",
 							"    pm.response.to.have.status(201);",
 							"});",
-							"",
 							"pm.test(\"Response contains user ID\", function () {",
 							"    pm.expect(jsonData).to.have.property(\"_id\");",
 							"});",
-							"",
 							"pm.test(\"Response contains username\", function () {",
 							"    pm.expect(jsonData).to.have.property(\"username\", \"user1\");",
 							"});",
-							""
+							"pm.test(\"Response contains password\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"password\", \"password1\");",
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -79,6 +74,20 @@
 		},
 		{
 			"name": "Update user information",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -107,6 +116,20 @@
 		},
 		{
 			"name": "Update username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "PATCH",
 				"header": [],
@@ -144,6 +167,16 @@
 							"pm.test(\"User account has been deleted (200 OK)\", function() {",
 							"    pm.response.to.have.status(200);",
 							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
 						],
 						"type": "text/javascript",
 						"packages": {}
