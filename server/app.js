@@ -6,8 +6,9 @@ var cors = require('cors');
 var history = require('connect-history-api-fallback');
 
 // Variables
-var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:3000/cardwiseDevelopmentDB'; // TODO: insert actual URL
+var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cardwiseDevelopmentDB';
 var port = process.env.PORT || 3000;
+var userController = require('./controllers/user.js');
 
 // Connect to MongoDB
 mongoose.connect(mongoURI).catch(function(err) {
@@ -33,6 +34,8 @@ app.use(cors());
 app.get('/api', function(req, res) {
     res.json({'message': 'Welcome to the CARDWISE!'});
 });
+
+app.use(userController);
 
 // Catch all non-error handler for api (i.e., 404 Not Found)
 app.use('/api/*', function (req, res) {
