@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "210f4cee-fed9-4c81-b8ab-df6b0d9b2a40",
+		"_postman_id": "04508af8-28a3-42df-9dae-e5e4ed92fa1e",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "38095200"
@@ -83,7 +83,20 @@
 						"exec": [
 							"pm.test(\"Status code is 200 OK\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});"
+							"});",
+							"",
+							"var jsonData = JSON.parse(pm.response.text());",
+							"",
+							"pm.test(\"Username is updated\", function () {",
+							"    pm.expect(jsonData.username).to.eql(\"user2\");",
+							"});",
+							"",
+							"pm.test(\"Password is updated\", function () {",
+							"    pm.expect(jsonData.password).to.eql(\"password2\");",
+							"});",
+							"",
+							"",
+							""
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -95,7 +108,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\",\n    \"registrationDate\": \"{{registrationDate}}\",\n    \"lastLoginDate\": \"{{lastLoginDate}}\"\n}",
+					"raw": "{\n    \"username\": \"user2\",\n    \"password\": \"password2\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -125,6 +138,12 @@
 						"exec": [
 							"pm.test(\"Status code is 200 OK\", function () {",
 							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = JSON.parse(pm.response.text());",
+							"",
+							"pm.test(\"Username is updated\", function () {",
+							"    pm.expect(jsonData.username).to.eql(\"user3\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -137,7 +156,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"{{username}}\"\n}",
+					"raw": "{\n    \"username\": \"user3\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
