@@ -7,11 +7,10 @@ var history = require('connect-history-api-fallback');
 // Variables
 var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cardwiseDevelopmentDB';
 var port = process.env.PORT || 3000;
- server/app.js
+
 const deckRoutes = require('./controllers/deck.js');
 
 var userController = require('./controllers/user.js');
- server/app.js
 
 // Connect to MongoDB
 mongoose.connect(mongoURI).catch(function(err) {
