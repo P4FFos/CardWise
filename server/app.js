@@ -4,10 +4,12 @@ var morgan = require('morgan');
 var path = require('path');
 var cors = require('cors');
 var history = require('connect-history-api-fallback');
-
 // Variables
 var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cardwiseDevelopmentDB';
 var port = process.env.PORT || 3000;
+
+const deckRoutes = require('./controllers/deck.js');
+
 var userController = require('./controllers/user.js');
 
 // Connect to MongoDB
@@ -30,7 +32,10 @@ app.use(morgan('dev'));
 app.options('*', cors());
 app.use(cors());
 
+
 // Import routes
+app.use(deckRoutes);
+
 app.get('/api', function(req, res) {
     res.json({'message': 'Welcome to the CARDWISE!'});
 });
@@ -41,6 +46,7 @@ app.use(userController);
 app.use('/api/*', function (req, res) {
     res.status(404).json({ 'message': 'Not Found' });
 });
+
 
 // Configuration for serving frontend in production mode
 // Support Vuejs HTML 5 history mode
