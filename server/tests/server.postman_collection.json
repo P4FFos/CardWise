@@ -15,7 +15,9 @@
 						"exec": [
 							"let currentDate = new Date().toISOString();",
 							"pm.environment.set(\"registrationDate\", currentDate);",
-							"pm.environment.set(\"lastLoginDate\", currentDate);"
+							"pm.environment.set(\"lastLoginDate\", currentDate);",
+							"pm.environment.set(\"username\", \"user1\");",
+							"pm.environment.set(\"password\", \"password1\");"
 						],
 						"type": "text/javascript",
 						"packages": {}
