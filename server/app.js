@@ -6,7 +6,7 @@ var cors = require('cors');
 var history = require('connect-history-api-fallback');
 
 // Variables
-var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/animalDevelopmentDB';
+var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:3000/cardwiseDevelopmentDB'; // TODO: insert actual URL
 var port = process.env.PORT || 3000;
 
 // Connect to MongoDB
@@ -31,7 +31,7 @@ app.use(cors());
 
 // Import routes
 app.get('/api', function(req, res) {
-    res.json({'message': 'Welcome to your DIT342 backend ExpressJS project!'});
+    res.json({'message': 'Welcome to the CARDWISE!'});
 });
 
 // Catch all non-error handler for api (i.e., 404 Not Found)
