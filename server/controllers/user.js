@@ -45,7 +45,7 @@ router.put('/api/user/:id', async function (req, res, next) {
 });
 
 // update username
-router.put('/api/user/:id/username', async function (req, res, next) {
+router.patch('/api/user/:id/username', async function (req, res, next) {
     var userId = req.params.id;
     var newUsername = req.body.username;
 
