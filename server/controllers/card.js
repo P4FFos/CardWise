@@ -2,14 +2,12 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 
-//var Card = require('../models/card.js');
-
+var Card = require('../models/card.js');
+var Deck = require('../models/deck.js');
 var cards = [];
 
-app.use(express.json());
-
 // Create a card
-app.post('/cards', function(req, res) {
+router.post('/api/decks/:deckID/cards', function(req, res) {
     console.log(req.body);
     var new_card = {
         "_id": cards.length,
@@ -20,20 +18,17 @@ app.post('/cards', function(req, res) {
     res.status(201).json(new_card);
 });
 
-// Get information from a specific card
-app.get('/cards/:id', function(req, res) {
-    res.json(cards[req.params.id]);
-});
-
-// Get information from all cards
-app.get('/cards', function(req, res) {
+// Get information from all cards in a specific deck
+router.get('/api/decks/deckIDcards', function(req, res) {
     res.json({"cards": cards});
 });
 
-app.listen(3000, function() {
-    console.log('Server running on port 3000');
+// Get information from a specific card in a specific deck
+router.get('/api/decks/:deckID/cards/:cardID', function(req, res) {
+    res.json(cards[req.params.id]);
 });
+
 
 //TODO: add endpoints from req list for cards
 
-module.exports = app;
+module.exports = router;
