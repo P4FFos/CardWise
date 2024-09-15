@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var app = express();
 
 var Card = require('../models/card.js');
 var Deck = require('../models/deck.js');
