@@ -7,7 +7,7 @@ var Deck = require('../models/deck.js');
 
 //TODO: add endpoints from req list for decks
 // Create a new deck
-app.post('/decks', async function(req, res, next) {
+router.post('/api/decks', async function(req, res, next) {
     var deck = new Deck(req.body);
     try {
         await deck.save();
@@ -18,7 +18,7 @@ app.post('/decks', async function(req, res, next) {
 });
 
 // Show all decks
-app.get('/decks', async function(req, res, next) {
+router.get('/api/decks', async function(req, res, next) {
     var decks;
     try {
         decks = await Deck.find();
@@ -29,7 +29,7 @@ app.get('/decks', async function(req, res, next) {
 });
 
 // Show a specific deck
-app.get('/decks/:id', async function(req, res, next) {
+router.get('/api/decks/:id', async function(req, res, next) {
     var id = req.params.id;
     try {
         const deck = await Deck.findById(id);
@@ -43,13 +43,13 @@ app.get('/decks/:id', async function(req, res, next) {
 })
 
 // Update a specific deck
-app.put('/decks/:id', async function(req, res, next) {
+router.put('/api/decks/:id', async function(req, res, next) {
     try {
         const deck = await Deck.findById(req.params.id);
         if (deck == null) {
             return res.status(404).json({"message": "Deck not found"});
         }
-        deck.name = req.body.content;
+        deck.name = req.body.name;
         deck.cards = req.body.cards;
 
         await deck.save();
@@ -60,7 +60,7 @@ app.put('/decks/:id', async function(req, res, next) {
 });
 
 // Update some part of a specific deck
-app.patch('/decks/:id', async function(req, res, next) {
+router.patch('/api/decks/:id', async function(req, res, next) {
     try {
         var deck = await Deck.findById(req.params.id);
         if (deck == null) {
@@ -77,7 +77,7 @@ app.patch('/decks/:id', async function(req, res, next) {
 });
 
 // Delete all decks
-app.delete('/decks', async function(req, res, next) {
+router.delete('/api/decks', async function(req, res, next) {
     try {
         const result = await Deck.deleteMany({});
         res.json({
@@ -90,7 +90,7 @@ app.delete('/decks', async function(req, res, next) {
 });
 
 // Delete specific deck
-app.delete('/decks/:id', async function(req, res, next) {
+router.delete('/api/decks/:id', async function(req, res, next) {
     try {
         const deck = await Deck.findByIdAndDelete(req.params.id);
         if (deck == null) {
@@ -101,9 +101,5 @@ app.delete('/decks/:id', async function(req, res, next) {
         return next(error);
     }
 })
-
-app.listen(3000, function(){
-    console.log("deck.js listening to port 3000.");
-});
 
 module.exports = router;
