@@ -11,7 +11,18 @@ router.post('/api/user', async function (req, res, next) {
     } catch (error) {
         return next(error);
     }
-    res.status(201).json(newUser);
+    res.status(201).json(user);
+});
+
+// get all users
+router.get('/api/user', async function (req, res, next) {
+    var users;
+    try {
+        users = await User.find();
+    } catch (error) {
+        return next(error);
+    }
+    res.json(users);
 });
 
 // update user information
@@ -21,13 +32,13 @@ router.put('/api/user/:id', async function (req, res, next) {
 
     var updatedUser;
     try {
-        updatedUser = await User.find(userId, updateData, {new: true});
+        updatedUser = await User.findById(userId);
+        if (updatedUser == null) {
+            return res.status(404).json({message: 'User not found'});
+        }
+        updatedUser.set(updateData);
     } catch (error) {
         return next(error);
-    }
-
-    if (!updatedUser) {
-        return res.status(404).json({message: 'User not found'});
     }
 
     res.json(updatedUser);
@@ -40,13 +51,13 @@ router.put('/api/user/:id/username', async function (req, res, next) {
 
     var updatedUser;
     try {
-        updatedUser = await User.findByIdAndUpdate(userId, {username: newUsername}, {new: true});
+        updatedUser = await User.findById(userId);
+        if (updatedUser == null) {
+            return res.status(404).json({message: 'User not found'});
+        }
+        updatedUser.username = newUsername;
     } catch (error) {
         return next(error);
-    }
-
-    if (!updatedUser) {
-        return res.status(404).json({message: 'User not found'});
     }
 
     res.json(updatedUser);
@@ -58,13 +69,12 @@ router.delete('/api/user/:id', async function (req, res, next) {
 
     var deletedUser;
     try {
-        deletedUser = await User.findByIdAndDelete(userId);
+        deletedUser = await User.findById(userId);
+        if (!deletedUser) {
+            return res.status(404).json({message: 'User not found'});
+        }
     } catch (error) {
         return next(error);
-    }
-
-    if (!deletedUser) {
-        return res.status(404).json({message: 'User not found'});
     }
 
     res.json({message: 'User account deleted successfully'});

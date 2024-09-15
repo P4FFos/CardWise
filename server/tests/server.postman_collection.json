@@ -1,42 +1,103 @@
 {
 	"info": {
-		"_postman_id": "f7ee95b5-9cb9-442f-a6a9-42de46138872",
+		"_postman_id": "3b715924-81b8-412d-b547-28ad5e3db59f",
 		"name": "server",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38095200"
 	},
 	"item": [
 		{
-			"name": "GET /api",
+			"name": "Create new user",
 			"event": [
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "b58d92ec-5214-450c-adb0-28e068aa71b9",
 						"exec": [
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// variable to store current date and time",
+							"let currentDate = new Date().toISOString();",
+							"",
+							"var jsonData = JSON.parse(pm.response.text());",
+							"var userID = jsonData._id",
+							"pm.environment.set(\"userID\", userID);",
+							"pm.environment.set(\"lastLoginDate\", currentDate);",
+							"pm.environment.set(\"username\", \"user1\");",
+							"pm.environment.set(\"registrationDate\", currentDate);",
+							"pm.environment.set(\"password\", \"password1\");",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response contains user ID\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"_id\");",
+							"});",
+							"",
+							"pm.test(\"Response contains username\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"username\", \"user1\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
 			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\",\n    \"registrationDate\": \"{{registrationDate}}\",\n    \"lastLoginDate\": \"{{lastLoginDate}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
 					}
-				],
+				},
 				"url": {
-					"raw": "{{host}}/api",
+					"raw": "{{host}}/api/user",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"api"
+						"api",
+						"user"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user information",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Update username",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"request": {
+				"method": "GET",
+				"header": []
 			},
 			"response": []
 		}
@@ -45,7 +106,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "05864cff-5cba-4070-bac3-a59328954ebf",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -55,7 +115,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "e9c319be-3306-4fc5-ba34-fcf64391213a",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -65,11 +124,9 @@
 	],
 	"variable": [
 		{
-			"id": "cd185905-a834-4211-8030-583d17702534",
 			"key": "host",
 			"value": "http://localhost:3000",
 			"type": "string"
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
