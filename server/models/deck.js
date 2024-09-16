@@ -3,11 +3,7 @@ var Schema = mongoose.Schema;
 
 var deckSchema = new Schema({
     name: {type: String },
-    cards: [
-        {
-            content: {type: String, required: false},
-            explanation: {type: String, required: false}
-        }]
+    cards: [{type: Schema.Types.ObjectId, ref: "card"}]
 });
 
 module.exports = mongoose.model('deck', deckSchema);
