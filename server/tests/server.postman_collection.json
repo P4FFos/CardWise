@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "22e67962-2800-44f9-905a-8189c8d00a30",
+		"_postman_id": "1a3fe1b2-254b-453f-87aa-ba75336df62a",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "38335183"
@@ -75,27 +75,24 @@
 			"response": []
 		},
 		{
-			"name": "Update user information",
+			"name": "Delete user",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 200 OK\", function () {",
+							"pm.test(\"User account has been deleted (200 OK)\", function() {",
 							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"var jsonData = JSON.parse(pm.response.text());",
-							"",
-							"pm.test(\"Username is updated\", function () {",
-							"    pm.expect(jsonData.username).to.eql(\"user2\");",
-							"});",
-							"",
-							"pm.test(\"Password is updated\", function () {",
-							"    pm.expect(jsonData.password).to.eql(\"password2\");",
-							"});",
-							"",
-							"",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
 							""
 						],
 						"type": "text/javascript",
@@ -104,17 +101,8 @@
 				}
 			],
 			"request": {
-				"method": "PUT",
+				"method": "DELETE",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"username\": \"user2\",\n    \"password\": \"password2\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "{{host}}/api/user/{{userID}}",
 					"host": [
@@ -179,24 +167,27 @@
 			"response": []
 		},
 		{
-			"name": "Delete user",
+			"name": "Update user information",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"User account has been deleted (200 OK)\", function() {",
+							"pm.test(\"Status code is 200 OK\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
+							"});",
+							"",
+							"var jsonData = JSON.parse(pm.response.text());",
+							"",
+							"pm.test(\"Username is updated\", function () {",
+							"    pm.expect(jsonData.username).to.eql(\"user2\");",
+							"});",
+							"",
+							"pm.test(\"Password is updated\", function () {",
+							"    pm.expect(jsonData.password).to.eql(\"password2\");",
+							"});",
+							"",
+							"",
 							""
 						],
 						"type": "text/javascript",
@@ -205,8 +196,17 @@
 				}
 			],
 			"request": {
-				"method": "DELETE",
+				"method": "PUT",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"user2\",\n    \"password\": \"password2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "{{host}}/api/user/{{userID}}",
 					"host": [
@@ -355,6 +355,105 @@
 			"response": []
 		},
 		{
+			"name": "Update deck name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Request should change the name of the deck\", function(){\r",
+							"    var jsonInfo = pm.response.json();\r",
+							"    pm.expect(jsonInfo.name).to.eql(\"Succesfull Patch\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Succesfull Patch\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update deck information",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonInfo = pm.response.json();\r",
+							"console.log(jsonInfo);\r",
+							"\r",
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Request should change the name of the deck\", function(){\r",
+							"    pm.expect(jsonInfo.name).to.eql(\"Succesfull Name Change\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Succesfull Name Change\",\r\n    \"cards\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Create new card",
 			"event": [
 				{
@@ -484,105 +583,6 @@
 						"{{deck_id}}",
 						"cards",
 						"{{card_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update deck name",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Request is CREATED\", function(){\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Request should change the name of the deck\", function(){\r",
-							"    var jsonInfo = pm.response.json();\r",
-							"    pm.expect(jsonInfo.name).to.eql(\"Succesfull Patch\");\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "PATCH",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Succesfull Patch\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{host}}/api/decks/{{deck_id}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"decks",
-						"{{deck_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update deck information",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonInfo = pm.response.json();\r",
-							"console.log(jsonInfo);\r",
-							"\r",
-							"pm.test(\"Request is CREATED\", function(){\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Request should change the name of the deck\", function(){\r",
-							"    pm.expect(jsonInfo.name).to.eql(\"Succesfull Name Change\");\r",
-							"});\r",
-							"\r",
-							"\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Succesfull Name Change\",\r\n    \"cards\": []\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{host}}/api/decks/{{deck_id}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"decks",
-						"{{deck_id}}"
 					]
 				}
 			},
