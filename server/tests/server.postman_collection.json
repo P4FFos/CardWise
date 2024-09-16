@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0f87dedd-3e68-4c89-adae-c96895cf6621",
+		"_postman_id": "22e67962-2800-44f9-905a-8189c8d00a30",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "38335183"
@@ -222,7 +222,7 @@
 			"response": []
 		},
 		{
-			"name": "POST /api/decks",
+			"name": "Create new deck",
 			"event": [
 				{
 					"listen": "test",
@@ -250,7 +250,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Fire\",\r\n    \"cards\": [\r\n        {\r\n            \"content\": \"Big fire\",\r\n            \"explanation\": \"Lava\"\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"name\": \"Fire\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -271,7 +271,7 @@
 			"response": []
 		},
 		{
-			"name": "GET /api/decks",
+			"name": "Get all decks",
 			"event": [
 				{
 					"listen": "test",
@@ -320,7 +320,7 @@
 			"response": []
 		},
 		{
-			"name": "GET /api/decks/:id",
+			"name": "Get specific deck",
 			"event": [
 				{
 					"listen": "test",
@@ -355,7 +355,142 @@
 			"response": []
 		},
 		{
-			"name": "PATCH /api/decks/:id",
+			"name": "Create new card",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(pm.response.text());\r",
+							"pm.environment.set(\"card_id\", jsonData._id);\r",
+							"\r",
+							"\r",
+							"pm.test(\"Resource is CREATED\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Card content is not empty.\", function(){\r",
+							"    pm.expect(jsonData.content).not.eql(null);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Card explanation is not empty.\", function(){\r",
+							"    pm.expect(jsonData.explanation).not.eql(null);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"Plz work\",\r\n    \"explanation\": \"I dont think this needs an explanation\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}/cards",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all cards from deck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains card(s)\", function(){\r",
+							"    var jsonInfo = pm.response.json();\r",
+							"    pm.expect(jsonInfo.deck.cards).to.be.an(\"array\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}/cards",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get specific card from deck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}/cards/{{card_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}",
+						"cards",
+						"{{card_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update deck name",
 			"event": [
 				{
 					"listen": "test",
@@ -402,7 +537,7 @@
 			"response": []
 		},
 		{
-			"name": "PUT /api/decks/:id",
+			"name": "Update deck information",
 			"event": [
 				{
 					"listen": "test",
@@ -410,6 +545,7 @@
 						"exec": [
 							"var jsonInfo = pm.response.json();\r",
 							"console.log(jsonInfo);\r",
+							"\r",
 							"pm.test(\"Request is CREATED\", function(){\r",
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
@@ -418,14 +554,6 @@
 							"    pm.expect(jsonInfo.name).to.eql(\"Succesfull Name Change\");\r",
 							"});\r",
 							"\r",
-							"pm.test(\"Request should change the content of the card\", function(){\r",
-							"    pm.expect(jsonInfo.cards[0].content).to.eql(\"Succesfull Content Change\");\r",
-							"});\r",
-							"\r",
-							"\r",
-							"pm.test(\"Request should change the explanation of the card\", function(){\r",
-							"    pm.expect(jsonInfo.cards[0].explanation).to.eql(\"Succesfull Explanation Change\");\r",
-							"});\r",
 							"\r",
 							""
 						],
@@ -439,7 +567,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Succesfull Name Change\",\r\n    \"cards\": [\r\n        {\r\n            \"content\": \"Succesfull Content Change\",\r\n            \"explanation\": \"Succesfull Explanation Change\"\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"name\": \"Succesfull Name Change\",\r\n    \"cards\": []\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -461,7 +589,77 @@
 			"response": []
 		},
 		{
-			"name": "DELETE /api/decks/:id",
+			"name": "Delete card from deck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}/cards/{{card_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}",
+						"cards",
+						"{{card_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete all cards from deck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}/cards",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete deck",
 			"event": [
 				{
 					"listen": "test",
@@ -496,14 +694,14 @@
 			"response": []
 		},
 		{
-			"name": "DELETE /api/decks",
+			"name": "Delete all decks",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Content has been deleted\", function(){\r",
-							"    pm.response.to.have.status(204);\r",
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
 							"});"
 						],
 						"type": "text/javascript",
