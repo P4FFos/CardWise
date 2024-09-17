@@ -353,7 +353,7 @@
 			"response": []
 		},
 		{
-			"name": "Sort decks in dsc",
+			"name": "Sort decks in dsc (card amount)",
 			"event": [
 				{
 					"listen": "test",
@@ -400,7 +400,7 @@
 			"response": []
 		},
 		{
-			"name": "Sort decks in asc",
+			"name": "Sort decks in asc (card amount)",
 			"event": [
 				{
 					"listen": "test",
@@ -447,13 +447,13 @@
 			"response": []
 		},
 		{
-			"name": "Sort decks by name",
+			"name": "Sort decks by name asc",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Sorted in alphabetical order (200 OK)\", function(){",
+							"pm.test(\"Sorted in ascending order (200 OK)\", function(){",
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
@@ -470,7 +470,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/decks/sort?field=name",
+					"raw": "{{host}}/api/decks/sort?field=name&order=asc",
 					"host": [
 						"{{host}}"
 					],
@@ -483,6 +483,57 @@
 						{
 							"key": "field",
 							"value": "name"
+						},
+						{
+							"key": "order",
+							"value": "asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sort decks by name dsc",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sorted in descending order (200 OK)\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is an array\", function() {",
+							"    pm.expect(pm.response.json()).to.be.an(\"array\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/decks/sort?field=name&order=dsc",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"sort"
+					],
+					"query": [
+						{
+							"key": "field",
+							"value": "name"
+						},
+						{
+							"key": "order",
+							"value": "dsc"
 						}
 					]
 				}

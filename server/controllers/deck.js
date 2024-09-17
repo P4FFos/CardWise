@@ -33,14 +33,14 @@ router.get('/api/decks', async function(req, res, next) {
 // Sort decks by the number of cards in it or by name
 router.get('/api/decks/sort', async function(req, res, next) {
     let sortField; // define type of sorting
-    if (req.query.field === 'name') {4
+    if (req.query.field === 'name') {
         sortField = 'name';
     } else {
         sortField = 'cardAmount';
     }
 
     let sortOrder;
-    if (req.query.order === 'asc' || req.query.order === '1') {
+    if (req.query.order === 'asc') {
         sortOrder = 1; // ascending
     } else {
         sortOrder = -1; // descending
@@ -56,7 +56,7 @@ router.get('/api/decks/sort', async function(req, res, next) {
         } else {
             decks = await Deck.aggregate([
                 { $addFields: { lowerName: { $toLower: "$name" } } },
-                { $sort: { lowerName: 1 } }
+                { $sort: { lowerName: sortOrder } }
             ]);
         }
 
