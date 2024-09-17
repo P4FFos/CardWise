@@ -5,7 +5,6 @@ var app = express();
 app.use(express.json());
 var Deck = require('../models/deck.js');
 
-//TODO: add endpoints from req list for decks
 // Create a new deck
 router.post('/api/decks', async function(req, res, next) {
     var deck = new Deck(req.body);
@@ -83,7 +82,7 @@ router.patch('/api/decks/:id', async function(req, res, next) {
 router.delete('/api/decks', async function(req, res, next) {
     try {
         const result = await Deck.deleteMany({});
-        res.status(204).json({
+        res.status(200).json({
             message: result.deletedCount + " " + "deck(s) deleted.",
             result: result
         });

@@ -11,6 +11,7 @@ var port = process.env.PORT || 3000;
 const deckRoutes = require('./controllers/deck.js');
 
 var userController = require('./controllers/user.js');
+var cardController = require('./controllers/card.js');
 
 // Connect to MongoDB
 mongoose.connect(mongoURI).catch(function(err) {
@@ -35,6 +36,8 @@ app.use(cors());
 
 // Import routes
 app.use(deckRoutes);
+
+app.use(cardController);
 
 app.get('/api', function(req, res) {
     res.json({'message': 'Welcome to the CARDWISE!'});
