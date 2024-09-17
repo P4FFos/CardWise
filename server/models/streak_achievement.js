@@ -1,9 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-var streakAchievementSchema = new Schema({
-  name: { type: String },
-  streakCounter: { type: Number, required: true},
+const streakAchievementSchema = new Schema({
+  streakCounter: { type: Number, required: true }
 });
 
-module.exports = mongoose.model('streakAchievement', achievementSchema);
+const StreakAchievement = Achievement.discriminator('StreakAchievement', streakAchievementSchema);
+
+module.exports = StreakAchievement;
