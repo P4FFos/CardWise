@@ -4,7 +4,7 @@ var app = express();
 
 app.use(express.json());
 
-var Achievement = require('../models/achievement.js');
+var Achievement = require('../models/streak_achievement.js');
 
 // Create a new achievement
 router.post('/api/achievements', async function(req, res, next) {
