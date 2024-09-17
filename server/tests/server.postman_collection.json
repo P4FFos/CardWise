@@ -1,0 +1,760 @@
+{
+	"info": {
+		"_postman_id": "1a3fe1b2-254b-453f-87aa-ba75336df62a",
+		"name": "server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38335183"
+	},
+	"item": [
+		{
+			"name": "Create new user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let currentDate = new Date().toISOString();",
+							"pm.environment.set(\"registrationDate\", currentDate);",
+							"pm.environment.set(\"lastLoginDate\", currentDate);",
+							"pm.environment.set(\"username\", \"user1\");",
+							"pm.environment.set(\"password\", \"password1\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(pm.response.text());",
+							"var userID = jsonData._id;",
+							"pm.environment.set(\"userID\", userID);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"Response contains user ID\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"_id\");",
+							"});",
+							"pm.test(\"Response contains username\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"username\", \"user1\");",
+							"});",
+							"pm.test(\"Response contains password\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"password\", \"password1\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\",\n    \"registrationDate\": \"{{registrationDate}}\",\n    \"lastLoginDate\": \"{{lastLoginDate}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/user",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User account has been deleted (200 OK)\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/user/{{userID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = JSON.parse(pm.response.text());",
+							"",
+							"pm.test(\"Username is updated\", function () {",
+							"    pm.expect(jsonData.username).to.eql(\"user3\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"user3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/user/{{userID}}/username",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"{{userID}}",
+						"username"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user information",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = JSON.parse(pm.response.text());",
+							"",
+							"pm.test(\"Username is updated\", function () {",
+							"    pm.expect(jsonData.username).to.eql(\"user2\");",
+							"});",
+							"",
+							"pm.test(\"Password is updated\", function () {",
+							"    pm.expect(jsonData.password).to.eql(\"password2\");",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"user2\",\n    \"password\": \"password2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/user/{{userID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new deck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(pm.response.text());\r",
+							"pm.environment.set(\"deck_id\", jsonData._id);\r",
+							"\r",
+							"pm.test(\"Resource is CREATED\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Deck name is not empty.\", function(){\r",
+							"    pm.expect(jsonData.name).not.eql(null);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Fire\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/decks",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all decks",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains deck(s)\", function(){\r",
+							"    var jsonInfo = pm.response.json();\r",
+							"    pm.expect(jsonInfo.decks).to.be.an(\"array\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/decks",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get specific deck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update deck name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Request should change the name of the deck\", function(){\r",
+							"    var jsonInfo = pm.response.json();\r",
+							"    pm.expect(jsonInfo.name).to.eql(\"Succesfull Patch\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Succesfull Patch\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update deck information",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonInfo = pm.response.json();\r",
+							"console.log(jsonInfo);\r",
+							"\r",
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Request should change the name of the deck\", function(){\r",
+							"    pm.expect(jsonInfo.name).to.eql(\"Succesfull Name Change\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Succesfull Name Change\",\r\n    \"cards\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new card",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(pm.response.text());\r",
+							"pm.environment.set(\"card_id\", jsonData._id);\r",
+							"\r",
+							"\r",
+							"pm.test(\"Resource is CREATED\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Card content is not empty.\", function(){\r",
+							"    pm.expect(jsonData.content).not.eql(null);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Card explanation is not empty.\", function(){\r",
+							"    pm.expect(jsonData.explanation).not.eql(null);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"Plz work\",\r\n    \"explanation\": \"I dont think this needs an explanation\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}/cards",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all cards from deck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains card(s)\", function(){\r",
+							"    var jsonInfo = pm.response.json();\r",
+							"    pm.expect(jsonInfo.deck.cards).to.be.an(\"array\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}/cards",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get specific card from deck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}/cards/{{card_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}",
+						"cards",
+						"{{card_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete card from deck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}/cards/{{card_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}",
+						"cards",
+						"{{card_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete all cards from deck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}/cards",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete deck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/decks/{{deck_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks",
+						"{{deck_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete all decks",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/decks",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"decks"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "card_id",
+			"value": "1"
+		}
+	]
+}
