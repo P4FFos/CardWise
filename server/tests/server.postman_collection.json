@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "1a3fe1b2-254b-453f-87aa-ba75336df62a",
+		"_postman_id": "762fad90-9b56-458c-896c-2d281eabb5b1",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38335183"
+		"_exporter_id": "38095200"
 	},
 	"item": [
 		{
@@ -720,6 +720,39 @@
 					"path": [
 						"api",
 						"decks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/user",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"user"
 					]
 				}
 			},
