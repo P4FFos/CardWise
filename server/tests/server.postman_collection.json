@@ -75,24 +75,15 @@
 			"response": []
 		},
 		{
-			"name": "Delete user",
+			"name": "Get all users",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"User account has been deleted (200 OK)\", function() {",
+							"pm.test(\"Status code is 200 OK\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
+							"});",
 							""
 						],
 						"type": "text/javascript",
@@ -101,17 +92,16 @@
 				}
 			],
 			"request": {
-				"method": "DELETE",
+				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/user/{{userID}}",
+					"raw": "{{host}}/api/user",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
-						"user",
-						"{{userID}}"
+						"user"
 					]
 				}
 			},
@@ -207,6 +197,49 @@
 						}
 					}
 				},
+				"url": {
+					"raw": "{{host}}/api/user/{{userID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User account has been deleted (200 OK)\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
 				"url": {
 					"raw": "{{host}}/api/user/{{userID}}",
 					"host": [
@@ -720,39 +753,6 @@
 					"path": [
 						"api",
 						"decks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get all users",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200 OK\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/api/user",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"user"
 					]
 				}
 			},
