@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "762fad90-9b56-458c-896c-2d281eabb5b1",
+		"_postman_id": "554c30f4-3e0d-40b4-a9aa-7d5c7e6748bb",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38095200"
+		"_exporter_id": "38335183"
 	},
 	"item": [
 		{
@@ -130,8 +130,14 @@
 				}
 			],
 			"request": {
-				"method": "PATCH",
-				"header": [],
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "PATCH",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"username\": \"user3\"\n}",
@@ -186,8 +192,14 @@
 				}
 			],
 			"request": {
-				"method": "PUT",
-				"header": [],
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "PUT",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"username\": \"user2\",\n    \"password\": \"password2\"\n}",
@@ -238,8 +250,14 @@
 				}
 			],
 			"request": {
-				"method": "DELETE",
-				"header": [],
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "DELETE",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "{{host}}/api/user/{{userID}}",
 					"host": [
@@ -409,8 +427,14 @@
 				}
 			],
 			"request": {
-				"method": "PATCH",
-				"header": [],
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "PATCH",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"name\": \"Succesfull Patch\"\r\n}",
@@ -461,8 +485,14 @@
 				}
 			],
 			"request": {
-				"method": "PUT",
-				"header": [],
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "PUT",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"name\": \"Succesfull Name Change\",\r\n    \"cards\": []\r\n}",
@@ -639,8 +669,14 @@
 				}
 			],
 			"request": {
-				"method": "DELETE",
-				"header": [],
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "DELETE",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "{{host}}/api/decks/{{deck_id}}/cards/{{card_id}}",
 					"host": [
@@ -674,8 +710,14 @@
 				}
 			],
 			"request": {
-				"method": "DELETE",
-				"header": [],
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "DELETE",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "{{host}}/api/decks/{{deck_id}}/cards",
 					"host": [
@@ -710,8 +752,14 @@
 				}
 			],
 			"request": {
-				"method": "DELETE",
-				"header": [],
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "DELETE",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "{{host}}/api/decks/{{deck_id}}",
 					"host": [
@@ -743,8 +791,14 @@
 				}
 			],
 			"request": {
-				"method": "DELETE",
-				"header": [],
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "DELETE",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "{{host}}/api/decks",
 					"host": [
