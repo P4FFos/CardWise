@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var app = express();
 
 app.use(express.json());
 
@@ -67,7 +66,12 @@ router.put('/api/achievements/:id', async function(req, res, next) {
             return res.status(404).json({"message": "Achievement not found"});
         }
         achievement.name = req.body.name;
-        achievement.type = req.body.type;
+        if (achievement.type == 'TestAchievement') {
+            achievement.condition = req.body.condition;
+        }
+        if (achievement.type == 'StreakAchievement') {
+            achievement.streakCounter = req.body.streakCounter;
+        }
 
         await achievement.save();
         res.json(achievement);
