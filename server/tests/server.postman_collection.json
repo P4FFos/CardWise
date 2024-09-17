@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "1a3fe1b2-254b-453f-87aa-ba75336df62a",
+		"_postman_id": "762fad90-9b56-458c-896c-2d281eabb5b1",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38335183"
+		"_exporter_id": "38095200"
 	},
 	"item": [
 		{
@@ -75,24 +75,15 @@
 			"response": []
 		},
 		{
-			"name": "Delete user",
+			"name": "Get all users",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"User account has been deleted (200 OK)\", function() {",
+							"pm.test(\"Status code is 200 OK\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
+							"});",
 							""
 						],
 						"type": "text/javascript",
@@ -101,17 +92,16 @@
 				}
 			],
 			"request": {
-				"method": "DELETE",
+				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/user/{{userID}}",
+					"raw": "{{host}}/api/user",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
-						"user",
-						"{{userID}}"
+						"user"
 					]
 				}
 			},
@@ -207,6 +197,49 @@
 						}
 					}
 				},
+				"url": {
+					"raw": "{{host}}/api/user/{{userID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User account has been deleted (200 OK)\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
 				"url": {
 					"raw": "{{host}}/api/user/{{userID}}",
 					"host": [
