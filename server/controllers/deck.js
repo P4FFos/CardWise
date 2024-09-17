@@ -30,6 +30,45 @@ router.get('/api/decks', async function(req, res, next) {
     res.json({"decks": decks});
 });
 
+// Sort decks by the number of cards in it or by name
+router.get('/api/decks/sort', async function(req, res, next) {
+    let sortField; // define type of sorting
+    if (req.query.field === 'name') {4
+        sortField = 'name';
+    } else {
+        sortField = 'cardAmount';
+    }
+
+    let sortOrder;
+    if (req.query.order === 'asc' || req.query.order === '1') {
+        sortOrder = 1; // ascending
+    } else {
+        sortOrder = -1; // descending
+    }
+
+    try {
+        let decks;
+        if (sortField === 'cardAmount') {
+            decks = await Deck.aggregate([
+                { $addFields: { cardAmount: { $size: "$cards" } } },
+                { $sort: { cardAmount: sortOrder } }
+            ]);
+        } else {
+            decks = await Deck.aggregate([
+                { $addFields: { lowerName: { $toLower: "$name" } } },
+                { $sort: { lowerName: 1 } }
+            ]);
+        }
+
+        if (decks.length === 0) {
+            return res.status(404).json({ "message": "No decks found." });
+        }
+        res.json(decks);
+    } catch (error) {
+        return next(error);
+    }
+});
+
 // Show a specific deck
 router.get('/api/decks/:id', async function(req, res, next) {
     var id = req.params.id;
