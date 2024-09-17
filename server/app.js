@@ -4,6 +4,7 @@ var morgan = require('morgan');
 var path = require('path');
 var cors = require('cors');
 var history = require('connect-history-api-fallback');
+var methodOverride = require('method-override');
 // Variables
 var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cardwiseDevelopmentDB';
 var port = process.env.PORT || 3000;
@@ -32,6 +33,8 @@ app.use(morgan('dev'));
 // Enable cross-origin resource sharing for frontend must be registered before api
 app.options('*', cors());
 app.use(cors());
+// Looks for X-HTTP-Method-Override header in requests
+app.use(methodOverride('X-HTTP-Method-Override'));
 
 
 // Import routes
