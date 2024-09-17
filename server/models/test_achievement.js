@@ -1,10 +1,9 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-var testAchievementSchema = new Schema({
-  name: { type: String },
-  isTriggered: false,
-  condition: { type: String },
+const testAchievementSchema = new Schema({
+  isTriggered: { type: Boolean, default: false },
+  condition: { type: String, required: true }
 });
 
-module.exports = mongoose.model('testAchievement', achievementSchema);
+const TestAchievement = Achievement.discriminator('TestAchievement', testAchievementSchema);
+
+module.exports = TestAchievement;
+  
