@@ -11,7 +11,7 @@ var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cardwiseDev
 var port = process.env.PORT || 3000;
 
 const deckRoutes = require('./controllers/decks.js');
-const achievementRoutes = require('./controllers/achievement.js');
+const achievementRoutes = require('./controllers/achievements.js');
 var userController = require('./controllers/users.js');
 var cardController = require('./controllers/cards.js');
 

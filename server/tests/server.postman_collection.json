@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b624ed25-2254-4123-8a71-8fc39dfc78d0",
+		"_postman_id": "6e9c4629-36e6-4946-a6e2-80d8a4ca8baf",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "38409323"
@@ -731,7 +731,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/decks/{{deck_id}}",
+					"raw": "{{host}}/api/v1/decks/{{deck_id}}/cards",
 					"host": [
 						"{{host}}"
 					],
@@ -847,7 +847,7 @@
 			"response": []
 		},
 		{
-			"name": "GET /api/achievements/:id",
+			"name": "Get specific card from deck",
 			"event": [
 				{
 					"listen": "test",
@@ -1055,6 +1055,9 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"var jsonData = JSON.parse(pm.response.text());\r",
+							"pm.environment.set(\"test_achievement_id\", jsonData._id);\r",
+							"\r",
 							"pm.test(\"Resource is CREATED\", function(){\r",
 							"    pm.response.to.have.status(201);\r",
 							"});\r",
@@ -1087,12 +1090,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/achievements",
+					"raw": "{{host}}/api/v1/achievements",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"achievements"
 					]
 				}
@@ -1106,6 +1110,9 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"var jsonData = JSON.parse(pm.response.text());\r",
+							"pm.environment.set(\"streak_achievement_id\", jsonData._id);\r",
+							"\r",
 							"pm.test(\"Resource is CREATED\", function(){\r",
 							"    pm.response.to.have.status(201);\r",
 							"});\r",
@@ -1138,12 +1145,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/achievements",
+					"raw": "{{host}}/api/v1/achievements",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"achievements"
 					]
 				}
@@ -1151,7 +1159,7 @@
 			"response": []
 		},
 		{
-			"name": "GET /api/achievements",
+			"name": "GET all achievements",
 			"event": [
 				{
 					"listen": "test",
@@ -1175,12 +1183,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/achievements",
+					"raw": "{{host}}/api/v1/achievements",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"achievements"
 					]
 				}
@@ -1188,7 +1197,7 @@
 			"response": []
 		},
 		{
-			"name": "GET /api/achievements/:id",
+			"name": "GET test achievement",
 			"event": [
 				{
 					"listen": "test",
@@ -1207,27 +1216,28 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/achievements/{{achievement_id}}",
+					"raw": "{{host}}/api/v1/achievements/{{test_achievement_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"achievements",
-						"{{achievement_id}}"
+						"{{test_achievement_id}}"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "DELETE /api/achievements",
+			"name": "GET streak achievement",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Content has been deleted\", function(){\r",
+							"pm.test(\"Request is CREATED\", function(){\r",
 							"    pm.response.to.have.status(200);\r",
 							"});"
 						],
@@ -1237,23 +1247,25 @@
 				}
 			],
 			"request": {
-				"method": "DELETE",
+				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/achievements",
+					"raw": "{{host}}/api/v1/achievements/{{streak_achievement_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
-						"achievements"
+						"v1",
+						"achievements",
+						"{{streak_achievement_id}}"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "PUT /api/achievements/:id test achievement",
+			"name": "Update test achievement",
 			"event": [
 				{
 					"listen": "test",
@@ -1270,7 +1282,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Request should change the condition of the achievement\", function(){\r",
-							"    pm.expect(jsonInfo.cards[0].condition).to.eql(\"Succesfull Condition Change\");\r",
+							"    pm.expect(jsonInfo.condition).to.eql(\"Succesfull Condition Change\");\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1279,8 +1291,14 @@
 				}
 			],
 			"request": {
-				"method": "PUT",
-				"header": [],
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "PUT",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n  \"type\": \"TestAchievement\",\r\n  \"name\": \"Succesfull Name Change\",\r\n  \"isTriggered\": false,\r\n  \"condition\": \"Succesfull Condition Change\"\r\n}",
@@ -1291,21 +1309,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/achievements/{{achievement_id}}",
+					"raw": "{{host}}/api/v1/achievements/{{test_achievement_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"achievements",
-						"{{achievement_id}}"
+						"{{test_achievement_id}}"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "PUT /api/achievements/:id streak achievement",
+			"name": "Update streak achievement",
 			"event": [
 				{
 					"listen": "test",
@@ -1322,7 +1341,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Request should change the streak counter of the achievement\", function(){\r",
-							"    pm.expect(jsonInfo.cards[0].streakCounter).to.eql(5);\r",
+							"    pm.expect(jsonInfo.streakCounter).to.eql(5);\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1331,8 +1350,14 @@
 				}
 			],
 			"request": {
-				"method": "PUT",
-				"header": [],
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "PUT",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n  \"type\": \"StreakAchievement\",\r\n  \"name\": \"Succesfull Name Change\",\r\n  \"streakCounter\": 5\r\n}",
@@ -1343,14 +1368,54 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/achievements/{{achievement_id}}",
+					"raw": "{{host}}/api/v1/achievements/{{streak_achievement_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"achievements",
-						"{{achievement_id}}"
+						"{{streak_achievement_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete all achievements",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Content has been deleted\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "DELETE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/api/v1/achievements",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"achievements"
 					]
 				}
 			},
