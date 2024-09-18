@@ -609,7 +609,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"type\": \"StreakAchievement\",\r\n  \"name\": \"10 Day Streak\",\r\n  \"streakCounter\": 10\r\n}",
+					"raw": "{\r\n  \"type\": \"StreakAchievement\",\r\n  \"name\": \"7 Day Streak\",\r\n  \"streakCounter\": 7\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -642,7 +642,7 @@
 							"\r",
 							"pm.test(\"Response contains achievements(s)\", function(){\r",
 							"    var jsonInfo = pm.response.json();\r",
-							"    pm.expect(jsonInfo.decks).to.be.an(\"array\");\r",
+							"    pm.expect(jsonInfo.achievements).to.be.an(\"array\");\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -667,7 +667,7 @@
 			"response": []
 		},
 		{
-			"name": "GET /api/achievement/:id",
+			"name": "GET /api/achievements/:id",
 			"event": [
 				{
 					"listen": "test",
@@ -708,13 +708,6 @@
 						"exec": [
 							"pm.test(\"Content has been deleted\", function(){\r",
 							"    pm.response.to.have.status(204);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Deletion message display\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    \r",
-							"    pm.expect(jsonData).to.have.property(\"message\");\r",
-							"    pm.expect(jsonData.message).to.include(\"Achievement(s) deleted. Progress restarted.\");\r",
 							"});"
 						],
 						"type": "text/javascript",
