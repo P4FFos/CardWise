@@ -11,6 +11,7 @@ var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cardwiseDev
 var port = process.env.PORT || 3000;
 
 const deckRoutes = require('./controllers/decks.js');
+const achievementRoutes = require('./controllers/achievements.js');
 var userController = require('./controllers/users.js');
 var cardController = require('./controllers/cards.js');
 
@@ -42,6 +43,7 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 
 // Import routes
 app.use(deckRoutes);
+app.use(achievementRoutes);
 app.use(cardController);
 app.use(userController);
 

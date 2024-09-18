@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "e34245a2-6a39-4b7b-a255-e880c509d6c0",
+		"_postman_id": "6e9c4629-36e6-4946-a6e2-80d8a4ca8baf",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38095200"
+		"_exporter_id": "38409323"
 	},
 	"item": [
 		{
@@ -166,7 +166,41 @@
 			"response": []
 		},
 		{
-			"name": "Update user information",
+			"name": "Get all users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/users",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update username",
 			"event": [
 				{
 					"listen": "test",
@@ -179,15 +213,8 @@
 							"var jsonData = JSON.parse(pm.response.text());",
 							"",
 							"pm.test(\"Username is updated\", function () {",
-							"    pm.expect(jsonData.username).to.eql(\"user2\");",
-							"});",
-							"",
-							"pm.test(\"Password is updated\", function () {",
-							"    pm.expect(jsonData.password).to.eql(\"password2\");",
-							"});",
-							"",
-							"",
-							""
+							"    pm.expect(jsonData.username).to.eql(\"user3\");",
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -205,7 +232,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"user2\",\n    \"password\": \"password2\"\n}",
+					"raw": "{\n    \"username\": \"user3\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -755,7 +782,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"content\": \"Plz work\",\r\n    \"explanation\": \"I dont think this needs an explanation\"\r\n}",
+					"raw": "{\r\n  \"type\": \"StreakAchievement\",\r\n  \"name\": \"7 Day Streak\",\r\n  \"streakCounter\": 7\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -863,10 +890,9 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Request is CREATED\", function(){\r",
+							"pm.test(\"Content has been deleted\", function(){\r",
 							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							""
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -1016,6 +1042,379 @@
 						"api",
 						"v1",
 						"decks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST new test achievement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(pm.response.text());\r",
+							"pm.environment.set(\"test_achievement_id\", jsonData._id);\r",
+							"\r",
+							"pm.test(\"Resource is CREATED\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should be a valid TestAchievement\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(jsonData.type).to.eql(\"TestAchievement\");\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property(\"name\", \"Pass 5 Tests\");\r",
+							"    pm.expect(jsonData).to.have.property(\"isTriggered\", false);\r",
+							"    pm.expect(jsonData).to.have.property(\"condition\", \"Pass at least 5 tests\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": \"TestAchievement\",\r\n  \"name\": \"Pass 5 Tests\",\r\n  \"isTriggered\": false,\r\n  \"condition\": \"Pass at least 5 tests\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/achievements",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"achievements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST new streak achievement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(pm.response.text());\r",
+							"pm.environment.set(\"streak_achievement_id\", jsonData._id);\r",
+							"\r",
+							"pm.test(\"Resource is CREATED\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should be a valid StreakAchievement\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(jsonData.type).to.eql(\"StreakAchievement\");\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property(\"name\", \"7 Day Streak\");\r",
+							"    pm.expect(jsonData).to.have.property(\"streakCounter\", 7);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": \"StreakAchievement\",\r\n  \"name\": \"7 Day Streak\",\r\n  \"streakCounter\": 7\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/achievements",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"achievements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET all achievements",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains achievements(s)\", function(){\r",
+							"    var jsonInfo = pm.response.json();\r",
+							"    pm.expect(jsonInfo.achievements).to.be.an(\"array\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/achievements",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"achievements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET test achievement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/achievements/{{test_achievement_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"achievements",
+						"{{test_achievement_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET streak achievement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/achievements/{{streak_achievement_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"achievements",
+						"{{streak_achievement_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update test achievement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonInfo = pm.response.json();\r",
+							"console.log(jsonInfo);\r",
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Request should change the name of the test achievement\", function(){\r",
+							"    pm.expect(jsonInfo.name).to.eql(\"Succesfull Name Change\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Request should change the condition of the achievement\", function(){\r",
+							"    pm.expect(jsonInfo.condition).to.eql(\"Succesfull Condition Change\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "PUT",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": \"TestAchievement\",\r\n  \"name\": \"Succesfull Name Change\",\r\n  \"isTriggered\": false,\r\n  \"condition\": \"Succesfull Condition Change\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/achievements/{{test_achievement_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"achievements",
+						"{{test_achievement_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update streak achievement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonInfo = pm.response.json();\r",
+							"console.log(jsonInfo);\r",
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Request should change the name of the test achievement\", function(){\r",
+							"    pm.expect(jsonInfo.name).to.eql(\"Succesfull Name Change\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Request should change the streak counter of the achievement\", function(){\r",
+							"    pm.expect(jsonInfo.streakCounter).to.eql(5);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "PUT",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": \"StreakAchievement\",\r\n  \"name\": \"Succesfull Name Change\",\r\n  \"streakCounter\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/achievements/{{streak_achievement_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"achievements",
+						"{{streak_achievement_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete all achievements",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Content has been deleted\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "DELETE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/api/v1/achievements",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"achievements"
 					]
 				}
 			},
