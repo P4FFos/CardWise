@@ -9,9 +9,9 @@ var TestAchievement = require('../models/test_achievement.js');
 var StreakAchievement = require('../models/streak_achievement.js');
 
 // Create a new achievement
-router.post('/api/achievements', async function(req, res, next) {
+router.post('/api/v1/achievements', async function(req, res, next) {
     try {
-        const { type, ...data } = req.body;
+        var { type, ...data } = req.body;
         
         var achievement;
         if (type === 'TestAchievement') {
@@ -31,7 +31,7 @@ router.post('/api/achievements', async function(req, res, next) {
 });
 
 // Info of all achievements
-router.get('/api/achievements', async function(req, res, next) {
+router.get('/api/v1/achievements', async function(req, res, next) {
     var achievements;
     try {
         achievements = await Achievement.find();
@@ -42,7 +42,7 @@ router.get('/api/achievements', async function(req, res, next) {
 });
 
 // Restarting progress through deleting achievements 
-router.delete('/api/achievements', async function(req, res, next) {
+router.delete('/api/v1/achievements', async function(req, res, next) {
     try {
         const result = await Achievement.deleteMany({});
         res.status(200).json({
@@ -55,7 +55,7 @@ router.delete('/api/achievements', async function(req, res, next) {
 });
 
 // Get info from a spec achievement
-router.get('/api/achievements/:id', async function(req, res, next) {
+router.get('/api/v1/achievements/:id', async function(req, res, next) {
     try {
         const achievement = await Achievement.findById(req.params.id);
         if (achievement == null) {
@@ -68,7 +68,7 @@ router.get('/api/achievements/:id', async function(req, res, next) {
 })
 
 // Put info into spec achievement
-router.put('/api/achievements/:id', async function(req, res, next) {
+router.put('/api/v1/achievements/:id', async function(req, res, next) {
     try {
         const achievement = await Achievement.findById(req.params.id);
         if (achievement == null) {

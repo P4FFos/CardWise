@@ -893,10 +893,9 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Request is CREATED\", function(){\r",
+							"pm.test(\"Content has been deleted\", function(){\r",
 							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							""
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
