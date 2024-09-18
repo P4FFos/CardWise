@@ -4,7 +4,7 @@ var router = express.Router();
 var User = require('../models/user.js');
 
 // create specific user
-router.post('/api/user', async function (req, res, next) {
+router.post('/api/v1/users', async function (req, res, next) {
     var user = new User(req.body);
     try {
         await user.save();
@@ -15,7 +15,7 @@ router.post('/api/user', async function (req, res, next) {
 });
 
 // get all users
-router.get('/api/user', async function (req, res, next) {
+router.get('/api/v1/users', async function (req, res, next) {
     var users;
     try {
         users = await User.find();
@@ -26,7 +26,7 @@ router.get('/api/user', async function (req, res, next) {
 });
 
 // update user information
-router.put('/api/user/:id', async function (req, res, next) {
+router.put('/api/v1/users/:id', async function (req, res, next) {
     var userId = req.params.id;
     var updateData = req.body;
 
@@ -45,7 +45,7 @@ router.put('/api/user/:id', async function (req, res, next) {
 });
 
 // update username
-router.patch('/api/user/:id/username', async function (req, res, next) {
+router.patch('/api/v1/users/:id/username', async function (req, res, next) {
     var userId = req.params.id;
     var newUsername = req.body.username;
 
@@ -64,7 +64,7 @@ router.patch('/api/user/:id/username', async function (req, res, next) {
 });
 
 // delete user
-router.delete('/api/user/:id', async function (req, res, next) {
+router.delete('/api/v1/users/:id', async function (req, res, next) {
     var userId = req.params.id;
 
     var deletedUser;

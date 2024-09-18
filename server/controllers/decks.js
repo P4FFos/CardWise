@@ -6,7 +6,7 @@ app.use(express.json());
 var Deck = require('../models/deck.js');
 
 // Create a new deck
-router.post('/api/decks', async function(req, res, next) {
+router.post('/api/v1/decks', async function(req, res, next) {
     var deck = new Deck(req.body);
     try {
         await deck.save();
@@ -20,7 +20,7 @@ router.post('/api/decks', async function(req, res, next) {
 });
 
 // Show all decks
-router.get('/api/decks', async function(req, res, next) {
+router.get('/api/v1/decks', async function(req, res, next) {
     var decks;
     try {
         decks = await Deck.find();
@@ -31,7 +31,7 @@ router.get('/api/decks', async function(req, res, next) {
 });
 
 // Sort decks by the number of cards in it or by name
-router.get('/api/decks/sort', async function(req, res, next) {
+router.get('/api/v1/decks/sort', async function(req, res, next) {
     let sortField; // define type of sorting
     if (req.query.field === 'name') {
         sortField = 'name';
@@ -70,7 +70,7 @@ router.get('/api/decks/sort', async function(req, res, next) {
 });
 
 // Show a specific deck
-router.get('/api/decks/:id', async function(req, res, next) {
+router.get('/api/v1/decks/:id', async function(req, res, next) {
     var id = req.params.id;
     try {
         const deck = await Deck.findById(id);
@@ -84,7 +84,7 @@ router.get('/api/decks/:id', async function(req, res, next) {
 })
 
 // Update a specific deck
-router.put('/api/decks/:id', async function(req, res, next) {
+router.put('/api/v1/decks/:id', async function(req, res, next) {
     try {
         const deck = await Deck.findById(req.params.id);
         if (deck == null) {
@@ -101,7 +101,7 @@ router.put('/api/decks/:id', async function(req, res, next) {
 });
 
 // Update some part of a specific deck
-router.patch('/api/decks/:id', async function(req, res, next) {
+router.patch('/api/v1/decks/:id', async function(req, res, next) {
     try {
         var deck = await Deck.findById(req.params.id);
         if (deck == null) {
@@ -118,7 +118,7 @@ router.patch('/api/decks/:id', async function(req, res, next) {
 });
 
 // Delete all decks
-router.delete('/api/decks', async function(req, res, next) {
+router.delete('/api/v1/decks', async function(req, res, next) {
     try {
         const result = await Deck.deleteMany({});
         res.status(200).json({
@@ -131,7 +131,7 @@ router.delete('/api/decks', async function(req, res, next) {
 });
 
 // Delete specific deck
-router.delete('/api/decks/:id', async function(req, res, next) {
+router.delete('/api/v1/decks/:id', async function(req, res, next) {
     try {
         const deck = await Deck.findByIdAndDelete(req.params.id);
         if (deck == null) {
