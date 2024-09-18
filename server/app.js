@@ -9,6 +9,7 @@ var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cardwiseDev
 var port = process.env.PORT || 3000;
 
 const deckRoutes = require('./controllers/deck.js');
+const achievementRoutes = require('./controllers/achievement.js');
 
 var userController = require('./controllers/user.js');
 
@@ -35,6 +36,7 @@ app.use(cors());
 
 // Import routes
 app.use(deckRoutes);
+app.use(achievementRoutes);
 
 app.get('/api', function(req, res) {
     res.json({'message': 'Welcome to the CARDWISE!'});
