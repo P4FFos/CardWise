@@ -10,9 +10,9 @@ var methodOverride = require('method-override');
 var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cardwiseDevelopmentDB';
 var port = process.env.PORT || 3000;
 
-const decksController = require('./controllers/decks.js');
-const usersController = require('./controllers/users.js');
-const cardsController = require('./controllers/cards.js');
+const deckRoutes = require('./controllers/decks.js');
+var userController = require('./controllers/users.js');
+var cardController = require('./controllers/cards.js');
 
 // Connect to MongoDB
 mongoose.connect(mongoURI).catch(function(err) {
@@ -41,16 +41,16 @@ app.use(cors());
 app.use(methodOverride('X-HTTP-Method-Override'));
 
 // Import routes
-app.use(decksController);
-app.use(usersController);
-app.use(cardsController);
+app.use(deckRoutes);
+app.use(cardController);
+app.use(userController);
 
-app.get('/api/v1', function(req, res) {
-    res.json({'message': 'Welcome to the CardWise!'});
+app.get('/api', function(req, res) {
+    res.json({'message': 'Welcome to the CARDWISE!'});
 });
 
 // Catch all non-error handler for api (i.e., 404 Not Found)
-app.use('/api/v1/*', function (req, res) {
+app.use('/api/*', function (req, res) {
     res.status(404).json({ 'message': 'Not Found' });
 });
 
