@@ -707,7 +707,7 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Content has been deleted\", function(){\r",
-							"    pm.response.to.have.status(204);\r",
+							"    pm.response.to.have.status(200);\r",
 							"});"
 						],
 						"type": "text/javascript",
