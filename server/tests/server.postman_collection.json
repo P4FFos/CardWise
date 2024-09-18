@@ -1,8 +1,10 @@
 {
 	"info": {
+		"_postman_id": "b624ed25-2254-4123-8a71-8fc39dfc78d0",
 		"_postman_id": "e34245a2-6a39-4b7b-a255-e880c509d6c0",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38409323"
 		"_exporter_id": "38095200"
 	},
 	"item": [
@@ -166,7 +168,41 @@
 			"response": []
 		},
 		{
-			"name": "Update user information",
+			"name": "Get all users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/users",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update username",
 			"event": [
 				{
 					"listen": "test",
@@ -179,15 +215,8 @@
 							"var jsonData = JSON.parse(pm.response.text());",
 							"",
 							"pm.test(\"Username is updated\", function () {",
-							"    pm.expect(jsonData.username).to.eql(\"user2\");",
-							"});",
-							"",
-							"pm.test(\"Password is updated\", function () {",
-							"    pm.expect(jsonData.password).to.eql(\"password2\");",
-							"});",
-							"",
-							"",
-							""
+							"    pm.expect(jsonData.username).to.eql(\"user3\");",
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -205,7 +234,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"user2\",\n    \"password\": \"password2\"\n}",
+					"raw": "{\n    \"username\": \"user3\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -712,7 +741,8 @@
 						"api",
 						"v1",
 						"decks",
-						"{{deck_id}}"
+						"{{deck_id}}",
+						"cards"
 					]
 				}
 			},
