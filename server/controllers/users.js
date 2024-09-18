@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-var Users = require('../models/user.js');
+var User = require('../models/user.js');
 
 // create specific user
 router.post('/api/v1/users', async function (req, res, next) {
-    var user = new Users(req.body);
+    var user = new User(req.body);
     try {
         await user.save();
     } catch (error) {
@@ -18,7 +18,7 @@ router.post('/api/v1/users', async function (req, res, next) {
 router.get('/api/v1/users', async function (req, res, next) {
     var users;
     try {
-        users = await Users.find();
+        users = await User.find();
     } catch (error) {
         return next(error);
     }
@@ -32,9 +32,9 @@ router.put('/api/v1/users/:id', async function (req, res, next) {
 
     var updatedUser;
     try {
-        updatedUser = await Users.findById(userId);
+        updatedUser = await User.findById(userId);
         if (updatedUser == null) {
-            return res.status(404).json({message: 'Users not found'});
+            return res.status(404).json({message: 'User not found'});
         }
         updatedUser.set(updateData);
     } catch (error) {
@@ -51,9 +51,9 @@ router.patch('/api/v1/users/:id/username', async function (req, res, next) {
 
     var updatedUser;
     try {
-        updatedUser = await Users.findById(userId);
+        updatedUser = await User.findById(userId);
         if (updatedUser == null) {
-            return res.status(404).json({message: 'Users not found'});
+            return res.status(404).json({message: 'User not found'});
         }
         updatedUser.username = newUsername;
     } catch (error) {
@@ -69,15 +69,15 @@ router.delete('/api/v1/users/:id', async function (req, res, next) {
 
     var deletedUser;
     try {
-        deletedUser = await Users.findById(userId);
+        deletedUser = await User.findById(userId);
         if (!deletedUser) {
-            return res.status(404).json({message: 'Users not found'});
+            return res.status(404).json({message: 'User not found'});
         }
     } catch (error) {
         return next(error);
     }
 
-    res.json({message: 'Users account deleted successfully'});
+    res.json({message: 'User account deleted successfully'});
 });
 
 module.exports = router;

@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
-var Cards = require('../models/card.js');
+var Card = require('../models/card.js');
 var Deck = require('../models/deck.js');
 
 // Create a card
 router.post('/api/v1/decks/:deckID/cards', async function(req, res, next) {
     var deckID = req.params.deckID;
-    var card = new Cards(req.body);
+    var card = new Card(req.body);
     try {
         var deck = await Deck.findById(deckID);
         await card.save();
@@ -50,7 +50,7 @@ router.get('/api/v1/decks/:deckID/cards', async function(req, res, next) {
 router.get('/api/v1/decks/:deckID/cards/:cardID', async function(req, res, next) {
     var deckID = req.params.deckID;
     var cardID = req.params.cardID;
-    console.log('Cards ID:', cardID);
+    console.log('Card ID:', cardID);
     try {
         var deck = await Deck.findById(deckID).populate("cards").exec();
         console.log('Deck:', deck);
@@ -62,7 +62,7 @@ router.get('/api/v1/decks/:deckID/cards/:cardID', async function(req, res, next)
         });
         console.log(card);
         if (!deck) {
-            return res.status(404).json({ "message": "Cards with the provided ID does not exist." });
+            return res.status(404).json({ "message": "Card with the provided ID does not exist." });
         }
     } catch (error) {
         return next(error);
@@ -75,7 +75,7 @@ router.get('/api/v1/decks/:deckID/cards/:cardID', async function(req, res, next)
 router.delete('/api/v1/decks/:deckID/cards/:cardID', async function(req, res, next) {
     var deckID = req.params.deckID;
     var cardID = req.params.cardID;
-    console.log('Cards ID:', cardID);
+    console.log('Card ID:', cardID);
     try {
         var deck = await Deck.findById(deckID).populate("cards").exec();
         console.log('Deck:', deck);
@@ -85,10 +85,10 @@ router.delete('/api/v1/decks/:deckID/cards/:cardID', async function(req, res, ne
         var cardInfo = deck.cards.find(function(card) {
             return card._id.toString() === cardID
         });
-        var card = await Cards.findByIdAndDelete(req.params.cardID);
+        var card = await Card.findByIdAndDelete(req.params.cardID);
         console.log(card);
         if (!deck) {
-            return res.status(404).json({ "message": "Cards with the provided ID does not exist." });
+            return res.status(404).json({ "message": "Card with the provided ID does not exist." });
         }
         res.json(card);
     } catch (error) {
@@ -107,7 +107,7 @@ router.delete('/api/v1/decks/:deckID/cards', async function(req, res, next) {
         
         var cardIDs = deck.cards.map(card => card._id);
         
-        var deletedCards = await Cards.deleteMany({ _id: { $in: cardIDs}});
+        var deletedCards = await Card.deleteMany({ _id: { $in: cardIDs}});
         
         deck.cards = [];
         await deck.save();
