@@ -9,8 +9,16 @@ var StreakAchievement = require('../models/streakAchievement');
 
 // Create a new achievement
 router.post('/api/achievements', async function(req, res, next) {
-    var achievement = new Achievement(req.body);
     try {
+        const { type, ...data } = req.body;
+        
+        var achievement;
+        if (type === 'TestAchievement') {
+            achievement = new TestAchievement(data);
+        }
+        if (type === 'StreakAchievement') {
+            achievement = new StreakAchievement(data);
+        }
         await achievement.save();
         if (achievement == null) {
             res.status(404).json({"message": "Cannot create a null achievement."})
