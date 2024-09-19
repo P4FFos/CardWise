@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "6e9c4629-36e6-4946-a6e2-80d8a4ca8baf",
+		"_postman_id": "6700898c-1b03-4e08-b668-ef9358992582",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38409323"
+		"_exporter_id": "38095200"
 	},
 	"item": [
 		{
@@ -200,7 +200,7 @@
 			"response": []
 		},
 		{
-			"name": "Update username",
+			"name": "Update user information",
 			"event": [
 				{
 					"listen": "test",
@@ -214,6 +214,10 @@
 							"",
 							"pm.test(\"Username is updated\", function () {",
 							"    pm.expect(jsonData.username).to.eql(\"user3\");",
+							"});",
+							"",
+							"pm.test(\"Password is updated\", function () {",
+							"    pm.expect(jsonData.password).to.eql(\"password3\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -232,7 +236,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"user3\"\n}",
+					"raw": "{\n    \"username\": \"user3\", \n    \"password\" : \"password3\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

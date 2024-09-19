@@ -10,10 +10,10 @@ var methodOverride = require('method-override');
 var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cardwiseDevelopmentDB';
 var port = process.env.PORT || 3000;
 
-const deckRoutes = require('./controllers/decks.js');
-const achievementRoutes = require('./controllers/achievements.js');
-var userController = require('./controllers/users.js');
-var cardController = require('./controllers/cards.js');
+var decksController = require('./controllers/decks.js');
+var achievementsController = require('./controllers/achievements.js');
+var usersController = require('./controllers/users.js');
+var cardsController = require('./controllers/cards.js');
 
 // Connect to MongoDB
 mongoose.connect(mongoURI).catch(function(err) {
@@ -42,10 +42,10 @@ app.use(cors());
 app.use(methodOverride('X-HTTP-Method-Override'));
 
 // Import routes
-app.use(deckRoutes);
-app.use(achievementRoutes);
-app.use(cardController);
-app.use(userController);
+app.use(decksController);
+app.use(achievementsController);
+app.use(usersController);
+app.use(cardsController);
 
 app.get('/api', function(req, res) {
     res.json({'message': 'Welcome to the CARDWISE!'});
