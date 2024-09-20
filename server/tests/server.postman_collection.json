@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "6700898c-1b03-4e08-b668-ef9358992582",
+		"_postman_id": "b51d2f2c-baae-4fa4-8c37-27def55eeee6",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38095200"
+		"_exporter_id": "38335183"
 	},
 	"item": [
 		{
@@ -28,20 +28,20 @@
 					"script": {
 						"exec": [
 							"var jsonData = JSON.parse(pm.response.text());",
-							"var userID = jsonData._id;",
+							"var userID = jsonData.user._id;",
 							"pm.environment.set(\"userID\", userID);",
 							"",
 							"pm.test(\"Status code is 201\", function () {",
 							"    pm.response.to.have.status(201);",
 							"});",
 							"pm.test(\"Response contains user ID\", function () {",
-							"    pm.expect(jsonData).to.have.property(\"_id\");",
+							"    pm.expect(jsonData.user).to.have.property(\"_id\");",
 							"});",
 							"pm.test(\"Response contains username\", function () {",
-							"    pm.expect(jsonData).to.have.property(\"username\", \"user1\");",
+							"    pm.expect(jsonData.user).to.have.property(\"username\", \"user1\");",
 							"});",
 							"pm.test(\"Response contains password\", function () {",
-							"    pm.expect(jsonData).to.have.property(\"password\", \"password1\");",
+							"    pm.expect(jsonData.user).to.have.property(\"password\", \"password1\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -123,7 +123,7 @@
 							"var jsonData = JSON.parse(pm.response.text());",
 							"",
 							"pm.test(\"Username is updated\", function () {",
-							"    pm.expect(jsonData.username).to.eql(\"user3\");",
+							"    pm.expect(jsonData.user.username).to.eql(\"user3\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -213,11 +213,11 @@
 							"var jsonData = JSON.parse(pm.response.text());",
 							"",
 							"pm.test(\"Username is updated\", function () {",
-							"    pm.expect(jsonData.username).to.eql(\"user3\");",
+							"    pm.expect(jsonData.user.username).to.eql(\"user3\");",
 							"});",
 							"",
 							"pm.test(\"Password is updated\", function () {",
-							"    pm.expect(jsonData.password).to.eql(\"password3\");",
+							"    pm.expect(jsonData.user.password).to.eql(\"password3\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -316,7 +316,7 @@
 					"script": {
 						"exec": [
 							"var jsonData = JSON.parse(pm.response.text());\r",
-							"pm.environment.set(\"deck_id\", jsonData._id);\r",
+							"pm.environment.set(\"deck_id\", jsonData.deck._id);\r",
 							"\r",
 							"pm.test(\"Resource is CREATED\", function(){\r",
 							"    pm.response.to.have.status(201);\r",
@@ -637,6 +637,66 @@
 			"response": []
 		},
 		{
+			"name": "Create new card",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(pm.response.text());\r",
+							"pm.environment.set(\"card_id\", jsonData.card._id);\r",
+							"\r",
+							"\r",
+							"pm.test(\"Resource is CREATED\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Card content is not empty.\", function(){\r",
+							"    pm.expect(jsonData.content).not.eql(null);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Card explanation is not empty.\", function(){\r",
+							"    pm.expect(jsonData.explanation).not.eql(null);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"Plz work\",\r\n    \"explanation\": \"I dont think this needs an explanation\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/decks/{{deck_id}}/cards",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"decks",
+						"{{deck_id}}",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Update deck name",
 			"event": [
 				{
@@ -649,7 +709,7 @@
 							"\r",
 							"pm.test(\"Request should change the name of the deck\", function(){\r",
 							"    var jsonInfo = pm.response.json();\r",
-							"    pm.expect(jsonInfo.name).to.eql(\"Succesfull Patch\");\r",
+							"    pm.expect(jsonInfo.deck.name).to.eql(\"Succesfull Patch\");\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -705,7 +765,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Request should change the name of the deck\", function(){\r",
-							"    pm.expect(jsonInfo.name).to.eql(\"Succesfull Name Change\");\r",
+							"    pm.expect(jsonInfo.deck.name).to.eql(\"Succesfull Name Change\");\r",
 							"});\r",
 							"\r",
 							"\r",
@@ -744,66 +804,6 @@
 						"v1",
 						"decks",
 						"{{deck_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create new card",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = JSON.parse(pm.response.text());\r",
-							"pm.environment.set(\"card_id\", jsonData._id);\r",
-							"\r",
-							"\r",
-							"pm.test(\"Resource is CREATED\", function(){\r",
-							"    pm.response.to.have.status(201);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Card content is not empty.\", function(){\r",
-							"    pm.expect(jsonData.content).not.eql(null);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Card explanation is not empty.\", function(){\r",
-							"    pm.expect(jsonData.explanation).not.eql(null);\r",
-							"});\r",
-							"\r",
-							"\r",
-							"\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"type\": \"StreakAchievement\",\r\n  \"name\": \"7 Day Streak\",\r\n  \"streakCounter\": 7\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{host}}/api/v1/decks/{{deck_id}}/cards",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"decks",
-						"{{deck_id}}",
-						"cards"
 					]
 				}
 			},
@@ -1059,7 +1059,7 @@
 					"script": {
 						"exec": [
 							"var jsonData = JSON.parse(pm.response.text());\r",
-							"pm.environment.set(\"test_achievement_id\", jsonData._id);\r",
+							"pm.environment.set(\"test_achievement_id\", jsonData.achievement._id);\r",
 							"\r",
 							"pm.test(\"Resource is CREATED\", function(){\r",
 							"    pm.response.to.have.status(201);\r",
@@ -1068,11 +1068,11 @@
 							"pm.test(\"Response should be a valid TestAchievement\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    \r",
-							"    pm.expect(jsonData.type).to.eql(\"TestAchievement\");\r",
+							"    pm.expect(jsonData.achievement.type).to.eql(\"TestAchievement\");\r",
 							"\r",
-							"    pm.expect(jsonData).to.have.property(\"name\", \"Pass 5 Tests\");\r",
-							"    pm.expect(jsonData).to.have.property(\"isTriggered\", false);\r",
-							"    pm.expect(jsonData).to.have.property(\"condition\", \"Pass at least 5 tests\");\r",
+							"    pm.expect(jsonData.achievement).to.have.property(\"name\", \"Pass 5 Tests\");\r",
+							"    pm.expect(jsonData.achievement).to.have.property(\"isTriggered\", false);\r",
+							"    pm.expect(jsonData.achievement).to.have.property(\"condition\", \"Pass at least 5 tests\");\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1114,7 +1114,7 @@
 					"script": {
 						"exec": [
 							"var jsonData = JSON.parse(pm.response.text());\r",
-							"pm.environment.set(\"streak_achievement_id\", jsonData._id);\r",
+							"pm.environment.set(\"streak_achievement_id\", jsonData.achievement._id);\r",
 							"\r",
 							"pm.test(\"Resource is CREATED\", function(){\r",
 							"    pm.response.to.have.status(201);\r",
@@ -1123,10 +1123,10 @@
 							"pm.test(\"Response should be a valid StreakAchievement\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    \r",
-							"    pm.expect(jsonData.type).to.eql(\"StreakAchievement\");\r",
+							"    pm.expect(jsonData.achievement.type).to.eql(\"StreakAchievement\");\r",
 							"\r",
-							"    pm.expect(jsonData).to.have.property(\"name\", \"7 Day Streak\");\r",
-							"    pm.expect(jsonData).to.have.property(\"streakCounter\", 7);\r",
+							"    pm.expect(jsonData.achievement).to.have.property(\"name\", \"7 Day Streak\");\r",
+							"    pm.expect(jsonData.achievement).to.have.property(\"streakCounter\", 7);\r",
 							"});\r",
 							""
 						],
@@ -1281,11 +1281,11 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Request should change the name of the test achievement\", function(){\r",
-							"    pm.expect(jsonInfo.name).to.eql(\"Succesfull Name Change\");\r",
+							"    pm.expect(jsonInfo.achievement.name).to.eql(\"Succesfull Name Change\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Request should change the condition of the achievement\", function(){\r",
-							"    pm.expect(jsonInfo.condition).to.eql(\"Succesfull Condition Change\");\r",
+							"    pm.expect(jsonInfo.achievement.condition).to.eql(\"Succesfull Condition Change\");\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1340,11 +1340,11 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Request should change the name of the test achievement\", function(){\r",
-							"    pm.expect(jsonInfo.name).to.eql(\"Succesfull Name Change\");\r",
+							"    pm.expect(jsonInfo.achievement.name).to.eql(\"Succesfull Name Change\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Request should change the streak counter of the achievement\", function(){\r",
-							"    pm.expect(jsonInfo.streakCounter).to.eql(5);\r",
+							"    pm.expect(jsonInfo.achievement.streakCounter).to.eql(5);\r",
 							"});"
 						],
 						"type": "text/javascript",
