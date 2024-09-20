@@ -16,7 +16,29 @@ router.post('/api/v1/decks', async function(req, res, next) {
     } catch (error) {
         return next(error);
     }
-    res.status(201).json(deck);
+    res.status(201).json({
+        "deck": deck,
+        "_links": {
+            "self": {
+                "rel": "self",
+                "href": `http://localhost:${port}/api/v1/decks/${deck._id}`
+            },
+            "update": {
+                "rel": "update",
+                "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                "method": "PUT"
+            },
+            "delete": {
+                "rel": "delete",
+                "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                "method": "DELETE"
+            }, 
+            "post": {
+                "rel": "post",
+                "href": `http://localhost:${port}/api/v1/decks`,
+                "method": "POST"
+            }
+        }});
 });
 
 // Show all decks
