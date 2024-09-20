@@ -85,7 +85,7 @@ router.get('/api/v1/decks/:deckID/cards/:cardID', async function(req, res, next)
         "_links": {
             "delete": {
                 "rel": "delete",
-                "href":`http://localhost:${port}/api/v1/decks/${deckID}/cards/${card._id}`,
+                "href":`http://localhost:${port}/api/v1/decks/${deckID}/cards/${cardID}`,
                 "method": "DELETE"
             }, 
             "post": {
