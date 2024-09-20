@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var port = process.env.PORT || 3000;
 
 var User = require('../models/user.js');
 
@@ -11,7 +12,29 @@ router.post('/api/v1/users', async function (req, res, next) {
     } catch (error) {
         return next(error);
     }
-    res.status(201).json(user);
+    res.status(201).json({
+        "user": user,
+        "_links": {
+            "self": {
+                "rel": "self",
+                "href": `http://localhost:${port}/api/v1/users/${user._id}`
+            },
+            "update user information": {
+                "rel": "update",
+                "href":`http://localhost:${port}/api/v1/users/${user._id}`,
+                "method": "PUT"
+            },
+            "update": {
+                "rel": "update",
+                "href":`http://localhost:${port}/api/v1/users/${user._id}/username`,
+                "method": "PATCH"
+            },
+            "delete": {
+                "rel": "delete",
+                "href":`http://localhost:${port}/api/v1/users/${user._id}`,
+                "method": "DELETE"
+            }
+        }});
 });
 
 // get all users
@@ -41,7 +64,29 @@ router.put('/api/v1/users/:id', async function (req, res, next) {
         return next(error);
     }
 
-    res.json(updatedUser);
+    res.json({
+        "user": updatedUser,
+        "_links": {
+            "self": {
+                "rel": "self",
+                "href": `http://localhost:${port}/api/v1/users/${userId}`
+            },
+            "update": {
+                "rel": "update",
+                "href":`http://localhost:${port}/api/v1/users/${userId}/username`,
+                "method": "PATCH"
+            },
+            "delete": {
+                "rel": "delete",
+                "href":`http://localhost:${port}/api/v1/users/${userId}`,
+                "method": "DELETE"
+            }, 
+            "post": {
+                "rel": "post",
+                "href": `http://localhost:${port}/api/v1/users`,
+                "method": "POST"
+            }
+        }});
 });
 
 // update username
@@ -60,7 +105,29 @@ router.patch('/api/v1/users/:id/username', async function (req, res, next) {
         return next(error);
     }
 
-    res.json(updatedUser);
+    res.json({
+        "user": updatedUser,
+        "_links": {
+            "self": {
+                "rel": "self",
+                "href": `http://localhost:${port}/api/v1/users/${userId}`
+            },
+            "update user information": {
+                "rel": "update",
+                "href":`http://localhost:${port}/api/v1/users/${userId}`,
+                "method": "PUT"
+            },
+            "delete": {
+                "rel": "delete",
+                "href":`http://localhost:${port}/api/v1/users/${userId}`,
+                "method": "DELETE"
+            }, 
+            "post": {
+                "rel": "post",
+                "href": `http://localhost:${port}/api/v1/users`,
+                "method": "POST"
+            }
+        }});
 });
 
 // delete user
