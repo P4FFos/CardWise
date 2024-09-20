@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var app = express();
+var port = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -32,16 +33,16 @@ router.post('/api/v1/achievements', async function(req, res, next) {
         "_links": {
             "self": {
                 "rel": "self",
-                "href": `http://localhost:${port}/api/v1/achievements/${req.params.id}`
+                "href": `http://localhost:${port}/api/v1/achievements/${achievement._id}`
             },
             "update achievement information": {
                 "rel": "update",
-                "href":`http://localhost:${port}/api/v1/achievements/${req.params.id}`,
+                "href":`http://localhost:${port}/api/v1/achievements/${achievement._id}`,
                 "method": "PUT"
             },
             "delete": {
                 "rel": "delete",
-                "href":`http://localhost:${port}/api/v1/achievements/${req.params.id}`,
+                "href":`http://localhost:${port}/api/v1/achievements/${achievement._id}`,
                 "method": "DELETE"
             }, 
             "post": {
@@ -51,6 +52,7 @@ router.post('/api/v1/achievements', async function(req, res, next) {
             }
         }});    
 });
+
 
 // Info of all achievements
 router.get('/api/v1/achievements', async function(req, res, next) {
@@ -88,12 +90,12 @@ router.get('/api/v1/achievements/:id', async function(req, res, next) {
             "_links": {
                 "update achievement information": {
                     "rel": "update",
-                    "href":`http://localhost:${port}/api/v1/achievements/${req.params.id}`,
+                    "href":`http://localhost:${port}/api/v1/achievements/${achievement._id}`,
                     "method": "PUT"
                 },
                 "delete": {
                     "rel": "delete",
-                    "href":`http://localhost:${port}/api/v1/achievements/${req.params.id}`,
+                    "href":`http://localhost:${port}/api/v1/achievements/${achievement._id}`,
                     "method": "DELETE"
                 }, 
                 "post": {
@@ -110,7 +112,7 @@ router.get('/api/v1/achievements/:id', async function(req, res, next) {
 // Put info into spec achievement
 router.put('/api/v1/achievements/:id', async function(req, res, next) {
     try {
-        const achievement = await Achievement.findById(req.params.id);
+        var achievement = await Achievement.findById(req.params.id);
         if (achievement == null) {
             return res.status(404).json({"message": "Achievement not found"});
         }
@@ -128,16 +130,16 @@ router.put('/api/v1/achievements/:id', async function(req, res, next) {
             "_links": {
                 "self": {
                     "rel": "self",
-                    "href": `http://localhost:${port}/api/v1/achievements/${req.params.id}`
+                    "href": `http://localhost:${port}/api/v1/achievements/${achievement._id}`
                 },
                 "update achievement information": {
                     "rel": "update",
-                    "href":`http://localhost:${port}/api/v1/achievements/${req.params.id}`,
+                    "href":`http://localhost:${port}/api/v1/achievements/${achievement._id}`,
                     "method": "PUT"
                 },
                 "delete": {
                     "rel": "delete",
-                    "href":`http://localhost:${port}/api/v1/achievements/${req.params.id}`,
+                    "href":`http://localhost:${port}/api/v1/achievements/${achievement._id}`,
                     "method": "DELETE"
                 }, 
                 "post": {
