@@ -67,7 +67,20 @@ router.get('/api/v1/decks/:deckID/cards/:cardID', async function(req, res, next)
     } catch (error) {
         return next(error);
     }
-    res.status(200).json(card);
+    res.status(200).json({
+        "card": card,
+        "_links": {
+            "delete": {
+                "rel": "delete",
+                "href":`http://localhost:${port}/api/v1/decks/${deckID}/cards/${cardID}`,
+                "method": "DELETE"
+            }, 
+            "post": {
+                "rel": "post",
+                "href": `http://localhost:${port}/api/v1/decks/${deckID}/cards`,
+                "method": "POST"
+            }
+        }});
 });
 
 
