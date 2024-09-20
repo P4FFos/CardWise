@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var port = process.env.PORT || 3000;
 
 var Card = require('../models/card.js');
 var Deck = require('../models/deck.js');
@@ -22,7 +23,19 @@ router.post('/api/v1/decks/:deckID/cards', async function(req, res, next) {
     } catch (error) {
         return next(error);
     }
-    res.status(201).json(card);
+    res.status(201).json({
+        "card": card,
+        "_links": {
+            "self": {
+                "rel": "self",
+                "href": `http://localhost:${port}/api/v1/decks/${deckID}/cards/${card._id}`
+            },
+            "delete": {
+                "rel": "delete",
+                "href":`http://localhost:${port}/api/v1/decks/${deckID}/cards/${card._id}`,
+                "method": "DELETE"
+            }
+        }});
 });
 
 // Get information from all cards in a specific deck
@@ -67,7 +80,20 @@ router.get('/api/v1/decks/:deckID/cards/:cardID', async function(req, res, next)
     } catch (error) {
         return next(error);
     }
-    res.status(200).json(card);
+    res.status(200).json({
+        "card": card,
+        "_links": {
+            "delete": {
+                "rel": "delete",
+                "href":`http://localhost:${port}/api/v1/decks/${deckID}/cards/${cardID}`,
+                "method": "DELETE"
+            }, 
+            "post": {
+                "rel": "post",
+                "href": `http://localhost:${port}/api/v1/decks/${deckID}/cards`,
+                "method": "POST"
+            }
+        }});
 });
 
 

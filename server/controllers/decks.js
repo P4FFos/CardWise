@@ -1,22 +1,47 @@
 var express = require('express');
 var router = express.Router();
 var app = express();
+var port = process.env.PORT || 3000;
 
 app.use(express.json());
 var Deck = require('../models/deck.js');
 
+
 // Create a new deck
 router.post('/api/v1/decks', async function(req, res, next) {
     var deck = new Deck(req.body);
+    console.log(deck._id);
     try {
-        await deck.save();
         if (deck == null) {
             res.status(404).json({"message": "Cannot create a null deck."})
         }
+        await deck.save();
     } catch (error) {
         return next(error);
     }
-    res.status(201).json(deck);
+    res.status(201).json({
+        "deck": deck,
+        "_links": {
+            "self": {
+                "rel": "self",
+                "href": `http://localhost:${port}/api/v1/decks/${deck._id}`
+            },
+            "update": {
+                "rel": "update",
+                "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                "method": "PUT"
+            },
+            "delete": {
+                "rel": "delete",
+                "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                "method": "DELETE"
+            }, 
+            "post": {
+                "rel": "post",
+                "href": `http://localhost:${port}/api/v1/decks`,
+                "method": "POST"
+            }
+        }});
 });
 
 // Show all decks
@@ -72,12 +97,36 @@ router.get('/api/v1/decks/sort', async function(req, res, next) {
 // Show a specific deck
 router.get('/api/v1/decks/:id', async function(req, res, next) {
     var id = req.params.id;
+    console.log(id)
     try {
-        const deck = await Deck.findById(id);
+        var deck = await Deck.findById(id);
         if (deck == null) {
             return res.status(404).json({"message": "Deck with given id cannot be found."});
         }
-        res.json(deck);
+        res.json({
+            "deck": deck,
+            "_links": {
+                "update": {
+                    "rel": "update",
+                    "href":`http://localhost:${port}/api/v1/decks/${id}`,
+                    "method": "PUT"
+                },
+                "update deck name": {
+                    "rel": "update",
+                    "href":`http://localhost:${port}/api/v1/decks/${id}`,
+                    "method": "PATCH"
+                },
+                "delete": {
+                    "rel": "delete",
+                    "href":`http://localhost:${port}/api/v1/decks/${id}`,
+                    "method": "DELETE"
+                }, 
+                "post": {
+                    "rel": "post",
+                    "href": `http://localhost:${port}/api/v1/decks`,
+                    "method": "POST"
+                }
+            }});
     } catch (error) {
         return next(error);
     }
@@ -94,7 +143,29 @@ router.put('/api/v1/decks/:id', async function(req, res, next) {
         deck.cards = req.body.cards;
 
         await deck.save();
-        res.json(deck);
+        res.json({
+            "deck": deck,
+            "_links": {
+                "self": {
+                    "rel": "self",
+                    "href": `http://localhost:${port}/api/v1/decks/${deck._id}`
+                },
+                "update deck name": {
+                    "rel": "update",
+                    "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                    "method": "PATCH"
+                },
+                "delete": {
+                    "rel": "delete",
+                    "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                    "method": "DELETE"
+                }, 
+                "post": {
+                    "rel": "post",
+                    "href": `http://localhost:${port}/api/v1/decks`,
+                    "method": "POST"
+                }
+            }});
     } catch (err) { 
         return next(err); 
     }
@@ -111,7 +182,29 @@ router.patch('/api/v1/decks/:id', async function(req, res, next) {
         deck.cards = req.body.cards || deck.cards;
 
         await deck.save();
-        res.json(deck);
+        res.json({
+            "deck": deck,
+            "_links": {
+                "self": {
+                    "rel": "self",
+                    "href": `http://localhost:${port}/api/v1/decks/${deck._id}`
+                },
+                "update": {
+                    "rel": "update",
+                    "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                    "method": "PUT"
+                },
+                "delete": {
+                    "rel": "delete",
+                    "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                    "method": "DELETE"
+                }, 
+                "post": {
+                    "rel": "post",
+                    "href": `http://localhost:${port}/api/v1/decks`,
+                    "method": "POST"
+                }
+            }});
     } catch (err) { 
         return next(err); 
     }
