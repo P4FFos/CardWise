@@ -12,7 +12,7 @@ router.post('/api/v1/decks', async function(req, res, next) {
     var deck = new Deck(req.body);
     console.log(deck._id);
     try {
-        if (deck == null) {
+        if (!deck) {
             res.status(404).json({"message": "Cannot create a null deck."})
         }
         await deck.save();
@@ -49,6 +49,9 @@ router.get('/api/v1/decks', async function(req, res, next) {
     var decks;
     try {
         decks = await Deck.find();
+        if (!decks) {
+            return res.status(404).json({ "message": "Decks do not exist." });
+        }
     } catch (error) {
         return next(error);
     }
@@ -58,6 +61,9 @@ router.get('/api/v1/decks', async function(req, res, next) {
 // Sort decks by the number of cards in it or by name
 router.get('/api/v1/decks/sort', async function(req, res, next) {
     let sortField; // define type of sorting
+    if (!sortField) {
+        return res.status(404).json({ "message": "Sort field was not defined." });
+    }
     if (req.query.field === 'name') {
         sortField = 'name';
     } else {
@@ -100,7 +106,7 @@ router.get('/api/v1/decks/:id', async function(req, res, next) {
     console.log(id)
     try {
         var deck = await Deck.findById(id);
-        if (deck == null) {
+        if (!deck) {
             return res.status(404).json({"message": "Deck with given id cannot be found."});
         }
         res.json({
@@ -136,7 +142,7 @@ router.get('/api/v1/decks/:id', async function(req, res, next) {
 router.put('/api/v1/decks/:id', async function(req, res, next) {
     try {
         const deck = await Deck.findById(req.params.id);
-        if (deck == null) {
+        if (!deck) {
             return res.status(404).json({"message": "Deck not found"});
         }
         deck.name = req.body.name;
@@ -175,7 +181,7 @@ router.put('/api/v1/decks/:id', async function(req, res, next) {
 router.patch('/api/v1/decks/:id', async function(req, res, next) {
     try {
         var deck = await Deck.findById(req.params.id);
-        if (deck == null) {
+        if (!deck) {
             return res.status(404).json({"message": "Deck not found"});
         }
         deck.name = req.body.name || deck.name;
@@ -214,6 +220,9 @@ router.patch('/api/v1/decks/:id', async function(req, res, next) {
 router.delete('/api/v1/decks', async function(req, res, next) {
     try {
         const result = await Deck.deleteMany({});
+        if (!result) {
+            return res.status(500).json({ "message": "Error while deleting all decks. Decks are not found." });
+        }
         res.status(200).json({
             message: result.deletedCount + " " + "deck(s) deleted.",
             result: result
@@ -227,7 +236,7 @@ router.delete('/api/v1/decks', async function(req, res, next) {
 router.delete('/api/v1/decks/:id', async function(req, res, next) {
     try {
         const deck = await Deck.findByIdAndDelete(req.params.id);
-        if (deck == null) {
+        if (!deck) {
             res.status(404).json({"message": "Deck with given id not found."});
         }
         res.json(deck);
