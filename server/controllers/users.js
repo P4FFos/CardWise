@@ -8,6 +8,9 @@ var User = require('../models/user.js');
 router.post('/api/v1/users', async function (req, res, next) {
     var user = new User(req.body);
     try {
+        if (!user) {
+            res.status(404).json({"message": "Cannot create a null user."})
+        }
         await user.save();
     } catch (error) {
         return next(error);
@@ -42,6 +45,9 @@ router.get('/api/v1/users', async function (req, res, next) {
     var users;
     try {
         users = await User.find();
+        if (!users) {
+            return res.status(404).json({ "message": "Users do not exist." });
+        }
     } catch (error) {
         return next(error);
     }
