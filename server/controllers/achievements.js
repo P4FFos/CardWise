@@ -22,7 +22,7 @@ router.post('/api/v1/achievements', async function(req, res, next) {
             achievement = new StreakAchievement(data);
         }
         await achievement.save();
-        if (achievement == null) {
+        if (!achievement) {
             res.status(404).json({"message": "Cannot create a null achievement."})
         }
     } catch (error) {
@@ -59,16 +59,22 @@ router.get('/api/v1/achievements', async function(req, res, next) {
     var achievements;
     try {
         achievements = await Achievement.find();
+        if (!achievements) {
+            return res.status(404).json({ "message": "Achievements do not exist." });
+        }
     } catch (error) {
         return next(error);
     }
-    res.json({"achievements": achievements});
+    res.status(200).json({"achievements": achievements});
 });
 
 // Restarting progress through deleting achievements 
 router.delete('/api/v1/achievements', async function(req, res, next) {
     try {
         const result = await Achievement.deleteMany({});
+        if (!result) {
+            return res.status(500).json({ "message": "Error while restarting progress. Achievements are not found." });
+        }
         res.status(200).json({
             message: result.deletedCount + " " + "Achievement(s) deleted. Progress reastarted.",
             result: result
@@ -82,7 +88,7 @@ router.delete('/api/v1/achievements', async function(req, res, next) {
 router.get('/api/v1/achievements/:id', async function(req, res, next) {
     try {
         const achievement = await Achievement.findById(req.params.id);
-        if (achievement == null) {
+        if (!achievement) {
             return res.status(404).json({"message": "Achievement with given id cannot be found."});
         }
         res.json({
@@ -113,8 +119,8 @@ router.get('/api/v1/achievements/:id', async function(req, res, next) {
 router.put('/api/v1/achievements/:id', async function(req, res, next) {
     try {
         var achievement = await Achievement.findById(req.params.id);
-        if (achievement == null) {
-            return res.status(404).json({"message": "Achievement not found"});
+        if (!achievement) {
+            return res.status(404).json({"message": "Achievement with given id cannot be found."});
         }
         achievement.name = req.body.name;
         if (achievement.type == 'TestAchievement') {

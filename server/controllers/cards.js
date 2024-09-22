@@ -56,7 +56,7 @@ router.get('/api/v1/decks/:deckID/cards', async function(req, res, next) {
                 cards: deck.cards
             }
 
-        });
+    });
 });
 
 // Get information from a specific card in a specific deck
