@@ -4,18 +4,23 @@ var app = express();
 var port = process.env.PORT || 3000;
 
 app.use(express.json());
+
+var User = require('../models/user.js');
 var Deck = require('../models/deck.js');
 
-
 // Create a new deck
-router.post('/api/v1/decks', async function(req, res, next) {
+router.post('/api/v1/users/:userID/decks', async function(req, res, next) {
+    var userID = req.params.userID;
+    var user = await User.findById(userID);
     var deck = new Deck(req.body);
     console.log(deck._id);
     try {
         if (!deck) {
             res.status(404).json({"message": "Cannot create a null deck."})
         }
+        user.decks.push(deck._id);
         await deck.save();
+        await user.save();
     } catch (error) {
         return next(error);
     }
@@ -45,10 +50,11 @@ router.post('/api/v1/decks', async function(req, res, next) {
 });
 
 // Show all decks
-router.get('/api/v1/decks', async function(req, res, next) {
+router.get('/api/v1/users/:userID/decks', async function(req, res, next) {
+    var userID = req.params.userID;
     var decks;
     try {
-        decks = await Deck.find();
+        decks = await User.findById(userID).populate("decks").exec();
         if (!decks) {
             return res.status(404).json({ "message": "Decks do not exist." });
         }
@@ -59,15 +65,15 @@ router.get('/api/v1/decks', async function(req, res, next) {
 });
 
 // Sort decks by the number of cards in it or by name
-router.get('/api/v1/decks/sort', async function(req, res, next) {
+router.get('/api/v1/users/:userID/decks/sort', async function(req, res, next) {
     let sortField; // define type of sorting
-    if (!sortField) {
-        return res.status(404).json({ "message": "Sort field was not defined." });
-    }
     if (req.query.field === 'name') {
         sortField = 'name';
     } else {
         sortField = 'cardAmount';
+    }
+    if (!sortField) {
+        return res.status(404).json({ "message": "Sort field was not defined." });
     }
 
     let sortOrder;
@@ -101,11 +107,15 @@ router.get('/api/v1/decks/sort', async function(req, res, next) {
 });
 
 // Show a specific deck
-router.get('/api/v1/decks/:id', async function(req, res, next) {
-    var id = req.params.id;
-    console.log(id)
+router.get('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
+    var userID = req.params.userID;
+    var deckID = req.params.id;
+    console.log('Deck ID:', deckID);
     try {
-        var deck = await Deck.findById(id);
+        var user = await User.findById(userID).populate("decks").exec();
+        var deck = await user.decks.find(function(deck) {
+            return deck._id.toString() === deckID;
+        });
         if (!deck) {
             return res.status(404).json({"message": "Deck with given id cannot be found."});
         }
@@ -114,22 +124,22 @@ router.get('/api/v1/decks/:id', async function(req, res, next) {
             "_links": {
                 "update": {
                     "rel": "update",
-                    "href":`http://localhost:${port}/api/v1/decks/${id}`,
+                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
                     "method": "PUT"
                 },
                 "update deck name": {
                     "rel": "update",
-                    "href":`http://localhost:${port}/api/v1/decks/${id}`,
+                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
                     "method": "PATCH"
                 },
                 "delete": {
                     "rel": "delete",
-                    "href":`http://localhost:${port}/api/v1/decks/${id}`,
+                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
                     "method": "DELETE"
                 }, 
                 "post": {
                     "rel": "post",
-                    "href": `http://localhost:${port}/api/v1/decks`,
+                    "href": `http://localhost:${port}/api/v1/users/:userID/decks`,
                     "method": "POST"
                 }
             }});
@@ -139,9 +149,13 @@ router.get('/api/v1/decks/:id', async function(req, res, next) {
 })
 
 // Update a specific deck
-router.put('/api/v1/decks/:id', async function(req, res, next) {
+router.put('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
+    var userID = req.params.userID;
+    var deckID = req.params.id;
+    console.log('Deck ID:', deckID);
     try {
-        const deck = await Deck.findById(req.params.id);
+        var user = await User.findById(userID).populate("decks").exec();
+        var deck = await user.decks.find(d => d._id.toString() === deckID);
         if (!deck) {
             return res.status(404).json({"message": "Deck not found"});
         }
@@ -154,21 +168,21 @@ router.put('/api/v1/decks/:id', async function(req, res, next) {
             "_links": {
                 "self": {
                     "rel": "self",
-                    "href": `http://localhost:${port}/api/v1/decks/${deck._id}`
+                    "href": `http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`
                 },
                 "update deck name": {
                     "rel": "update",
-                    "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
                     "method": "PATCH"
                 },
                 "delete": {
                     "rel": "delete",
-                    "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
                     "method": "DELETE"
                 }, 
                 "post": {
                     "rel": "post",
-                    "href": `http://localhost:${port}/api/v1/decks`,
+                    "href": `http://localhost:${port}/api/v1/users/:userID/decks`,
                     "method": "POST"
                 }
             }});
@@ -178,9 +192,13 @@ router.put('/api/v1/decks/:id', async function(req, res, next) {
 });
 
 // Update some part of a specific deck
-router.patch('/api/v1/decks/:id', async function(req, res, next) {
+router.patch('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
+    var userID = req.params.userID;
+    var deckID = req.params.id;
+    console.log('Deck ID:', deckID);
     try {
-        var deck = await Deck.findById(req.params.id);
+        var user = await User.findById(userID).populate("decks").exec();
+        var deck = await user.decks.find(d => d._id.toString() === deckID);
         if (!deck) {
             return res.status(404).json({"message": "Deck not found"});
         }
@@ -193,21 +211,21 @@ router.patch('/api/v1/decks/:id', async function(req, res, next) {
             "_links": {
                 "self": {
                     "rel": "self",
-                    "href": `http://localhost:${port}/api/v1/decks/${deck._id}`
+                    "href": `http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`
                 },
                 "update": {
                     "rel": "update",
-                    "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
                     "method": "PUT"
                 },
                 "delete": {
                     "rel": "delete",
-                    "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
                     "method": "DELETE"
                 }, 
                 "post": {
                     "rel": "post",
-                    "href": `http://localhost:${port}/api/v1/decks`,
+                    "href": `http://localhost:${port}/api/v1/users/:userID/decks`,
                     "method": "POST"
                 }
             }});
@@ -217,15 +235,27 @@ router.patch('/api/v1/decks/:id', async function(req, res, next) {
 });
 
 // Delete all decks
-router.delete('/api/v1/decks', async function(req, res, next) {
+router.delete('/api/v1/users/:userID/decks', async function(req, res, next) {
+    var userID = req.params.userID;
     try {
+        var user = await User.findById(userID);
+        if (!user) {
+            return res.status(404).json({ "message": "User with the provided ID does not exist." });
+        }
+        var deckIDs = user.decks.map(deck => deck._id);
+        var deletedDecks = await Deck.deleteMany({ _id: { $in: deckIDs}});
+        
+        user.decks = [];
+        await user.save();
+
         const result = await Deck.deleteMany({});
         if (!result) {
             return res.status(500).json({ "message": "Error while deleting all decks. Decks are not found." });
         }
         res.status(200).json({
             message: result.deletedCount + " " + "deck(s) deleted.",
-            result: result
+            userResult: user,
+            deckResults: deletedDecks,
         });
     } catch (error) {
         return next(error);
@@ -233,9 +263,10 @@ router.delete('/api/v1/decks', async function(req, res, next) {
 });
 
 // Delete specific deck
-router.delete('/api/v1/decks/:id', async function(req, res, next) {
+router.delete('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
+    var deckID = req.params.id;
     try {
-        const deck = await Deck.findByIdAndDelete(req.params.id);
+        const deck = await Deck.findByIdAndDelete(deckID);
         if (!deck) {
             res.status(404).json({"message": "Deck with given id not found."});
         }

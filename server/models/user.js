@@ -9,7 +9,8 @@ var userSchema = new Schema({
   achievements: {
     testAchievements: [{type: Schema.Types.ObjectId, ref: "TestAchievement"}],
     streakAchievements: [{type: Schema.Types.ObjectId, ref: "StreakAchievement"}]
-  }
+  },
+  decks: [{type: Schema.Types.ObjectId, ref: "deck"}]
 });
 
 module.exports = mongoose.model('user', userSchema);
