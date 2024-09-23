@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "b51d2f2c-baae-4fa4-8c37-27def55eeee6",
+		"_postman_id": "860f516a-37df-4ada-984d-588fbf706335",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38335183"
+		"_exporter_id": "38409323"
 	},
 	"item": [
 		{
@@ -259,56 +259,6 @@
 			"response": []
 		},
 		{
-			"name": "Delete user",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"User account has been deleted (200 OK)\", function() {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "X-HTTP-Method-Override",
-						"value": "DELETE",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/api/v1/users/{{userID}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"users",
-						"{{userID}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Create new deck",
 			"event": [
 				{
@@ -345,13 +295,15 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/decks",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks"
 					]
 				}
@@ -371,7 +323,7 @@
 							"\r",
 							"pm.test(\"Response contains deck(s)\", function(){\r",
 							"    var jsonInfo = pm.response.json();\r",
-							"    pm.expect(jsonInfo.decks).to.be.an(\"array\");\r",
+							"    pm.expect(jsonInfo.decks).to.be.an(\"object\");\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -395,13 +347,15 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/decks",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks"
 					]
 				}
@@ -432,13 +386,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/decks/sort?field=cardAmount&order=dsc",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks/sort?field=cardAmount&order=dsc",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks",
 						"sort"
 					],
@@ -480,13 +436,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/decks/sort?field=cardAmount&order=asc",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks/sort?field=cardAmount&order=asc",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks",
 						"sort"
 					],
@@ -528,13 +486,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/decks/sort?field=name&order=asc",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks/sort?field=name&order=asc",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks",
 						"sort"
 					],
@@ -576,13 +536,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/decks/sort?field=name&order=dsc",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks/sort?field=name&order=dsc",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks",
 						"sort"
 					],
@@ -622,13 +584,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/decks/{{deck_id}}",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks/{{deck_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks",
 						"{{deck_id}}"
 					]
@@ -681,13 +645,15 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/decks/{{deck_id}}/cards",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks/{{deck_id}}/cards",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks",
 						"{{deck_id}}",
 						"cards"
@@ -736,13 +702,15 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/decks/{{deck_id}}",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks/{{deck_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks",
 						"{{deck_id}}"
 					]
@@ -795,13 +763,15 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/decks/{{deck_id}}",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks/{{deck_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks",
 						"{{deck_id}}"
 					]
@@ -834,13 +804,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/decks/{{deck_id}}/cards",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks/{{deck_id}}/cards",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks",
 						"{{deck_id}}",
 						"cards"
@@ -871,13 +843,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/decks/{{deck_id}}/cards/{{card_id}}",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks/{{deck_id}}/cards/{{card_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks",
 						"{{deck_id}}",
 						"cards",
@@ -913,13 +887,15 @@
 					}
 				],
 				"url": {
-					"raw": "{{host}}/api/v1/decks/{{deck_id}}/cards/{{card_id}}",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks/{{deck_id}}/cards/{{card_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks",
 						"{{deck_id}}",
 						"cards",
@@ -955,13 +931,15 @@
 					}
 				],
 				"url": {
-					"raw": "{{host}}/api/v1/decks/{{deck_id}}/cards",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks/{{deck_id}}/cards",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks",
 						"{{deck_id}}",
 						"cards"
@@ -998,13 +976,15 @@
 					}
 				],
 				"url": {
-					"raw": "{{host}}/api/v1/decks/{{deck_id}}",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks/{{deck_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks",
 						"{{deck_id}}"
 					]
@@ -1038,13 +1018,15 @@
 					}
 				],
 				"url": {
-					"raw": "{{host}}/api/v1/decks",
+					"raw": "{{host}}/api/v1/users/{{userID}}/decks",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"decks"
 					]
 				}
@@ -1067,7 +1049,7 @@
 							"\r",
 							"pm.test(\"Response should be a valid TestAchievement\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
-							"    \r",
+							"\r",
 							"    pm.expect(jsonData.achievement.type).to.eql(\"TestAchievement\");\r",
 							"\r",
 							"    pm.expect(jsonData.achievement).to.have.property(\"name\", \"Pass 5 Tests\");\r",
@@ -1093,13 +1075,15 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/achievements",
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"achievements"
 					]
 				}
@@ -1148,13 +1132,15 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/achievements",
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"achievements"
 					]
 				}
@@ -1174,8 +1160,9 @@
 							"\r",
 							"pm.test(\"Response contains achievements(s)\", function(){\r",
 							"    var jsonInfo = pm.response.json();\r",
-							"    pm.expect(jsonInfo.achievements).to.be.an(\"array\");\r",
-							"});"
+							"    pm.expect(jsonInfo.achievements).to.be.an(\"object\");\r",
+							"});\r",
+							""
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -1186,13 +1173,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/achievements",
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"achievements"
 					]
 				}
@@ -1219,13 +1208,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/achievements/{{test_achievement_id}}",
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/{{test_achievement_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"achievements",
 						"{{test_achievement_id}}"
 					]
@@ -1253,13 +1244,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/achievements/{{streak_achievement_id}}",
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/{{streak_achievement_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"achievements",
 						"{{streak_achievement_id}}"
 					]
@@ -1312,13 +1305,15 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/achievements/{{test_achievement_id}}",
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/{{test_achievement_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"achievements",
 						"{{test_achievement_id}}"
 					]
@@ -1371,13 +1366,15 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/achievements/{{streak_achievement_id}}",
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/{{streak_achievement_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"achievements",
 						"{{streak_achievement_id}}"
 					]
@@ -1411,14 +1408,66 @@
 					}
 				],
 				"url": {
-					"raw": "{{host}}/api/v1/achievements",
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
+						"users",
+						"{{userID}}",
 						"achievements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User account has been deleted (200 OK)\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "DELETE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/api/v1/users/{{userID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"{{userID}}"
 					]
 				}
 			},
