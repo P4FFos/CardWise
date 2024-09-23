@@ -166,7 +166,7 @@
 			"response": []
 		},
 		{
-			"name": "Get all users",
+			"name": "Get specific user",
 			"event": [
 				{
 					"listen": "test",
@@ -186,14 +186,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/users",
+					"raw": "{{host}}/api/v1/users/{{userID}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"users"
+						"users",
+						"{{userID}}"
 					]
 				}
 			},

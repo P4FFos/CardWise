@@ -54,6 +54,43 @@ router.get('/api/v1/users', async function (req, res, next) {
     res.json(users);
 });
 
+// Show a specific user
+router.get('/api/v1/users/:userID', async function(req, res, next) {
+    var userID = req.params.userID;
+    try {
+        var user = await User.findById(userID);
+        if (!user) {
+            return res.status(404).json({"message": "User with given id cannot be found."});
+        }
+        res.json({
+            "user": user,
+            "_links": {
+                "update": {
+                    "rel": "update",
+                    "href":`http://localhost:${port}/api/v1/users/${userID}`,
+                    "method": "PUT"
+                },
+                "update username": {
+                    "rel": "update",
+                    "href":`http://localhost:${port}/api/v1/users/${userID}`,
+                    "method": "PATCH"
+                },
+                "delete": {
+                    "rel": "delete",
+                    "href":`http://localhost:${port}/api/v1/users/${userID}/decks`,
+                    "method": "DELETE"
+                }, 
+                "post": {
+                    "rel": "post",
+                    "href": `http://localhost:${port}/api/v1/users`,
+                    "method": "POST"
+                }
+            }});
+    } catch (error) {
+        return next(error);
+    }
+})
+
 // update user information
 router.put('/api/v1/users/:id', async function (req, res, next) {
     var userId = req.params.id;
