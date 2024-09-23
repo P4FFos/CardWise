@@ -2,11 +2,13 @@ var express = require('express');
 var router = express.Router();
 var port = process.env.PORT || 3000;
 
+var User = require('../models/user.js');
 var Card = require('../models/card.js');
 var Deck = require('../models/deck.js');
 
 // Create a card
-router.post('/api/v1/decks/:deckID/cards', async function(req, res, next) {
+router.post('/api/v1/users/:userID/decks/:deckID/cards', async function(req, res, next) {
+    var userID = req.params.userID;
     var deckID = req.params.deckID;
     var card = new Card(req.body);
     try {
@@ -28,18 +30,18 @@ router.post('/api/v1/decks/:deckID/cards', async function(req, res, next) {
         "_links": {
             "self": {
                 "rel": "self",
-                "href": `http://localhost:${port}/api/v1/decks/${deckID}/cards/${card._id}`
+                "href": `http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}/cards/${card._id}`
             },
             "delete": {
                 "rel": "delete",
-                "href":`http://localhost:${port}/api/v1/decks/${deckID}/cards/${card._id}`,
+                "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}/cards/${card._id}`,
                 "method": "DELETE"
             }
         }});
 });
 
 // Get information from all cards in a specific deck
-router.get('/api/v1/decks/:deckID/cards', async function(req, res, next) {
+router.get('/api/v1/users/:userID/decks/:deckID/cards', async function(req, res, next) {
     var deckID = req.params.deckID;
     try {
         var deck = await Deck.findById(deckID).populate("cards").exec();
@@ -60,7 +62,8 @@ router.get('/api/v1/decks/:deckID/cards', async function(req, res, next) {
 });
 
 // Get information from a specific card in a specific deck
-router.get('/api/v1/decks/:deckID/cards/:cardID', async function(req, res, next) {
+router.get('/api/v1/users/:userID/decks/:deckID/cards/:cardID', async function(req, res, next) {
+    var userID = req.params.userID;
     var deckID = req.params.deckID;
     var cardID = req.params.cardID;
     console.log('Card ID:', cardID);
@@ -85,12 +88,12 @@ router.get('/api/v1/decks/:deckID/cards/:cardID', async function(req, res, next)
         "_links": {
             "delete": {
                 "rel": "delete",
-                "href":`http://localhost:${port}/api/v1/decks/${deckID}/cards/${cardID}`,
+                "href":`http://localhost:${port}/api/v1/users/${userID}decks/${deckID}/cards/${cardID}`,
                 "method": "DELETE"
             }, 
             "post": {
                 "rel": "post",
-                "href": `http://localhost:${port}/api/v1/decks/${deckID}/cards`,
+                "href": `http://localhost:${port}/api/v1/users/${userID}decks/${deckID}/cards`,
                 "method": "POST"
             }
         }});
@@ -98,7 +101,7 @@ router.get('/api/v1/decks/:deckID/cards/:cardID', async function(req, res, next)
 
 
 // Delete a card in a deck
-router.delete('/api/v1/decks/:deckID/cards/:cardID', async function(req, res, next) {
+router.delete('/api/v1/users/:userID/decks/:deckID/cards/:cardID', async function(req, res, next) {
     var deckID = req.params.deckID;
     var cardID = req.params.cardID;
     console.log('Card ID:', cardID);
@@ -123,7 +126,7 @@ router.delete('/api/v1/decks/:deckID/cards/:cardID', async function(req, res, ne
 });
 
 // Delete all cards in a deck
-router.delete('/api/v1/decks/:deckID/cards', async function(req, res, next) {
+router.delete('/api/v1/users/:userID/decks/:deckID/cards', async function(req, res, next) {
     var deckID = req.params.deckID;
     try {
         var deck = await Deck.findById(deckID)
