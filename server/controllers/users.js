@@ -8,6 +8,9 @@ var User = require('../models/user.js');
 router.post('/api/v1/users', async function (req, res, next) {
     var user = new User(req.body);
     try {
+        if (!user) {
+            res.status(404).json({"message": "Cannot create a null user."})
+        }
         await user.save();
     } catch (error) {
         return next(error);
@@ -42,11 +45,51 @@ router.get('/api/v1/users', async function (req, res, next) {
     var users;
     try {
         users = await User.find();
+        if (!users) {
+            return res.status(404).json({ "message": "Users do not exist." });
+        }
     } catch (error) {
         return next(error);
     }
     res.json(users);
 });
+
+// Show a specific user
+router.get('/api/v1/users/:userID', async function(req, res, next) {
+    var userID = req.params.userID;
+    try {
+        var user = await User.findById(userID);
+        if (!user) {
+            return res.status(404).json({"message": "User with given id cannot be found."});
+        }
+        res.status(200).json({
+            "user": user,
+            "_links": {
+                "update": {
+                    "rel": "update",
+                    "href":`http://localhost:${port}/api/v1/users/${userID}`,
+                    "method": "PUT"
+                },
+                "update username": {
+                    "rel": "update",
+                    "href":`http://localhost:${port}/api/v1/users/${userID}`,
+                    "method": "PATCH"
+                },
+                "delete": {
+                    "rel": "delete",
+                    "href":`http://localhost:${port}/api/v1/users/${userID}/decks`,
+                    "method": "DELETE"
+                }, 
+                "post": {
+                    "rel": "post",
+                    "href": `http://localhost:${port}/api/v1/users`,
+                    "method": "POST"
+                }
+            }});
+    } catch (error) {
+        return next(error);
+    }
+})
 
 // update user information
 router.put('/api/v1/users/:id', async function (req, res, next) {
@@ -64,7 +107,7 @@ router.put('/api/v1/users/:id', async function (req, res, next) {
         return next(error);
     }
 
-    res.json({
+    res.status(200).json({
         "user": updatedUser,
         "_links": {
             "self": {
@@ -105,7 +148,7 @@ router.patch('/api/v1/users/:id/username', async function (req, res, next) {
         return next(error);
     }
 
-    res.json({
+    res.status(200).json({
         "user": updatedUser,
         "_links": {
             "self": {

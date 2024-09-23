@@ -6,6 +6,11 @@ var userSchema = new Schema({
   registrationDate: { type: Date },
   lastLoginDate: { type: Date },
   password: { type: String },
+  achievements: {
+    testAchievements: [{type: Schema.Types.ObjectId, ref: "TestAchievement"}],
+    streakAchievements: [{type: Schema.Types.ObjectId, ref: "StreakAchievement"}]
+  },
+  decks: [{type: Schema.Types.ObjectId, ref: "deck"}]
 });
 
 module.exports = mongoose.model('user', userSchema);
