@@ -29,21 +29,21 @@ router.post('/api/v1/users/:userID/decks', async function(req, res, next) {
         "_links": {
             "self": {
                 "rel": "self",
-                "href": `http://localhost:${port}/api/v1/decks/${deck._id}`
+                "href": `http://localhost:${port}/api/v1/users/${userID}/decks/${deck._id}`
             },
             "update": {
                 "rel": "update",
-                "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deck._id}`,
                 "method": "PUT"
             },
             "delete": {
                 "rel": "delete",
-                "href":`http://localhost:${port}/api/v1/decks/${deck._id}`,
+                "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deck._id}`,
                 "method": "DELETE"
             }, 
             "post": {
                 "rel": "post",
-                "href": `http://localhost:${port}/api/v1/decks`,
+                "href": `http://localhost:${port}/api/v1/users/${userID}/decks`,
                 "method": "POST"
             }
         }});
@@ -124,22 +124,22 @@ router.get('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
             "_links": {
                 "update": {
                     "rel": "update",
-                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
+                    "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}`,
                     "method": "PUT"
                 },
                 "update deck name": {
                     "rel": "update",
-                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
+                    "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}`,
                     "method": "PATCH"
                 },
                 "delete": {
                     "rel": "delete",
-                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
+                    "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}`,
                     "method": "DELETE"
                 }, 
                 "post": {
                     "rel": "post",
-                    "href": `http://localhost:${port}/api/v1/users/:userID/decks`,
+                    "href": `http://localhost:${port}/api/v1/users/${userID}/decks`,
                     "method": "POST"
                 }
             }});
@@ -168,21 +168,21 @@ router.put('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
             "_links": {
                 "self": {
                     "rel": "self",
-                    "href": `http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`
+                    "href": `http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}`
                 },
                 "update deck name": {
                     "rel": "update",
-                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
+                    "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}`,
                     "method": "PATCH"
                 },
                 "delete": {
                     "rel": "delete",
-                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
+                    "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}`,
                     "method": "DELETE"
                 }, 
                 "post": {
                     "rel": "post",
-                    "href": `http://localhost:${port}/api/v1/users/:userID/decks`,
+                    "href": `http://localhost:${port}/api/v1/users/${userID}/decks`,
                     "method": "POST"
                 }
             }});
@@ -211,21 +211,21 @@ router.patch('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
             "_links": {
                 "self": {
                     "rel": "self",
-                    "href": `http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`
+                    "href": `http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}`
                 },
                 "update": {
                     "rel": "update",
-                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
+                    "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}`,
                     "method": "PUT"
                 },
                 "delete": {
                     "rel": "delete",
-                    "href":`http://localhost:${port}/api/v1/users/:userID/decks/${deckID}`,
+                    "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}`,
                     "method": "DELETE"
                 }, 
                 "post": {
                     "rel": "post",
-                    "href": `http://localhost:${port}/api/v1/users/:userID/decks`,
+                    "href": `http://localhost:${port}/api/v1/users/${userID}/decks`,
                     "method": "POST"
                 }
             }});
