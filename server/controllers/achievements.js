@@ -128,7 +128,7 @@ router.get('/api/v1/users/:userID/achievements/:id', async function(req, res, ne
             return res.status(404).json({"message": "Achievement with given id cannot be found."});
         }
 
-        res.json({
+        res.status(200).json({
             "achievement": achievement,
             "_links": {
                 "update achievement information": {
@@ -178,7 +178,7 @@ router.put('/api/v1/users/:userID/achievements/:id', async function(req, res, ne
         }
 
         await achievement.save();
-        res.json({
+        res.status(200).json({
             "achievement": achievement,
             "_links": {
                 "self": {

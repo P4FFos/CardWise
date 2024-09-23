@@ -119,7 +119,7 @@ router.get('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
         if (!deck) {
             return res.status(404).json({"message": "Deck with given id cannot be found."});
         }
-        res.json({
+        res.status(200).json({
             "deck": deck,
             "_links": {
                 "update": {
@@ -163,7 +163,7 @@ router.put('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
         deck.cards = req.body.cards;
 
         await deck.save();
-        res.json({
+        res.status(200).json({
             "deck": deck,
             "_links": {
                 "self": {
@@ -206,7 +206,7 @@ router.patch('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
         deck.cards = req.body.cards || deck.cards;
 
         await deck.save();
-        res.json({
+        res.status(200).json({
             "deck": deck,
             "_links": {
                 "self": {

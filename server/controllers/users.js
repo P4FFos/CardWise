@@ -62,7 +62,7 @@ router.get('/api/v1/users/:userID', async function(req, res, next) {
         if (!user) {
             return res.status(404).json({"message": "User with given id cannot be found."});
         }
-        res.json({
+        res.status(200).json({
             "user": user,
             "_links": {
                 "update": {
@@ -107,7 +107,7 @@ router.put('/api/v1/users/:id', async function (req, res, next) {
         return next(error);
     }
 
-    res.json({
+    res.status(200).json({
         "user": updatedUser,
         "_links": {
             "self": {
@@ -148,7 +148,7 @@ router.patch('/api/v1/users/:id/username', async function (req, res, next) {
         return next(error);
     }
 
-    res.json({
+    res.status(200).json({
         "user": updatedUser,
         "_links": {
             "self": {
