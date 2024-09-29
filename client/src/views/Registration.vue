@@ -13,6 +13,7 @@
 
       <button type="submit">Register</button>
     </form>
+    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     <button @click="showUserInfo">Show User Info</button>
     <div v-if="userInfo">
       <p>User Information</p>
@@ -36,7 +37,8 @@ export default {
       email: '',
       password: '',
       userInfo: null,
-      userId: ''
+      userId: '',
+      errorMessage: ''
     }
   },
   methods: {
@@ -50,7 +52,7 @@ export default {
         this.userId = response.data.user._id
         alert('User successfully registered')
       } catch (error) {
-        alert('Registration failed: ' + error.message)
+        this.errorMessage = error.response.data.message || 'Registration failed'
       }
     },
     async showUserInfo() {
