@@ -18,13 +18,9 @@
 </template>
 
 <script>
-import axios from 'axios'
-
-// specify the base URL for the API server
-axios.defaults.baseURL = 'http://localhost:3000'
+import { Api } from '@/Api.js'
 
 export default {
-  name: 'Registration',
   data() {
     return {
       username: '',
@@ -36,16 +32,13 @@ export default {
   methods: {
     async register() {
       try {
-        const response = await axios.post('/api/v1/users', {
+        const response = await Api.post('/v1/users', {
           username: this.username,
           email: this.email,
           password: this.password
         })
-        this.userId = response.data.user._id
-        alert('User successfully registered')
-
-        const user = await axios.get(`/api/v1/users/${this.userId}`)
-        console.log('Get the user:', user.data.user)
+        const userId = response.data.user._id
+        localStorage.setItem('userId', userId)
         this.$router.push('/login')
       } catch (error) {
         this.errorMessage = 'Registration failed'

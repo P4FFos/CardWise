@@ -247,12 +247,8 @@ router.delete('/api/v1/users/:userID/decks', async function(req, res, next) {
         user.decks = [];
         await user.save();
 
-        const result = await Deck.deleteMany({});
-        if (!result) {
-            return res.status(500).json({ "message": "Error while deleting all decks. Decks are not found." });
-        }
         res.status(200).json({
-            message: result.deletedCount + " " + "deck(s) deleted.",
+            message: deletedDecks.deletedCount + " deck(s) deleted.",
             userResult: user,
             deckResults: deletedDecks,
         });
