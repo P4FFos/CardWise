@@ -14,53 +14,34 @@
       <button type="submit">Register</button>
     </form>
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-    <button @click="showUserInfo">Show User Info</button>
-    <div v-if="userInfo">
-      <p>User Information</p>
-      <p>Username: {{ userInfo.username }}</p>
-      <p>Email: {{ userInfo.email }}</p>
-    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-
-// specify the base URL for the API server
-axios.defaults.baseURL = 'http://localhost:3000'
+import { Api } from '@/Api.js'
 
 export default {
-  name: 'Registration',
   data() {
     return {
       username: '',
       email: '',
       password: '',
-      userInfo: null,
-      userId: '',
       errorMessage: ''
     }
   },
   methods: {
     async register() {
       try {
-        const response = await axios.post('/api/v1/users', {
+        const response = await Api.post('/v1/users', {
           username: this.username,
           email: this.email,
           password: this.password
         })
-        this.userId = response.data.user._id
-        alert('User successfully registered')
+        const userId = response.data.user._id
+        localStorage.setItem('userId', userId)
+        this.$router.push('/login')
       } catch (error) {
-        this.errorMessage = error.response.data.message || 'Registration failed'
-      }
-    },
-    async showUserInfo() {
-      try {
-        const response = await axios.get(`/api/v1/users/${this.userId}`)
-        this.userInfo = response.data.user
-      } catch (error) {
-        alert('Failed to get user info: ' + error.message)
+        this.errorMessage = 'Registration failed'
       }
     }
   }

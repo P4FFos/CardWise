@@ -11,17 +11,11 @@
       <button type="submit">Login</button>
     </form>
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-    <div v-if="userInfo">
-      <p>User Information</p>
-      <p>Username: {{ userInfo.username }}</p>
-      <p>Email: {{ userInfo.email }}</p>
-      <p>User Id: {{userInfo._id}}</p>
-    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import { Api } from '@/Api.js'
 
 export default {
   name: 'Login',
@@ -29,28 +23,25 @@ export default {
     return {
       username: '',
       password: '',
-      errorMessage: '',
-      userInfo: null,
-      userId: ''
+      errorMessage: ''
     }
   },
   methods: {
     async login() {
       try {
-        const response = await axios.get('/api/v1/users')
+        const response = await Api.get('/v1/users')
         const users = response.data
         const user = users.find(user => user.username === this.username && user.password === this.password)
 
         if (user) {
-          this.userInfo = user
+          localStorage.setItem('userId', user._id)
+          this.$router.push('/main')
         } else {
           this.errorMessage = 'Invalid username or password'
         }
       } catch (error) {
         this.errorMessage = 'An error occurred while trying to login'
       }
-    },
-    showUserInfo() {
     }
   }
 }

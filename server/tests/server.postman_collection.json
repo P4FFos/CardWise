@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "dfa6b8c9-63b7-46ad-bc6a-575c72f739e9",
+		"_postman_id": "c7e69deb-c621-4c8a-b279-d9e85fc947d2",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "38095200"
@@ -16,9 +16,9 @@
 							"let currentDate = new Date().toISOString();",
 							"pm.environment.set(\"registrationDate\", currentDate);",
 							"pm.environment.set(\"lastLoginDate\", currentDate);",
-							"pm.environment.set(\"username\", \"user1\");",
-							"pm.environment.set(\"password\", \"password1\");",
-							"pm.environment.set(\"email\", \"email1\");",
+							"pm.environment.set(\"username\", \"user\");",
+							"pm.environment.set(\"password\", \"password\");",
+							"pm.environment.set(\"email\", \"email\");",
 							""
 						],
 						"type": "text/javascript",
@@ -40,13 +40,13 @@
 							"    pm.expect(jsonData.user).to.have.property(\"_id\");",
 							"});",
 							"pm.test(\"Response contains username\", function () {",
-							"    pm.expect(jsonData.user).to.have.property(\"username\", \"user1\");",
+							"    pm.expect(jsonData.user).to.have.property(\"username\", \"user\");",
 							"});",
 							"pm.test(\"Response contains password\", function () {",
-							"    pm.expect(jsonData.user).to.have.property(\"password\", \"password1\");",
+							"    pm.expect(jsonData.user).to.have.property(\"password\", \"password\");",
 							"});",
 							"pm.test(\"Response contains email\", function () {",
-							"    pm.expect(jsonData.user).to.have.property(\"email\", \"email1\");",
+							"    pm.expect(jsonData.user).to.have.property(\"email\", \"email\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -333,11 +333,18 @@
 							"\r",
 							"pm.test(\"Response contains deck(s)\", function(){\r",
 							"    var jsonInfo = pm.response.json();\r",
-							"    pm.expect(jsonInfo.decks).to.be.an(\"object\");\r",
+							"    pm.expect(jsonInfo.decks).to.be.an(\"array\");\r",
 							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
 					}
 				}
 			],
