@@ -8,7 +8,7 @@ import Main from './views/Main.vue'
 const routes = [
   { path: '/', name: 'home', component: Home },
   { path: '/registration', name: 'registration', component: Registration },
-  { path: '/main', name: 'main', component: Main }
+  { path: '/main', name: 'main', component: Main },
   { path: '/decks', name: 'decks', component: Decks },
   { path: '/login', name: 'login', component: Login }
 ]
