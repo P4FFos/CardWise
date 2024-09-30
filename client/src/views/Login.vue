@@ -11,12 +11,6 @@
       <button type="submit">Login</button>
     </form>
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-    <div v-if="userInfo">
-      <p>User Information</p>
-      <p>Username: {{ userInfo.username }}</p>
-      <p>Email: {{ userInfo.email }}</p>
-      <p>User Id: {{userInfo._id}}</p>
-    </div>
   </div>
 </template>
 
@@ -29,9 +23,7 @@ export default {
     return {
       username: '',
       password: '',
-      errorMessage: '',
-      userInfo: null,
-      userId: ''
+      errorMessage: ''
     }
   },
   methods: {
@@ -42,8 +34,8 @@ export default {
         const user = users.find(user => user.username === this.username && user.password === this.password)
 
         if (user) {
-          this.userInfo = user
           localStorage.setItem('userId', user._id)
+          console.log('Get the user:', user)
           this.$router.push('/main')
         } else {
           this.errorMessage = 'Invalid username or password'
@@ -51,8 +43,6 @@ export default {
       } catch (error) {
         this.errorMessage = 'An error occurred while trying to login'
       }
-    },
-    showUserInfo() {
     }
   }
 }

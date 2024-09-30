@@ -14,12 +14,6 @@
       <button type="submit">Register</button>
     </form>
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-    <button @click="showUserInfo">Show User Info</button>
-    <div v-if="userInfo">
-      <p>User Information</p>
-      <p>Username: {{ userInfo.username }}</p>
-      <p>Email: {{ userInfo.email }}</p>
-    </div>
   </div>
 </template>
 
@@ -36,8 +30,6 @@ export default {
       username: '',
       email: '',
       password: '',
-      userInfo: null,
-      userId: '',
       errorMessage: ''
     }
   },
@@ -51,16 +43,12 @@ export default {
         })
         this.userId = response.data.user._id
         alert('User successfully registered')
+
+        const user = await axios.get(`/api/v1/users/${this.userId}`)
+        console.log('Get the user:', user.data.user)
+        this.$router.push('/login')
       } catch (error) {
-        this.errorMessage = error.response.data.message || 'Registration failed'
-      }
-    },
-    async showUserInfo() {
-      try {
-        const response = await axios.get(`/api/v1/users/${this.userId}`)
-        this.userInfo = response.data.user
-      } catch (error) {
-        alert('Failed to get user info: ' + error.message)
+        this.errorMessage = 'Registration failed'
       }
     }
   }

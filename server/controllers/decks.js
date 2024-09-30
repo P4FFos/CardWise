@@ -52,16 +52,15 @@ router.post('/api/v1/users/:userID/decks', async function(req, res, next) {
 // Show all decks
 router.get('/api/v1/users/:userID/decks', async function(req, res, next) {
     var userID = req.params.userID;
-    var decks;
     try {
-        decks = await User.findById(userID).populate("decks").exec();
-        if (!decks) {
+        user = await User.findById(userID).populate("decks").exec();
+        if (!user) {
             return res.status(404).json({ "message": "Decks do not exist." });
         }
     } catch (error) {
         return next(error);
     }
-    res.json({"decks": decks});
+    res.json({"decks": user.decks});
 });
 
 // Sort decks by the number of cards in it or by name
