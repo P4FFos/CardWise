@@ -43,6 +43,8 @@ export default {
 
         if (user) {
           this.userInfo = user
+          localStorage.setItem('userId', user._id)
+          this.$router.push('/main')
         } else {
           this.errorMessage = 'Invalid username or password'
         }
