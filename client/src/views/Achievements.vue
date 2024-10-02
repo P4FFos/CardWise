@@ -27,7 +27,9 @@
       </form>
     </div>
     <div id="achievements-list">
-      <div v-for="achievement in achievements" :key="achievement._id" class="achievement">
+      <div v-for="achievement in achievements"
+         :key="achievement._id"
+         :class="{'achievement-completed': achievement.isTriggered, 'achievement': true}">
         <h2>Achievement: {{ achievement.name }}</h2>
         <p><strong>Condition:</strong> {{ achievement.condition }} </p>
         <button class="complete-button" @click="completeAchievement(achievement._id, achievement.isTriggered)">👍</button>
@@ -156,6 +158,15 @@ export default {
     margin-bottom: 10px;
     border-radius: 10px;
     background-color: #f9f9f9;
+  }
+
+  .achievement-completed {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background-color: #b2f2b2;
   }
 
   .achievement h2 {
