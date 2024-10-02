@@ -35,7 +35,12 @@ export default {
 
         if (user) {
           localStorage.setItem('userId', user._id)
-          this.$router.push('/main')
+
+          if (this.username.includes('admin')) {
+            this.$router.push('/admin-panel')
+          } else {
+            this.$router.push('/main')
+          }
         } else {
           this.errorMessage = 'Invalid username or password'
         }
