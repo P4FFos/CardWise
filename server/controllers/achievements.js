@@ -19,11 +19,11 @@ router.post('/api/v1/users/:userID/achievements', async function(req, res, next)
         var achievement;
         if (type === 'TestAchievement') {
             achievement = new TestAchievement(data);
-            user.achievements.testAchievements.push(achievement);
+            user.achievements.testAchievements.push(achievement._id);
         }
         if (type === 'StreakAchievement') {
             achievement = new StreakAchievement(data);
-            user.achievements.streakAchievements.push(achievement);
+            user.achievements.streakAchievements.push(achievement._id);
         }
         await achievement.save();
         await user.save();
