@@ -19,11 +19,11 @@ router.post('/api/v1/users/:userID/achievements', async function(req, res, next)
         var achievement;
         if (type === 'TestAchievement') {
             achievement = new TestAchievement(data);
-            user.achievements.testAchievements.push(achievement._id);
+            user.achievements.testAchievements.push(achievement);
         }
         if (type === 'StreakAchievement') {
             achievement = new StreakAchievement(data);
-            user.achievements.streakAchievements.push(achievement._id);
+            user.achievements.streakAchievements.push(achievement);
         }
         await achievement.save();
         await user.save();
@@ -62,16 +62,29 @@ router.post('/api/v1/users/:userID/achievements', async function(req, res, next)
 // Info of all achievements
 router.get('/api/v1/users/:userID/achievements', async function(req, res, next) {
     var userID = req.params.userID;
-    var achievements;
     try {
-        achievements = await User.findById(userID).populate("achievements").exec();
-        if (!achievements) {
-            return res.status(404).json({ "message": "Achievements do not exist." });
+        const user = await User.findById(userID)
+            .populate("achievements.testAchievements")
+            .populate("achievements.streakAchievements")
+            .exec();
+
+        if (!user) {
+            return res.status(404).json({ "message": "User not found." });
         }
+
+        const achievements = [
+            ...user.achievements.testAchievements,
+            ...user.achievements.streakAchievements
+        ];
+
+        if (!achievements || achievements.length === 0) {
+            return res.status(404).json({ "message": "No achievements found for this user." });
+        }
+
+        res.status(200).json({ "achievements": achievements });
     } catch (error) {
         return next(error);
     }
-    res.status(200).json({"achievements": achievements});
 });
 
 // Restarting progress through deleting achievements 
