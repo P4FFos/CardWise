@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "c7e69deb-c621-4c8a-b279-d9e85fc947d2",
+		"_postman_id": "b08c6500-6cfd-4f8f-a2c4-160a81e52c56",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38095200"
+		"_exporter_id": "38409323"
 	},
 	"item": [
 		{
@@ -1177,7 +1177,7 @@
 							"\r",
 							"pm.test(\"Response contains achievements(s)\", function(){\r",
 							"    var jsonInfo = pm.response.json();\r",
-							"    pm.expect(jsonInfo.achievements).to.be.an(\"object\");\r",
+							"    pm.expect(jsonInfo.achievements).to.be.an(\"array\");\r",
 							"});\r",
 							""
 						],

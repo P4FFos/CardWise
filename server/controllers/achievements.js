@@ -62,16 +62,29 @@ router.post('/api/v1/users/:userID/achievements', async function(req, res, next)
 // Info of all achievements
 router.get('/api/v1/users/:userID/achievements', async function(req, res, next) {
     var userID = req.params.userID;
-    var achievements;
     try {
-        achievements = await User.findById(userID).populate("achievements").exec();
-        if (!achievements) {
-            return res.status(404).json({ "message": "Achievements do not exist." });
+        const user = await User.findById(userID)
+            .populate("achievements.testAchievements")
+            .populate("achievements.streakAchievements")
+            .exec();
+
+        if (!user) {
+            return res.status(404).json({ "message": "User not found." });
         }
+
+        const achievements = [
+            ...user.achievements.testAchievements,
+            ...user.achievements.streakAchievements
+        ];
+
+        if (!achievements || achievements.length === 0) {
+            return res.status(404).json({ "message": "No achievements found for this user." });
+        }
+
+        res.status(200).json({ "achievements": achievements });
     } catch (error) {
         return next(error);
     }
-    res.status(200).json({"achievements": achievements});
 });
 
 // Restarting progress through deleting achievements 
@@ -169,12 +182,18 @@ router.put('/api/v1/users/:userID/achievements/:id', async function(req, res, ne
         if (!achievement) {
             return res.status(404).json({"message": "Achievement with given id cannot be found."});
         }
-        achievement.name = req.body.name;
-
         if (achievement instanceof TestAchievement) {
-            achievement.condition = req.body.condition;
+            achievement = await TestAchievement.findByIdAndUpdate(achievementID, {
+                name: req.body.name,
+                isTriggered: req.body.isTriggered,
+                condition: req.body.condition
+            }, { new: true });
         } else if (achievement instanceof StreakAchievement) {
-            achievement.streakCounter = req.body.streakCounter;
+            achievement = await StreakAchievement.findByIdAndUpdate(achievementID, {
+                name: req.body.name,
+                isTriggered: req.body.isTriggered,
+                streakCounter: req.body.streakCounter
+            }, { new: true });
         }
 
         await achievement.save();
