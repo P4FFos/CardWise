@@ -117,6 +117,34 @@ router.delete('/api/v1/users/:userID/achievements', async function(req, res, nex
     }
 });
 
+// Delete one achievement
+router.delete('/api/v1/users/:userID/achievements/:id', async function(req, res, next) {
+    var userID = req.params.userID;
+    var achievementID = req.params.id;
+    try {
+        var user = await User.findById(userID);
+        if (!user) {
+            return res.status(404).json({ "message": "User with the provided ID does not exist." });
+        }
+        const achievement = await Achievement.findByIdAndDelete(achievementID);
+        if (!achievement) {
+            res.status(404).json({"message": "Achievement with given id not found."});
+        }
+
+        user.achievements.testAchievements = user.achievements.testAchievements.filter(a => a.toString() !== achievementID);
+        user.achievements.streakAchievements = user.achievements.streakAchievements.filter(a => a.toString() !== achievementID);
+
+        await user.save();
+
+        res.status(200).json({
+            message: "Achievement successfully deleted.",
+            achievement: achievement
+        });
+    } catch (error) {
+        return next(error);
+    }
+});
+
 // Get info from a spec achievement
 router.get('/api/v1/users/:userID/achievements/:id', async function(req, res, next) {
     var userID = req.params.userID;

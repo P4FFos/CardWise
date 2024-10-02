@@ -34,7 +34,7 @@
            :class="{'achievement-completed': achievement.isTriggered, 'achievement': true}">
           <h2>Achievement: {{ achievement.name }}</h2>
           <p><strong>Condition:</strong> {{ achievement.condition }} </p>
-          <button @click="deleteAchievement(achievement._id, achievement.isTriggered)">🗑️ Delete</button>
+          <button @click="deleteAchievement(achievement._id)">🗑️ Delete</button>
         </div>
       </div>
       </div>
@@ -115,23 +115,17 @@ export default {
         alert('Failed to fetch user')
       }
     },
-    async deleteAchievement(achievementId, isTriggered) {
+    async deleteAchievement(achievementId) {
       const userId = localStorage.getItem('userId')
       if (!userId) {
         alert('Failed to fetch user')
         return
       }
       try {
-        const updatedIsTriggered = !isTriggered
-        const response = await axios.put(`/api/v1/users/${userId}/achievements/${achievementId}`, {
-          isTriggered: updatedIsTriggered
-        })
-        console.log(`Achievement ${achievementId} deleted`)
-        const achievement = this.achievements.find(a => a._id === achievementId)
-        if (achievement) {
-          achievement.isTriggered = updatedIsTriggered
-        }
+        const response = await axios.delete(`/api/v1/users/${userId}/achievements/${achievementId}`)
+        console.log(`Achievement ${achievementId} was deleted`)
         alert('achievement deleted')
+        this.achievements = this.achievements.filter(achievement => achievement._id !== achievementId)
       } catch (error) {
         alert('Failed to complete achievement: ' + error.message)
       }
