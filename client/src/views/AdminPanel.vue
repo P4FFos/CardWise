@@ -1,7 +1,16 @@
 <template>
     <div>
       <h1>Admin Panel</h1>
-      <div class="achievements-panel">
+      <div class="panel">
+        <h2>Users</h2>
+        <div id="list">
+        <div class="container">
+          <h2>User: </h2>
+          <button>🗑️ Delete</button>
+        </div>
+      </div>
+      </div>
+      <div class="panel">
         <h2>Achievements</h2>
         <div>
         <p>create test achievement</p>
@@ -31,7 +40,7 @@
       <div id="achievements-list">
         <div v-for="achievement in achievements"
            :key="achievement._id"
-           :class="{'achievement-completed': achievement.isTriggered, 'achievement': true}">
+           :class="{'achievement-completed': achievement.isTriggered, 'container': true}">
           <h2>Achievement: {{ achievement.name }}</h2>
           <p><strong>Condition:</strong> {{ achievement.condition }} </p>
           <button @click="deleteAchievement(achievement._id)">🗑️ Delete</button>
@@ -138,7 +147,7 @@ export default {
 </script>
 
 <style>
-  #achievements-list {
+  #list {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -147,7 +156,7 @@ export default {
     width: 50%;
   }
 
-  .achievement {
+  .container {
     border: 1px solid #ccc;
     padding: 10px;
     margin-top: 10px;
@@ -165,20 +174,20 @@ export default {
     background-color: #b2f2b2;
   }
 
-  .achievement h2 {
+  .container h2 {
     margin: 0;
     font-size: 1.5em;
   }
 
-  .achievement p {
+  .container p {
     margin: 5px 0;
   }
 
-  .achievements-panel {
+  .panel {
     border: 2px solid #6c6c6c;
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    padding: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     border-radius: 10px;
   }
 </style>
