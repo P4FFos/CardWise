@@ -111,6 +111,7 @@ router.put('/api/v1/users/:id', async function (req, res, next) {
             return res.status(404).json({message: 'User not found'});
         }
         updatedUser.set(updateData);
+        await updatedUser.save();
     } catch (error) {
         return next(error);
     }
@@ -152,6 +153,7 @@ router.patch('/api/v1/users/:id/username', async function (req, res, next) {
             return res.status(404).json({message: 'User not found'});
         }
         updatedUser.username = newUsername;
+        await updatedUser.save();
     } catch (error) {
         return next(error);
     }
@@ -185,12 +187,12 @@ router.patch('/api/v1/users/:id/username', async function (req, res, next) {
 router.delete('/api/v1/users/:id', async function (req, res, next) {
     var userId = req.params.id;
 
-    var deletedUser;
     try {
-        deletedUser = await User.findById(userId);
+        var deletedUser = await User.findById(userId);
         if (!deletedUser) {
             return res.status(404).json({message: 'User not found'});
         }
+        await User.deleteOne({ _id: userId });
     } catch (error) {
         return next(error);
     }

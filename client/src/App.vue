@@ -3,9 +3,11 @@
     <div id="nav">
       <router-link to="/">Home</router-link>
       <router-link to="/registration">Registration</router-link>
+      <router-link to="/decks">Potato</router-link>
       <router-link to="/login">Login</router-link>
       <router-link to="/achievements">Achievements</router-link>
       <router-link to="/main">Main</router-link>
+      <router-link to="/profile">User Profile</router-link>
     </div>
     <router-view/>
   </div>

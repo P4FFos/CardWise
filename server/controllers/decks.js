@@ -86,11 +86,13 @@ router.get('/api/v1/users/:userID/decks/sort', async function(req, res, next) {
         let decks;
         if (sortField === 'cardAmount') {
             decks = await Deck.aggregate([
+                { $match: { _id: { $in: user.decks } } },
                 { $addFields: { cardAmount: { $size: "$cards" } } },
                 { $sort: { cardAmount: sortOrder } }
             ]);
         } else {
             decks = await Deck.aggregate([
+                { $match: { _id: { $in: user.decks } } },
                 { $addFields: { lowerName: { $toLower: "$name" } } },
                 { $sort: { lowerName: sortOrder } }
             ]);
