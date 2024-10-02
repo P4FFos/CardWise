@@ -7,8 +7,8 @@
           <div v-for="user in users"
               :key="user._id"
               class="container">
-              <h2>User: </h2>
-              <button>🗑️ Delete</button>
+              <h2>User: {{ user.name }}</h2>
+              <button @click="deleteUser(user._id)">🗑️ Delete</button>
           </div>
       </div>
       </div>
@@ -151,7 +151,17 @@ export default {
         alert('achievement deleted')
         this.achievements = this.achievements.filter(achievement => achievement._id !== achievementId)
       } catch (error) {
-        alert('Failed to complete achievement: ' + error.message)
+        alert('Failed to delete achievement: ' + error.message)
+      }
+    },
+    async deleteUser(userId) {
+      try {
+        const response = await axios.delete(`/api/v1/users/${userId}`)
+        console.log(`User ${userId} was deleted`)
+        alert('User was deleted')
+        this.users = this.users.filter(user => user._id !== userId)
+      } catch (error) {
+        alert('Failed to delete user: ' + error.message)
       }
     }
   },
