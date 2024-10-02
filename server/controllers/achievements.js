@@ -169,12 +169,18 @@ router.put('/api/v1/users/:userID/achievements/:id', async function(req, res, ne
         if (!achievement) {
             return res.status(404).json({"message": "Achievement with given id cannot be found."});
         }
-        achievement.name = req.body.name;
-
         if (achievement instanceof TestAchievement) {
-            achievement.condition = req.body.condition;
+            achievement = await TestAchievement.findByIdAndUpdate(achievementID, {
+                name: req.body.name,
+                isTriggered: req.body.isTriggered,
+                condition: req.body.condition
+            }, { new: true });
         } else if (achievement instanceof StreakAchievement) {
-            achievement.streakCounter = req.body.streakCounter;
+            achievement = await StreakAchievement.findByIdAndUpdate(achievementID, {
+                name: req.body.name,
+                isTriggered: req.body.isTriggered,
+                streakCounter: req.body.streakCounter
+            }, { new: true });
         }
 
         await achievement.save();

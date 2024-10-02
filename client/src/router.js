@@ -10,7 +10,7 @@ const routes = [
   { path: '/registration', name: 'registration', component: Registration },
   { path: '/login', name: 'login', component: Login },
   { path: '/login', name: 'login', component: Login },
-  { path: '/achievements', name: 'achievements', component: Achievements},
+  { path: '/achievements', name: 'achievements', component: Achievements },
   { path: '/main', name: 'main', component: Main }
 ]
 
