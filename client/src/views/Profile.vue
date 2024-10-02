@@ -1,0 +1,129 @@
+<template>
+  <div>
+    <h1>User Profile</h1>
+    <p>Username: {{ user.username }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Last Login: {{ user.lastLogin }}</p>
+    <p>Registration Date: {{ user.registrationDate }}</p>
+
+    <div>
+      <form @submit.prevent="updateUsername">
+        <label for="username">New Username:</label>
+        <input type="text" id="username" v-model="newUsername" required>
+        <button type="submit">Update Username</button>
+      </form>
+    </div>
+
+    <div>
+      <form @submit.prevent="updateEmail">
+        <label for="email">New Email:</label>
+        <input type="email" id="email" v-model="newEmail" required>
+        <button type="submit">Update Email</button>
+      </form>
+    </div>
+
+    <div>
+      <form @submit.prevent="updatePassword">
+        <label for="newPassword">New Password:</label>
+        <input type="password" id="newPassword" v-model="newPassword" required>
+        <button type="submit">Update Password</button>
+      </form>
+    </div>
+
+    <button @click="deleteAccount">Delete Account</button>
+    <button @click="backToMain">Main Page</button>
+
+    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+    <p v-if="successMessage" class="success">{{ successMessage }}</p>
+  </div>
+</template>
+
+<script>
+import { Api } from '@/Api.js'
+
+export default {
+  data() {
+    return {
+      user: {
+        username: '',
+        email: '',
+        lastLogin: '',
+        registrationDate: ''
+      },
+      newUsername: '',
+      newEmail: '',
+      newPassword: '',
+      errorMessage: '',
+      successMessage: ''
+    }
+  },
+  methods: {
+    async getUserData() {
+      try {
+        const userId = localStorage.getItem('userId')
+        const response = await Api.get(`/v1/users/${userId}`)
+
+        this.user = response.data.user
+        this.newEmail = this.user.email
+        this.newUsername = this.user.username
+      } catch (error) {
+        this.errorMessage = 'Failed to get user data'
+      }
+    },
+    async updateUsername() {
+      try {
+        const userId = localStorage.getItem('userId')
+        await Api.patch(`/v1/users/${userId}/username`, { username: this.newUsername })
+
+        this.successMessage = 'Username updated successfully'
+        this.getUserData()
+      } catch (error) {
+        this.errorMessage = 'Failed to update username'
+      }
+    },
+    async updateEmail() {
+      try {
+        const userId = localStorage.getItem('userId')
+        await Api.put(`/v1/users/${userId}`, { email: this.newEmail })
+
+        this.successMessage = 'Email updated successfully'
+        this.getUserData()
+      } catch (error) {
+        this.errorMessage = 'Failed to update email'
+      }
+    },
+    async updatePassword() {
+      try {
+        const userId = localStorage.getItem('userId')
+        await Api.put(`/v1/users/${userId}`, { password: this.newPassword })
+
+        this.successMessage = 'Password updated successfully'
+        this.getUserData()
+      } catch (error) {
+        this.errorMessage = 'Failed to update password'
+      }
+    },
+    async deleteAccount() {
+      try {
+        const userId = localStorage.getItem('userId')
+        await Api.delete(`/v1/users/${userId}`)
+
+        localStorage.removeItem('userId')
+        this.$router.push('/registration')
+      } catch (error) {
+        this.errorMessage = 'Failed to delete account'
+      }
+    },
+    backToMain() {
+      this.$router.push('/main')
+    }
+  },
+  mounted() {
+    this.getUserData()
+  }
+}
+</script>
+
+<style>
+
+</style>
