@@ -4,10 +4,12 @@
       <div class="panel">
         <h2>Users</h2>
         <div id="list">
-        <div class="container">
-          <h2>User: </h2>
-          <button>🗑️ Delete</button>
-        </div>
+          <div v-for="user in users"
+              :key="user._id"
+              class="container">
+              <h2>User: </h2>
+              <button>🗑️ Delete</button>
+          </div>
       </div>
       </div>
       <div class="panel">
@@ -65,10 +67,23 @@ export default {
       isTriggered: false,
       condition: '',
       streakCounter: 0,
-      achievements: []
+      achievements: [],
+      users: []
     }
   },
   methods: {
+    async fetchUsers() {
+      try {
+        const response = await axios.get('/api/v1/users')
+        if (response.data && Array.isArray(response.data.users)) {
+          this.users = response.data.users
+        } else {
+          console.log('No users found')
+        }
+      } catch (error) {
+        alert('Failed to fetch users: ' + error.message)
+      }
+    },
     async fetchAchievements() {
       const userId = localStorage.getItem('userId')
       if (userId) {
@@ -141,6 +156,7 @@ export default {
     }
   },
   mounted() {
+    this.fetchUsers()
     this.fetchAchievements()
   }
 }
