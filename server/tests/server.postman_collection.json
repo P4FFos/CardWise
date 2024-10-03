@@ -16,9 +16,9 @@
 							"let currentDate = new Date().toISOString();",
 							"pm.environment.set(\"registrationDate\", currentDate);",
 							"pm.environment.set(\"lastLoginDate\", currentDate);",
-							"pm.environment.set(\"username\", \"user\");",
-							"pm.environment.set(\"password\", \"password\");",
-							"pm.environment.set(\"email\", \"email\");",
+							"pm.environment.set(\"username\", \"user1\");",
+							"pm.environment.set(\"password\", \"password1\");",
+							"pm.environment.set(\"email\", \"email1\");",
 							""
 						],
 						"type": "text/javascript",
@@ -40,13 +40,13 @@
 							"    pm.expect(jsonData.user).to.have.property(\"_id\");",
 							"});",
 							"pm.test(\"Response contains username\", function () {",
-							"    pm.expect(jsonData.user).to.have.property(\"username\", \"user\");",
+							"    pm.expect(jsonData.user).to.have.property(\"username\", \"user1\");",
 							"});",
 							"pm.test(\"Response contains password\", function () {",
-							"    pm.expect(jsonData.user).to.have.property(\"password\", \"password\");",
+							"    pm.expect(jsonData.user).to.have.property(\"password\", \"password1\");",
 							"});",
 							"pm.test(\"Response contains email\", function () {",
-							"    pm.expect(jsonData.user).to.have.property(\"email\", \"email\");",
+							"    pm.expect(jsonData.user).to.have.property(\"email\", \"email1\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -267,7 +267,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/users/{{userID}}/username",
+					"raw": "{{host}}/api/v1/users/{{userID}}/",
 					"host": [
 						"{{host}}"
 					],
@@ -276,7 +276,7 @@
 						"v1",
 						"users",
 						"{{userID}}",
-						"username"
+						""
 					]
 				}
 			},
