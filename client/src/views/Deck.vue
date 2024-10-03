@@ -13,9 +13,11 @@
         <div v-if="showCards">
             <ul>
                 <li v-for="card in cardInfo" :key="card._id">
-                    <p>Deck ID: {{ card._id }}</p>
+                    <p>Card ID: {{ card._id }}</p>
                     <p>Content: {{ card.content }}</p>
                     <p>Explanation: {{ card.explanation }}</p>
+                    <button>Edit card</button>
+                    <button @click="deleteCard(card._id)">Delete card</button>
                 </li>
             </ul>
         </div>
@@ -50,6 +52,15 @@ export default {
         this.cardInfo.push(addedCard)
 
         console.log(addedCard)
+      } catch (error) {
+        console.error('Failed to add new card:', error)
+      }
+    },
+    async deleteCard(cardId) {
+      const userId = localStorage.getItem('userId')
+      try {
+        await Api.delete(`/v1/users/${userId}/decks/${this.deckId}/cards/${cardId}`)
+        this.cardInfo = this.cardInfo.filter(card => card._id !== cardId)
       } catch (error) {
         console.error('Failed to add new card:', error)
       }
