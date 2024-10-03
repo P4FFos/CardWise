@@ -11,19 +11,15 @@ var TestAchievement = require('../models/test_achievement.js');
 var StreakAchievement = require('../models/streak_achievement.js');
 
 // Create a new achievement
-router.post('/api/v1/users/:userID/achievements', async function(req, res, next) {
+router.post('/api/v1/achievements', async function(req, res, next) {
     try {
-        var userID = req.params.userID;
         var { type, ...data } = req.body;
-        var user = await User.findById(userID);
         var achievement;
         if (type === 'TestAchievement') {
             achievement = new TestAchievement(data);
-            user.achievements.testAchievements.push(achievement._id);
         }
         if (type === 'StreakAchievement') {
             achievement = new StreakAchievement(data);
-            user.achievements.streakAchievements.push(achievement._id);
         }
         await achievement.save();
         await user.save();
@@ -60,25 +56,12 @@ router.post('/api/v1/users/:userID/achievements', async function(req, res, next)
 
 
 // Info of all achievements
-router.get('/api/v1/users/:userID/achievements', async function(req, res, next) {
-    var userID = req.params.userID;
+router.get('/api/v1/achievements', async function(req, res, next) {
     try {
-        const user = await User.findById(userID)
-            .populate("achievements.testAchievements")
-            .populate("achievements.streakAchievements")
-            .exec();
-
-        if (!user) {
-            return res.status(404).json({ "message": "User not found." });
-        }
-
-        const achievements = [
-            ...user.achievements.testAchievements,
-            ...user.achievements.streakAchievements
-        ];
+        const achievements = await Achievement.find().exec();
 
         if (!achievements || achievements.length === 0) {
-            return res.status(404).json({ "message": "No achievements found for this user." });
+            return res.status(404).json({ "message": "No achievements found." });
         }
 
         res.status(200).json({ "achievements": achievements });
@@ -118,23 +101,13 @@ router.delete('/api/v1/users/:userID/achievements', async function(req, res, nex
 });
 
 // Delete one achievement
-router.delete('/api/v1/users/:userID/achievements/:id', async function(req, res, next) {
-    var userID = req.params.userID;
+router.delete('/api/v1/achievements/:id', async function(req, res, next) {
     var achievementID = req.params.id;
     try {
-        var user = await User.findById(userID);
-        if (!user) {
-            return res.status(404).json({ "message": "User with the provided ID does not exist." });
-        }
         const achievement = await Achievement.findByIdAndDelete(achievementID);
         if (!achievement) {
             res.status(404).json({"message": "Achievement with given id not found."});
         }
-
-        user.achievements.testAchievements = user.achievements.testAchievements.filter(a => a.toString() !== achievementID);
-        user.achievements.streakAchievements = user.achievements.streakAchievements.filter(a => a.toString() !== achievementID);
-
-        await user.save();
 
         res.status(200).json({
             message: "Achievement successfully deleted.",
@@ -146,22 +119,12 @@ router.delete('/api/v1/users/:userID/achievements/:id', async function(req, res,
 });
 
 // Get info from a spec achievement
-router.get('/api/v1/users/:userID/achievements/:id', async function(req, res, next) {
-    var userID = req.params.userID;
+router.get('/api/v1/achievements/:achievementID', async function(req, res, next) {
     var achievementID = req.params.id;
     console.log('Achievement ID:', achievementID);
 
     try {
-        var user = await User.findById(userID)
-            .populate("achievements.testAchievements")
-            .populate("achievements.streakAchievements")
-            .exec();
-
-        var achievement = user.achievements.testAchievements.find(function(achievement) {
-            return achievement._id.toString() === achievementID;
-        }) || user.achievements.streakAchievements.find(function(achievement) {
-            return achievement._id.toString() === achievementID;
-        });
+        const achievement = await Achievement.findById(achievementID);
 
         console.log(achievement);
 
@@ -169,6 +132,7 @@ router.get('/api/v1/users/:userID/achievements/:id', async function(req, res, ne
             return res.status(404).json({"message": "Achievement with given id cannot be found."});
         }
 
+        await achievement.save();
         res.status(200).json({
             "achievement": achievement,
             "_links": {
@@ -192,65 +156,5 @@ router.get('/api/v1/users/:userID/achievements/:id', async function(req, res, ne
         return next(error);
     }
 })
-
-// Put info into spec achievement
-router.put('/api/v1/users/:userID/achievements/:id', async function(req, res, next) {
-    var userID = req.params.userID;
-    var achievementID = req.params.id;
-    console.log('Achievement ID:', achievementID);
-
-    try {
-        var user = await User.findById(userID)
-            .populate("achievements.testAchievements")
-            .populate("achievements.streakAchievements")
-            .exec();
-
-        var achievement = user.achievements.testAchievements.find(a => a._id.toString() === achievementID) ||
-        user.achievements.streakAchievements.find(a => a._id.toString() === achievementID);
-        if (!achievement) {
-            return res.status(404).json({"message": "Achievement with given id cannot be found."});
-        }
-        if (achievement instanceof TestAchievement) {
-            achievement = await TestAchievement.findByIdAndUpdate(achievementID, {
-                name: req.body.name,
-                isTriggered: req.body.isTriggered,
-                condition: req.body.condition
-            }, { new: true });
-        } else if (achievement instanceof StreakAchievement) {
-            achievement = await StreakAchievement.findByIdAndUpdate(achievementID, {
-                name: req.body.name,
-                isTriggered: req.body.isTriggered,
-                streakCounter: req.body.streakCounter
-            }, { new: true });
-        }
-
-        await achievement.save();
-        res.status(200).json({
-            "achievement": achievement,
-            "_links": {
-                "self": {
-                    "rel": "self",
-                    "href": `http://localhost:${port}/api/v1/users/${userID}/achievements/${achievement._id}`
-                },
-                "update achievement information": {
-                    "rel": "update",
-                    "href":`http://localhost:${port}/api/v1/users/${userID}/achievements/${achievement._id}`,
-                    "method": "PUT"
-                },
-                "delete": {
-                    "rel": "delete",
-                    "href":`http://localhost:${port}/api/v1/users/${userID}/achievements/${achievement._id}`,
-                    "method": "DELETE"
-                }, 
-                "post": {
-                    "rel": "post",
-                    "href": `http://localhost:${port}/api/v1/users/${userID}/achievements`,
-                    "method": "POST"
-                }
-            }});
-    } catch (err) { 
-        return next(err); 
-    }
-});
 
 module.exports = router;

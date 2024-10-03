@@ -3,8 +3,7 @@ const { Schema } = mongoose;
 
 const achievementSchema = new Schema({
   name: { type: String },
-  type: { type: String, required: true },
-  isTriggered: { type: Boolean, default: false }
+  type: { type: String, required: true }
 }, {
   discriminatorKey: 'type',
 });

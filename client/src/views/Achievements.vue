@@ -50,25 +50,26 @@ export default {
       }
     },
     async completeAchievement(achievementId, isTriggered) {
-      const userId = localStorage.getItem('userId')
-      if (!userId) {
-        alert('Failed to fetch user')
-        return
-      }
-      try {
-        const updatedIsTriggered = !isTriggered
-        const response = await axios.put(`/api/v1/users/${userId}/achievements/${achievementId}`, {
-          isTriggered: updatedIsTriggered
-        })
-        console.log(`Achievement ${achievementId} completed: ${updatedIsTriggered}`)
-        const achievement = this.achievements.find(a => a._id === achievementId)
-        if (achievement) {
-          achievement.isTriggered = updatedIsTriggered
-        }
-        alert('achievement completed')
-      } catch (error) {
-        alert('Failed to complete achievement: ' + error.message)
-      }
+      alert('achievement completed')
+      // const userId = localStorage.getItem('userId')
+      // if (!userId) {
+      //   alert('Failed to fetch user')
+      //   return
+      // }
+      // try {
+      //   const updatedIsTriggered = !isTriggered
+      //   await axios.put(`/api/v1/users/${userId}/achievements/${achievementId}`, {
+      //     isTriggered: updatedIsTriggered
+      //   })
+      //   console.log(`Achievement ${achievementId} completed: ${updatedIsTriggered}`)
+      //   const achievement = this.achievements.find(a => a._id === achievementId)
+      //   if (achievement) {
+      //     achievement.isTriggered = updatedIsTriggered
+      //   }
+      //   alert('achievement completed')
+      // } catch (error) {
+      //   alert('Failed to complete achievement: ' + error.message)
+      // }
     }
   },
   mounted() {

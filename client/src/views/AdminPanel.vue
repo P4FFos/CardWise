@@ -88,20 +88,15 @@ export default {
       }
     },
     async fetchAchievements() {
-      const userId = localStorage.getItem('userId')
-      if (userId) {
-        try {
-          const response = await axios.get(`/api/v1/users/${userId}/achievements`)
-          if (response.data && Array.isArray(response.data.achievements)) {
-            this.achievements = response.data.achievements
-          } else {
-            console.log('No achievements found')
-          }
-        } catch (error) {
-          alert('Failed to fetch achievements: ' + error.message)
+      const response = await axios.get('/api/v1/achievements')
+      try {
+        if (response.data && Array.isArray(response.data.achievements)) {
+          this.achievements = response.data.achievements
+        } else {
+          console.log('No achievements found')
         }
-      } else {
-        alert('Failed to fetch user')
+      } catch (error) {
+        alert('Failed to fetch achievements: ' + error.message)
       }
     },
     async createTestAchievement() {
@@ -149,7 +144,7 @@ export default {
         return
       }
       try {
-        const response = await axios.delete(`/api/v1/users/${userId}/achievements/${achievementId}`)
+        await axios.delete(`/api/v1/users/${userId}/achievements/${achievementId}`)
         console.log(`Achievement ${achievementId} was deleted`)
         alert('achievement deleted')
         this.achievements = this.achievements.filter(achievement => achievement._id !== achievementId)
@@ -159,7 +154,7 @@ export default {
     },
     async deleteUser(userId) {
       try {
-        const response = await axios.delete(`/api/v1/users/${userId}`)
+        await axios.delete(`/api/v1/users/${userId}`)
         console.log(`User ${userId} was deleted`)
         alert('User was deleted')
         this.users = this.users.filter(user => user._id !== userId)
