@@ -9,6 +9,7 @@
           <button @click="addNewCard">Add new card</button>
         </div>
         <button @click="getAllCards">Show cards info</button>
+        <button @click="deleteAllCards">Delete all cards</button>
         <div v-if="showCards">
             <ul>
                 <li v-for="card in cardInfo" :key="card._id">
@@ -63,6 +64,16 @@ export default {
         this.showCards = true
       } catch (error) {
         console.error('Failed to get all decks:', error)
+      }
+    },
+    async deleteAllCards() {
+      const userId = localStorage.getItem('userId')
+
+      try {
+        await Api.delete(`/v1/users/${userId}/decks/${this.deckId}/cards`)
+        this.cardInfo = []
+      } catch (error) {
+        console.error('Failed to delete all decks:', error)
       }
     }
   }
