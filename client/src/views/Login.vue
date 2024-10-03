@@ -33,14 +33,20 @@ export default {
         const users = response.data
         const user = users.find(user => user.username === this.username && user.password === this.password)
 
+        const responseAdmin = await Api.get('/v1/admins')
+        const admins = responseAdmin.data
+        const admin = admins.find(admin => admin.username === this.username && admin.password === this.password)
+
         if (user) {
           localStorage.setItem('userId', user._id)
+          this.$router.push('/main')
+        } else {
+          this.errorMessage = 'Invalid username or password'
+        }
 
-          if (this.username.includes('admin')) {
-            this.$router.push('/admin-panel')
-          } else {
-            this.$router.push('/main')
-          }
+        if (admin) {
+          localStorage.setItem('adminID', admin._id)
+          this.$router.push('/admin-panel')
         } else {
           this.errorMessage = 'Invalid username or password'
         }

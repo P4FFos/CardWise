@@ -13,6 +13,7 @@
           </div>
       </div>
       </div>
+      <button @click="deleteAllUsers" class="button">🗑️ Delete All Users</button>
       <div class="panel">
         <h2>Achievements</h2>
         <div>
@@ -164,6 +165,15 @@ export default {
         this.users = this.users.filter(user => user._id !== userId)
       } catch (error) {
         alert('Failed to delete user: ' + error.message)
+      }
+    },
+    async deleteAllUsers() {
+      try {
+        await axios.delete('/api/v1/users')
+        alert('All user accounts deleted successfully')
+        this.users = []
+      } catch (error) {
+        alert('Failed to delete all users: ' + error.message)
       }
     }
   },

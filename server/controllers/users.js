@@ -200,4 +200,14 @@ router.delete('/api/v1/users/:id', async function (req, res, next) {
     res.json({message: 'User account deleted successfully'});
 });
 
+// delete all users
+router.delete('/api/v1/users', async function (req, res, next) {
+    try {
+        await User.deleteMany({});
+        res.json({message: 'All user accounts deleted successfully'});
+    } catch (error) {
+        return next(error);
+    }
+});
+
 module.exports = router;

@@ -1643,6 +1643,45 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Delete all users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Content has been deleted\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "DELETE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/api/v1/users",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
