@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "b08c6500-6cfd-4f8f-a2c4-160a81e52c56",
+		"_postman_id": "84f7e816-7c79-498d-b1db-84b8a88f38f6",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38409323"
+		"_exporter_id": "38095200"
 	},
 	"item": [
 		{
@@ -81,6 +81,75 @@
 			"response": []
 		},
 		{
+			"name": "Create new admin",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"",
+							"",
+							"pm.environment.set(\"username\", \"admin1\");",
+							"pm.environment.set(\"password\", \"password1\");",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(pm.response.text());",
+							"var adminID = jsonData.admin._id;",
+							"pm.environment.set(\"adminID\", adminID);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"Response contains admin ID\", function () {",
+							"    pm.expect(jsonData.admin).to.have.property(\"_id\");",
+							"});",
+							"pm.test(\"Response contains username\", function () {",
+							"    pm.expect(jsonData.admin).to.have.property(\"username\", \"admin1\");",
+							"});",
+							"pm.test(\"Response contains password\", function () {",
+							"    pm.expect(jsonData.admin).to.have.property(\"password\", \"password1\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/admins",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"admins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get all users",
 			"event": [
 				{
@@ -109,6 +178,47 @@
 						"api",
 						"v1",
 						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all admins",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/admins",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"admins"
 					]
 				}
 			},
@@ -200,6 +310,48 @@
 						"v1",
 						"users",
 						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get specific admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/admins/{{adminID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"admins",
+						"{{adminID}}"
 					]
 				}
 			},
