@@ -10,17 +10,21 @@
         </div>
         <button @click="getAllCards">Show cards info</button>
         <button @click="deleteAllCards">Delete all cards</button>
-        <div v-if="showCards">
-            <ul>
-                <li v-for="card in cardInfo" :key="card._id">
-                    <p>Card ID: {{ card._id }}</p>
-                    <p>Content: {{ card.content }}</p>
-                    <p>Explanation: {{ card.explanation }}</p>
-                    <button>Edit card</button>
-                    <button @click="deleteCard(card._id)">Delete card</button>
-                </li>
-            </ul>
-        </div>
+        <ul>
+            <li v-for="card in cardInfo" :key="card._id">
+                <p>Card ID: {{ card._id }}</p>
+                <p>Content: {{ card.content }}</p>
+                <p>Explanation: {{ card.explanation }}</p>
+                <button @click="toggleEditCard(card)">Edit Card</button>
+                <button @click="deleteCard(card._id)">Delete card</button>
+
+                <div v-if="editCardId === card._id">
+                    <input type="text" v-model="editCardContent" placeholder="Enter new content for card">
+                    <input type="text" v-model="editCardExplanation" placeholder="Enter new explanation for card">
+                    <button @click="editCardInfo(card._id)">Submit</button>
+                </div>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -38,6 +42,10 @@ export default {
     return {
       cardContent: '',
       cardExplanation: '',
+      editCardContent: '',
+      editCardExplanation: '',
+      editCardId: null,
+      editCard: false,
       cardInfo: [],
       showCards: false
     }
@@ -64,6 +72,37 @@ export default {
       } catch (error) {
         console.error('Failed to add new card:', error)
       }
+    },
+    async editCardInfo(cardId) {
+      const userId = localStorage.getItem('userId')
+      try {
+        console.log(userId, this.deckId, cardId)
+        console.log(this.editCardContent, this.editCardExplanation)
+        const response = await Api.put(`/v1/users/${userId}/decks/${this.deckId}/cards/${cardId}`, {
+          content: this.editCardContent,
+          explanation: this.editCardExplanation
+        })
+        console.log('API response:', response)
+
+        const updatedCard = response.data.card
+
+        console.log(updatedCard)
+        const cardIndex = this.cardInfo.findIndex(card => card._id === cardId)
+        if (cardIndex !== -1) {
+            this.cardInfo[cardIndex] = updatedCard
+        }
+
+        this.editCardId = null
+        this.editCardContent = ''
+        this.editCardExplanation = ''
+      } catch (error) {
+        console.error('Failed to edit card:', error)
+      }
+    },
+    toggleEditCard(card) {
+      this.editCardId = card._id
+      console.log(card._id)
+      console.log(this.editCardId)
     },
     async getAllCards() {
       const userId = localStorage.getItem('userId')
