@@ -7,7 +7,7 @@
          :class="{'achievement-completed': achievement.isTriggered, 'achievement': true}">
         <h2>Achievement: {{ achievement.name }}</h2>
         <p><strong>Condition:</strong> {{ achievement.condition }} </p>
-        <button class="complete-button" @click="completeAchievement(achievement._id, achievement.isTriggered)">👍 Complete</button>
+        <button class="complete-button" @click="completeAchievement(achievement._id, achievement.isTriggered)">🏆 Complete</button>
       </div>
     </div>
   </div>

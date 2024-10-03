@@ -8,6 +8,7 @@
               :key="user._id"
               class="container">
               <h2>User: {{ user.username }}</h2>
+              <p>Password: {{ user.password }}</p>
               <button @click="deleteUser(user._id)">🗑️ Delete</button>
           </div>
       </div>
@@ -44,7 +45,7 @@
            :key="achievement._id"
            :class="{'achievement-completed': achievement.isTriggered, 'container': true}">
           <h2>Achievement: {{ achievement.name }}</h2>
-          <p><strong>Condition:</strong> {{ achievement.condition }} </p>
+          <p><strong>Condition: </strong> {{ achievement.condition || achievement.streakCounter }} </p>
           <button @click="deleteAchievement(achievement._id)">🗑️ Delete</button>
         </div>
       </div>
