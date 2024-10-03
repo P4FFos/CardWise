@@ -51,6 +51,7 @@ router.get('/api/v1/users/:userID/decks/:deckID/cards', async function(req, res,
     } catch (error) {
         return next(error);
     }
+    //TODO This is not good, have to change it
     res.status(200).json({
             deck : {
                 _id: deck._id,
@@ -73,6 +74,7 @@ router.get('/api/v1/users/:userID/decks/:deckID/cards/:cardID', async function(r
         if (!deck) {
             return res.status(404).json({ "message": "Deck with the provided ID does not exist." });
         }
+       
         var card = deck.cards.find(function(card) {
             return card._id.toString() === cardID
         });
@@ -97,6 +99,63 @@ router.get('/api/v1/users/:userID/decks/:deckID/cards/:cardID', async function(r
                 "method": "POST"
             }
         }});
+});
+// Update card of a specific deck
+router.put('/api/v1/users/:userID/decks/:deckId/cards/:cardId', async function(req, res, next) {
+    const userID = req.params.userID;
+    const deckID = req.params.deckId;
+    const cardID = req.params.cardId;
+
+    try {
+        const user = await User.findById(userID).populate("decks").exec();
+        if (!user) {
+            return res.status(404).json({ "message": "User not found" });
+        }
+
+        var deck = await Deck.findById(deckID).populate("cards").exec();
+        if (!deck) {
+            return res.status(404).json({ "message": "Deck not found" });
+        }
+
+        var card = deck.cards.find(function(card) {
+            return card._id.toString() === cardID
+        });
+        if (!card) {
+            return res.status(404).json({ "message": "Card not found" });
+        }
+
+        // Log the request body to ensure it's correct
+        console.log("Request body:", req.body);
+
+        card.content = req.body.content || card.content;
+        card.explanation = req.body.explanation || card.explanation;
+
+        // Save the updated deck
+        await deck.save()
+        await card.save()
+        res.status(200).json({
+            "card": card,
+            "_links": {
+                "self": {
+                    "rel": "self",
+                    "href": `http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}/cards/${cardID}`
+                },
+                "delete": {
+                    "rel": "delete",
+                    "href": `http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}/cards/${cardID}`,
+                    "method": "DELETE"
+                },
+                "post": {
+                    "rel": "post",
+                    "href": `http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}`,
+                    "method": "POST"
+                }
+            }
+        });
+    } catch (err) {
+        console.error("Error occurred:", err); // Log the error for debugging
+        return res.status(500).json({ "message": "Internal server error", error: err.message });
+    }
 });
 
 
