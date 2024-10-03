@@ -9,7 +9,7 @@
               class="container">
               <h2>User: {{ user.username }}</h2>
               <p>Password: {{ user.password }}</p>
-              <button @click="deleteUser(user._id)">🗑️ Delete</button>
+              <button @click="deleteUser(user._id)" class="button">🗑️ Delete</button>
           </div>
       </div>
       </div>
@@ -19,8 +19,8 @@
         <p>create test achievement</p>
         <form @submit.prevent="createTestAchievement">
 
-        <label for="name">Name:</label>
-        <input type="text" id="name" v-model="name" name="name" required>
+        <label for="testName">Name:</label>
+        <input type="text" id="testName" v-model="testName" name="testName" required>
 
         <label for="condition">Condition: </label>
         <input type="text" id="condition" v-model="condition" name="condition" required>
@@ -31,8 +31,8 @@
         <p>create streak achievement</p>
         <form @submit.prevent="createStreakAchievement">
 
-        <label for="name">Name:</label>
-        <input type="text" id="name" v-model="name" name="name" required>
+        <label for="streakName">Name:</label>
+        <input type="text" id="streakName" v-model="streakName" name="streakName" required>
 
         <label for="streakCounter">Streak Counter: </label>
         <input type="number" id="streakCounter" v-model="streakCounter" name="streakCounter" required>
@@ -46,7 +46,7 @@
            :class="{'achievement-completed': achievement.isTriggered, 'container': true}">
           <h2>Achievement: {{ achievement.name }}</h2>
           <p><strong>Condition: </strong> {{ achievement.condition || achievement.streakCounter }} </p>
-          <button @click="deleteAchievement(achievement._id)">🗑️ Delete</button>
+          <button @click="deleteAchievement(achievement._id)" class="button">🗑️ Delete</button>
         </div>
       </div>
       </div>
@@ -64,7 +64,8 @@ export default {
   data() {
     return {
       type: '',
-      name: '',
+      testName: '',
+      streakName: '',
       isTriggered: false,
       condition: '',
       streakCounter: 0,
@@ -108,7 +109,7 @@ export default {
         try {
           const response = await axios.post(`/api/v1/users/${userId}/achievements`, {
             type: 'TestAchievement',
-            name: this.name,
+            name: this.testName,
             isTriggered: this.isTriggered,
             condition: this.condition
           })
@@ -127,7 +128,7 @@ export default {
         try {
           const response = await axios.post(`/api/v1/users/${userId}/achievements`, {
             type: 'StreakAchievement',
-            name: this.name,
+            name: this.streakName,
             isTriggered: this.isTriggered,
             streakCounter: this.streakCounter
           })
@@ -216,5 +217,10 @@ export default {
     margin-top: 20px;
     margin-bottom: 20px;
     border-radius: 10px;
+  }
+
+  .button {
+    margin-left: 5px;
+    margin-right: 5px;
   }
 </style>
