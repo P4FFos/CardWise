@@ -7,7 +7,7 @@
           <div v-for="user in users"
               :key="user._id"
               class="container">
-              <h2>User: {{ user.name }}</h2>
+              <h2>User: {{ user.username }}</h2>
               <button @click="deleteUser(user._id)">🗑️ Delete</button>
           </div>
       </div>
@@ -75,8 +75,8 @@ export default {
     async fetchUsers() {
       try {
         const response = await axios.get('/api/v1/users')
-        if (response.data && Array.isArray(response.data.users)) {
-          this.users = response.data.users
+        if (response.data && Array.isArray(response.data)) {
+          this.users = response.data
         } else {
           console.log('No users found')
         }
