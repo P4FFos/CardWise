@@ -31,8 +31,10 @@
     </div>
     <div v-if="deckInfo" class="deck">
       <li v-for="deck in deckInfo" :key="deck._id" @contextmenu.prevent="showContextMenu($event, deck._id)">
-        <p>Name: {{ deck.name }}</p>
-        <p>Deck ID: {{ deck._id }}</p>
+        <router-link :to="{ name: 'deck', params: { deckId: deck._id } }">
+          <p>Name: {{ deck.name }}</p>
+          <p>Deck ID: {{ deck._id }}</p>
+        </router-link>
       </li>
     </div>
     <context-menu v-if="showMenu"
