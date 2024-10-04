@@ -15,7 +15,7 @@ const routes = [
   { path: '/achievements', name: 'achievements', component: Achievements },
   { path: '/main', name: 'main', component: Main },
   { path: '/profile', name: 'profile', component: Profile },
-  { path: '/admin-panel', name: 'admin panel', component: AdminPanel }
+  { path: '/admin-panel', name: 'admin panel', component: AdminPanel },
   { path: '/deck/:deckId', name: 'deck', component: Deck, props: true },
   { path: '/profile', name: 'profile', component: Profile }
 ]

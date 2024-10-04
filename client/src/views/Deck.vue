@@ -89,7 +89,7 @@ export default {
         console.log(updatedCard)
         const cardIndex = this.cardInfo.findIndex(card => card._id === cardId)
         if (cardIndex !== -1) {
-            this.cardInfo[cardIndex] = updatedCard
+          this.cardInfo[cardIndex] = updatedCard
         }
 
         this.editCardId = null
