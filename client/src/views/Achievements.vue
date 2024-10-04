@@ -1,48 +1,20 @@
 <template>
   <div>
     <h1>Achievements</h1>
-    <div>
-      <p>dev-function: create test achievement</p>
-      <form @submit.prevent="createTestAchievement">
-
-      <label for="name">Name:</label>
-      <input type="text" id="name" v-model="name" name="name" required>
-
-      <label for="condition">Condition:</label>
-      <input type="text" id="condition" v-model="condition" name="condition" required>
-
-      <button type="submit">Register</button>
-      </form>
-
-      <p>create streak achievement</p>
-      <form @submit.prevent="createStreakAchievement">
-
-      <label for="name">Name:</label>
-      <input type="text" id="name" v-model="name" name="name" required>
-
-      <label for="streakCounter">streakCounter:</label>
-      <input type="number" id="streakCounter" v-model="streakCounter" name="streakCounter" required>
-
-      <button type="submit">Register</button>
-      </form>
-    </div>
     <div id="achievements-list">
-      <div v-for="achievement in achievements"
-         :key="achievement._id"
-         :class="{'achievement-completed': achievement.isTriggered, 'achievement': true}">
-        <h2>Achievement: {{ achievement.name }}</h2>
-        <p><strong>Condition:</strong> {{ achievement.condition }} </p>
-        <button class="complete-button" @click="completeAchievement(achievement._id, achievement.isTriggered)">👍 Complete</button>
+      <div v-for="achievement in this.achievements"
+           :key="achievement._id"
+           :class="{'achievement-completed': achievement.completed, 'container': true}">
+          <h2>Achievement: {{ achievement.achievement.name }}</h2>
+          <p><strong>Condition: </strong> {{ achievement.achievement.condition || achievement.achievement.streakCounter }} </p>
+        <button class="complete-button" @click="completeAchievement(achievement._id, achievement.completed)">🏆 Complete</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-
-// specify the base URL for the API server
-axios.defaults.baseURL = 'http://localhost:3000'
+import { Api } from '@/Api.js'
 
 export default {
   name: 'Achievements',
@@ -50,83 +22,44 @@ export default {
     return {
       type: '',
       name: '',
-      isTriggered: false,
       condition: '',
+      completed: false,
       streakCounter: 0,
       achievements: []
     }
   },
   methods: {
     async fetchAchievements() {
-      const userId = localStorage.getItem('userId')
-      if (userId) {
-        try {
-          const response = await axios.get(`/api/v1/users/${userId}/achievements`)
-          if (response.data && Array.isArray(response.data.achievements)) {
-            this.achievements = response.data.achievements
-          } else {
-            console.log('No achievements found')
-          }
-        } catch (error) {
-          alert('Failed to fetch achievements: ' + error.message)
+      try {
+        const userID = localStorage.getItem('userId')
+
+        const response = await Api.get(`/v1/users/${userID}/achievements`)
+
+        if (response.data && Array.isArray(response.data.achievements)) {
+          this.achievements = response.data.achievements
+          console.log(this.achievements)
+        } else {
+          console.log('No achievements found')
         }
-      } else {
-        alert('Failed to fetch user')
+      } catch (error) {
+        alert('Failed to fetch achievements: ' + error.message)
       }
     },
-    async createTestAchievement() {
-      const userId = localStorage.getItem('userId')
-      if (userId) {
-        try {
-          const response = await axios.post(`/api/v1/users/${userId}/achievements`, {
-            type: 'TestAchievement',
-            name: this.name,
-            isTriggered: this.isTriggered,
-            condition: this.condition
-          })
-          console.log('New Achievement:', response.data.achievement)
-          this.achievements.push(response.data.achievement)
-        } catch (error) {
-          alert('Failed to create achievement: ' + error.message)
-        }
-      } else {
-        alert('Failed to fetch user')
-      }
-    },
-    async createStreakAchievement() {
-      const userId = localStorage.getItem('userId')
-      if (userId) {
-        try {
-          const response = await axios.post(`/api/v1/users/${userId}/achievements`, {
-            type: 'StreakAchievement',
-            name: this.name,
-            isTriggered: this.isTriggered,
-            streakCounter: this.streakCounter
-          })
-          console.log('New Achievement:', response.data.achievement)
-          this.achievements.push(response.data.achievement)
-        } catch (error) {
-          alert('Failed to create achievement: ' + error.message)
-        }
-      } else {
-        alert('Failed to fetch user')
-      }
-    },
-    async completeAchievement(achievementId, isTriggered) {
-      const userId = localStorage.getItem('userId')
-      if (!userId) {
+    async completeAchievement(achievementId, completed) {
+      const userID = localStorage.getItem('userId')
+      if (!userID) {
         alert('Failed to fetch user')
         return
       }
       try {
-        const updatedIsTriggered = !isTriggered
-        const response = await axios.put(`/api/v1/users/${userId}/achievements/${achievementId}`, {
-          isTriggered: updatedIsTriggered
+        const updatedCompleted = !completed
+        await Api.put(`/v1/users/${userID}/achievements/${achievementId}`, {
+          completed: updatedCompleted
         })
-        console.log(`Achievement ${achievementId} completed: ${updatedIsTriggered}`)
+        console.log(`Achievement ${achievementId} completed: ${updatedCompleted}`)
         const achievement = this.achievements.find(a => a._id === achievementId)
         if (achievement) {
-          achievement.isTriggered = updatedIsTriggered
+          achievement.completed = updatedCompleted
         }
         alert('achievement completed')
       } catch (error) {
