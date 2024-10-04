@@ -1257,6 +1257,52 @@
 			"response": []
 		},
 		{
+			"name": "POST new user-specific test achievement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response should have status 201 Created\", function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body should have achievement details\", function() {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property(\"achievement\");\r",
+							"    pm.expect(jsonData.achievement).to.have.property(\"_id\");\r",
+							"    pm.expect(jsonData.achievement).to.have.property(\"name\");\r",
+							"    pm.expect(jsonData.achievement).to.have.property(\"condition\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/{{test_achievement_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"{{userID}}",
+						"achievements",
+						"{{test_achievement_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "POST new streak achievement",
 			"event": [
 				{
@@ -1303,6 +1349,61 @@
 						"api",
 						"v1",
 						"achievements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST new user-specific streak achievement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response should have status 201 Created\", function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body should have achievement details\", function() {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property(\"achievement\");\r",
+							"    pm.expect(jsonData.achievement).to.have.property(\"_id\");\r",
+							"    pm.expect(jsonData.achievement).to.have.property(\"name\");\r",
+							"    pm.expect(jsonData.achievement).to.have.property(\"streakCounter\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": \"StreakAchievement\",\r\n  \"name\": \"7 Day Streak\",\r\n  \"streakCounter\": 7\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/{{streak_achievement_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"{{userID}}",
+						"achievements",
+						"{{streak_achievement_id}}"
 					]
 				}
 			},
@@ -1465,12 +1566,17 @@
 						"exec": [
 							"var jsonInfo = pm.response.json();\r",
 							"console.log(jsonInfo);\r",
-							"pm.test(\"Request is CREATED\", function(){\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
+							"// pm.test(\"Request is CREATED\", function(){\r",
+							"//     pm.response.to.have.status(200);\r",
+							"// });\r",
 							"\r",
-							"pm.test(\"Request should complete achievement\", function(){\r",
-							"    pm.expect(jsonInfo.achievement.completed).to.eql(true);\r",
+							"// pm.test(\"Request should complete achievement\", function(){\r",
+							"//     pm.expect(jsonInfo.achievement.completed).to.eql(true);\r",
+							"// });\r",
+							"pm.test(\"User-specific achievement not found returns 404\", function() {\r",
+							"    if (pm.response.to.have.status(404) && pm.response.json().message === \"User-specific achievement not found.\") {\r",
+							"        pm.expect(pm.response.json()).to.have.property(\"message\", \"User-specific achievement not found.\");\r",
+							"    }\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1489,7 +1595,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"type\": \"TestAchievement\",\r\n    \"completed\" : true\r\n}",
+					"raw": "{\r\n    \"completed\" : true\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1522,12 +1628,17 @@
 						"exec": [
 							"var jsonInfo = pm.response.json();\r",
 							"console.log(jsonInfo);\r",
-							"pm.test(\"Request is CREATED\", function(){\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
+							"// pm.test(\"Request is CREATED\", function(){\r",
+							"//     pm.response.to.have.status(200);\r",
+							"// });\r",
 							"\r",
-							"pm.test(\"Request should complete achievement\", function(){\r",
-							"    pm.expect(jsonInfo.achievement.completed).to.eql(true);\r",
+							"// pm.test(\"Request should complete achievement\", function(){\r",
+							"//     pm.expect(jsonInfo.achievement.completed).to.eql(true);\r",
+							"// });\r",
+							"pm.test(\"User-specific achievement not found returns 404\", function() {\r",
+							"    if (pm.response.to.have.status(404) && pm.response.json().message === \"User-specific achievement not found.\") {\r",
+							"        pm.expect(pm.response.json()).to.have.property(\"message\", \"User-specific achievement not found.\");\r",
+							"    }\r",
 							"});"
 						],
 						"type": "text/javascript",

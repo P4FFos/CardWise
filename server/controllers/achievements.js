@@ -89,7 +89,7 @@ router.delete('/api/v1/achievements/:id', async function(req, res, next) {
 
 // Get info from a spec achievement
 router.get('/api/v1/achievements/:achievementID', async function(req, res, next) {
-    var achievementID = req.params.id;
+    var achievementID = req.params.achievementID;
     console.log('Achievement ID:', achievementID);
 
     try {
@@ -178,6 +178,8 @@ router.post('/api/v1/users/:userID/achievements/:achievementID', async function(
 router.put('/api/v1/users/:userID/achievements/:achievementID', async function(req, res, next) {
     const userID = req.params.userID;
     const achievementID = req.params.achievementID;
+
+    console.log('User ID:', userID);
 
     try {
         const user = await User.findById(userID);
