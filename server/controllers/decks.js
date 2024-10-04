@@ -52,16 +52,15 @@ router.post('/api/v1/users/:userID/decks', async function(req, res, next) {
 // Show all decks
 router.get('/api/v1/users/:userID/decks', async function(req, res, next) {
     var userID = req.params.userID;
-    var decks;
     try {
-        decks = await User.findById(userID).populate("decks").exec();
-        if (!decks) {
+        user = await User.findById(userID).populate("decks").exec();
+        if (!user) {
             return res.status(404).json({ "message": "Decks do not exist." });
         }
     } catch (error) {
         return next(error);
     }
-    res.json({"decks": decks});
+    res.json({"decks": user.decks});
 });
 
 // Sort decks by the number of cards in it or by name
@@ -87,11 +86,13 @@ router.get('/api/v1/users/:userID/decks/sort', async function(req, res, next) {
         let decks;
         if (sortField === 'cardAmount') {
             decks = await Deck.aggregate([
+                { $match: { _id: { $in: user.decks } } },
                 { $addFields: { cardAmount: { $size: "$cards" } } },
                 { $sort: { cardAmount: sortOrder } }
             ]);
         } else {
             decks = await Deck.aggregate([
+                { $match: { _id: { $in: user.decks } } },
                 { $addFields: { lowerName: { $toLower: "$name" } } },
                 { $sort: { lowerName: sortOrder } }
             ]);
@@ -248,12 +249,8 @@ router.delete('/api/v1/users/:userID/decks', async function(req, res, next) {
         user.decks = [];
         await user.save();
 
-        const result = await Deck.deleteMany({});
-        if (!result) {
-            return res.status(500).json({ "message": "Error while deleting all decks. Decks are not found." });
-        }
         res.status(200).json({
-            message: result.deletedCount + " " + "deck(s) deleted.",
+            message: deletedDecks.deletedCount + " deck(s) deleted.",
             userResult: user,
             deckResults: deletedDecks,
         });

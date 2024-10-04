@@ -6,38 +6,46 @@ var User = require('../models/user.js');
 
 // create specific user
 router.post('/api/v1/users', async function (req, res, next) {
-    var user = new User(req.body);
     try {
+        // Check if the user already exists
+        var existingUser = await User.findOne({ email: req.body.email });
+        if (existingUser) {
+            return res.status(409).json({ "message": "User already exists" });
+        }
+
+        var user = new User(req.body);
         if (!user) {
-            res.status(404).json({"message": "Cannot create a null user."})
+            res.status(404).json({"message": "Cannot create a null user"})
         }
         await user.save();
+
+        res.status(201).json({
+            "user": user,
+            "_links": {
+                "self": {
+                    "rel": "self",
+                    "href": `http://localhost:${port}/api/v1/users/${user._id}`
+                },
+                "update user information": {
+                    "rel": "update",
+                    "href": `http://localhost:${port}/api/v1/users/${user._id}`,
+                    "method": "PUT"
+                },
+                "update": {
+                    "rel": "update",
+                    "href": `http://localhost:${port}/api/v1/users/${user._id}/username`,
+                    "method": "PATCH"
+                },
+                "delete": {
+                    "rel": "delete",
+                    "href": `http://localhost:${port}/api/v1/users/${user._id}`,
+                    "method": "DELETE"
+                }
+            }
+        });
     } catch (error) {
         return next(error);
     }
-    res.status(201).json({
-        "user": user,
-        "_links": {
-            "self": {
-                "rel": "self",
-                "href": `http://localhost:${port}/api/v1/users/${user._id}`
-            },
-            "update user information": {
-                "rel": "update",
-                "href":`http://localhost:${port}/api/v1/users/${user._id}`,
-                "method": "PUT"
-            },
-            "update": {
-                "rel": "update",
-                "href":`http://localhost:${port}/api/v1/users/${user._id}/username`,
-                "method": "PATCH"
-            },
-            "delete": {
-                "rel": "delete",
-                "href":`http://localhost:${port}/api/v1/users/${user._id}`,
-                "method": "DELETE"
-            }
-        }});
 });
 
 // get all users
@@ -46,7 +54,7 @@ router.get('/api/v1/users', async function (req, res, next) {
     try {
         users = await User.find();
         if (!users) {
-            return res.status(404).json({ "message": "Users do not exist." });
+            return res.status(404).json({ "message": "Users do not exist" });
         }
     } catch (error) {
         return next(error);
@@ -60,7 +68,7 @@ router.get('/api/v1/users/:userID', async function(req, res, next) {
     try {
         var user = await User.findById(userID);
         if (!user) {
-            return res.status(404).json({"message": "User with given id cannot be found."});
+            return res.status(404).json({"message": "User with given id cannot be found"});
         }
         res.status(200).json({
             "user": user,
@@ -103,6 +111,7 @@ router.put('/api/v1/users/:id', async function (req, res, next) {
             return res.status(404).json({message: 'User not found'});
         }
         updatedUser.set(updateData);
+        await updatedUser.save();
     } catch (error) {
         return next(error);
     }
@@ -133,7 +142,7 @@ router.put('/api/v1/users/:id', async function (req, res, next) {
 });
 
 // update username
-router.patch('/api/v1/users/:id/username', async function (req, res, next) {
+router.patch('/api/v1/users/:id/', async function (req, res, next) {
     var userId = req.params.id;
     var newUsername = req.body.username;
 
@@ -144,6 +153,7 @@ router.patch('/api/v1/users/:id/username', async function (req, res, next) {
             return res.status(404).json({message: 'User not found'});
         }
         updatedUser.username = newUsername;
+        await updatedUser.save();
     } catch (error) {
         return next(error);
     }
@@ -177,17 +187,27 @@ router.patch('/api/v1/users/:id/username', async function (req, res, next) {
 router.delete('/api/v1/users/:id', async function (req, res, next) {
     var userId = req.params.id;
 
-    var deletedUser;
     try {
-        deletedUser = await User.findById(userId);
+        var deletedUser = await User.findById(userId);
         if (!deletedUser) {
             return res.status(404).json({message: 'User not found'});
         }
+        await User.deleteOne({ _id: userId });
     } catch (error) {
         return next(error);
     }
 
     res.json({message: 'User account deleted successfully'});
+});
+
+// delete all users
+router.delete('/api/v1/users', async function (req, res, next) {
+    try {
+        await User.deleteMany({});
+        res.json({message: 'All user accounts deleted successfully'});
+    } catch (error) {
+        return next(error);
+    }
 });
 
 module.exports = router;
