@@ -22,7 +22,6 @@ router.post('/api/v1/achievements', async function(req, res, next) {
             achievement = new StreakAchievement(data);
         }
         await achievement.save();
-        await user.save();
         if (!achievement) {
             res.status(404).json({"message": "Cannot create a null achievement."})
         }
@@ -34,21 +33,21 @@ router.post('/api/v1/achievements', async function(req, res, next) {
         "_links": {
             "self": {
                 "rel": "self",
-                "href": `http://localhost:${port}/api/v1/users/${userID}/achievements/${achievement._id}`
+                "href": `http://localhost:${port}/api/v1/achievements/${achievement._id}`
             },
             "update achievement information": {
                 "rel": "update",
-                "href":`http://localhost:${port}/api/v1/users/${userID}/achievements/${achievement._id}`,
+                "href":`http://localhost:${port}/api/v1/achievements/${achievement._id}`,
                 "method": "PUT"
             },
             "delete": {
                 "rel": "delete",
-                "href":`http://localhost:${port}/api/v1/users/${userID}/achievements/${achievement._id}`,
+                "href":`http://localhost:${port}/api/v1/achievements/${achievement._id}`,
                 "method": "DELETE"
             }, 
             "post": {
                 "rel": "post",
-                "href": `http://localhost:${port}/api/v1/users/${userID}/achievements`,
+                "href": `http://localhost:${port}/api/v1/achievements`,
                 "method": "POST"
             }
         }});    
@@ -65,36 +64,6 @@ router.get('/api/v1/achievements', async function(req, res, next) {
         }
 
         res.status(200).json({ "achievements": achievements });
-    } catch (error) {
-        return next(error);
-    }
-});
-
-// Restarting progress through deleting achievements 
-router.delete('/api/v1/users/:userID/achievements', async function(req, res, next) {
-    var userID = req.params.userID;
-    try {
-        var user = await User.findById(userID);
-        if (!user) {
-            return res.status(404).json({ "message": "User with the provided ID does not exist." });
-        }
-        
-        var testAchievementIDs = user.achievements.testAchievements.map(achievement => achievement._id);
-        var streakAchievementIDs = user.achievements.streakAchievements.map(achievement => achievement._id);
-        
-        var deletedTestAchievements = await TestAchievement.deleteMany({ _id: { $in: testAchievementIDs}});
-        var deletedStreakAchievements = await StreakAchievement.deleteMany({ _id: { $in: streakAchievementIDs}});
-        
-        user.achievements.testAchievements = [];
-        user.achievements.streakAchievements = [];
-        await user.save();
-
-        res.status(200).json({
-            message:  "All achievements have been deleted. Progress reastarted.",
-            userResult: user,
-            testAchievementResults: deletedTestAchievements,
-            streakAchievementResults: deletedStreakAchievements,
-        });
     } catch (error) {
         return next(error);
     }
@@ -138,6 +107,53 @@ router.get('/api/v1/achievements/:achievementID', async function(req, res, next)
             "_links": {
                 "update achievement information": {
                     "rel": "update",
+                    "href":`http://localhost:${port}/api/v1/achievements/${achievement._id}`,
+                    "method": "PUT"
+                },
+                "delete": {
+                    "rel": "delete",
+                    "href":`http://localhost:${port}/api/v1/achievements/${achievement._id}`,
+                    "method": "DELETE"
+                }, 
+                "post": {
+                    "rel": "post",
+                    "href": `http://localhost:${port}/api/v1/achievements`,
+                    "method": "POST"
+                }
+            }});
+    } catch (error) {
+        return next(error);
+    }
+})
+
+// Add an achievement to user's profile
+router.post('/api/v1/users/:userID/achievements/:achievementID', async function(req, res, next) {
+    const userID = req.params.userID;
+    const achievementID = req.params.achievementID;
+
+    try {
+        const user = await User.findById(userID);
+        if (!user) {
+            return res.status(404).json({ "message": "User not found." });
+        }
+
+        const achievement = await Achievement.findById(achievementID).exec();
+        if (!achievement) {
+            return res.status(404).json({ "message": "Achievement not found." });
+        }
+
+        user.achievements.push({ achievement: achievement, completed: false });
+        await user.save();
+
+        res.status(201).json({
+            "achievement": achievement,
+            "_links": {
+                "self": {
+                    "rel": "self",
+                    "href": `http://localhost:${port}/api/v1/users/${userID}/achievements/${achievement._id}`
+                },
+                "update achievement information": {
+                    "rel": "update",
                     "href":`http://localhost:${port}/api/v1/users/${userID}/achievements/${achievement._id}`,
                     "method": "PUT"
                 },
@@ -151,10 +167,82 @@ router.get('/api/v1/achievements/:achievementID', async function(req, res, next)
                     "href": `http://localhost:${port}/api/v1/users/${userID}/achievements`,
                     "method": "POST"
                 }
-            }});
+            }
+        });
     } catch (error) {
         return next(error);
     }
-})
+});
+
+// Update user's achievement progress (e.g., mark as completed)
+router.put('/api/v1/users/:userID/achievements/:achievementID', async function(req, res, next) {
+    const userID = req.params.userID;
+    const achievementID = req.params.achievementID;
+
+    try {
+        const user = await User.findById(userID);
+
+        if (!user) {
+            return res.status(404).json({ "message": "User not found." });
+        }
+
+        const userAchievement = user.achievements.find(a => a._id.toString() === achievementID);
+        if (!userAchievement) {
+            return res.status(404).json({ "message": "User-specific achievement not found." });
+        }
+
+        if (req.body.completed !== undefined) {
+            userAchievement.completed = req.body.completed;
+        }
+
+        await user.save();
+    } catch (error) {
+        return next(error);
+    }
+});
+
+// Get all user-specific achievements
+router.get('/api/v1/users/:userID/achievements', async function(req, res, next) {
+    const userID = req.params.userID;  // Get userID from route params
+
+    try {
+        const user = await User.findById(userID)
+            .populate('achievements.achievement')  // Populate the global achievements in the user's profile
+            .exec();
+
+        if (!user) {
+            return res.status(404).json({ "message": "User not found." });
+        }
+
+        res.status(200).json({ "achievements": user.achievements });
+    } catch (error) {
+        return next(error);
+    }
+});
+
+// Delete one user-specific achievement
+router.delete('/api/v1/users/:userID/achievements/:achievementID', async function(req, res, next) {
+    const userID = req.params.userID;
+    var achievementID = req.params.achievementID;
+    try {
+        var user = await User.findById(userID);
+        if (!user) {
+            return res.status(404).json({ "message": "User with the provided ID does not exist." });
+        }
+        const achievement = await Achievement.findByIdAndDelete(achievementID);
+        if (!achievement) {
+            res.status(404).json({"message": "Achievement with given id not found."});
+        }
+        user.achievements = user.achievements.filter(a => a.achievement.toString() !== achievementID);
+
+        await user.save();
+        res.status(200).json({
+            message: "Achievement successfully deleted.",
+            achievement: achievement
+        });
+    } catch (error) {
+        return next(error);
+    }
+});
 
 module.exports = router;

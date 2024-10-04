@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "84f7e816-7c79-498d-b1db-84b8a88f38f6",
+		"_postman_id": "c2f66756-59af-4155-a785-c1c92f7d34d5",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38095200"
+		"_exporter_id": "38409323"
 	},
 	"item": [
 		{
@@ -1220,11 +1220,8 @@
 							"\r",
 							"pm.test(\"Response should be a valid TestAchievement\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
-							"\r",
 							"    pm.expect(jsonData.achievement.type).to.eql(\"TestAchievement\");\r",
-							"\r",
 							"    pm.expect(jsonData.achievement).to.have.property(\"name\", \"Pass 5 Tests\");\r",
-							"    pm.expect(jsonData.achievement).to.have.property(\"isTriggered\", false);\r",
 							"    pm.expect(jsonData.achievement).to.have.property(\"condition\", \"Pass at least 5 tests\");\r",
 							"});"
 						],
@@ -1238,7 +1235,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"type\": \"TestAchievement\",\r\n  \"name\": \"Pass 5 Tests\",\r\n  \"isTriggered\": false,\r\n  \"condition\": \"Pass at least 5 tests\"\r\n}",
+					"raw": "{\r\n  \"type\": \"TestAchievement\",\r\n  \"name\": \"Pass 5 Tests\",\r\n  \"condition\": \"Pass at least 5 tests\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1246,15 +1243,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/users/{{userID}}/achievements",
+					"raw": "{{host}}/api/v1/achievements",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"users",
-						"{{userID}}",
 						"achievements"
 					]
 				}
@@ -1277,13 +1272,10 @@
 							"\r",
 							"pm.test(\"Response should be a valid StreakAchievement\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
-							"    \r",
 							"    pm.expect(jsonData.achievement.type).to.eql(\"StreakAchievement\");\r",
-							"\r",
 							"    pm.expect(jsonData.achievement).to.have.property(\"name\", \"7 Day Streak\");\r",
 							"    pm.expect(jsonData.achievement).to.have.property(\"streakCounter\", 7);\r",
-							"});\r",
-							""
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -1303,15 +1295,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/users/{{userID}}/achievements",
+					"raw": "{{host}}/api/v1/achievements",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"users",
-						"{{userID}}",
 						"achievements"
 					]
 				}
@@ -1319,7 +1309,7 @@
 			"response": []
 		},
 		{
-			"name": "GET all achievements",
+			"name": "GET all user-specific achievements",
 			"event": [
 				{
 					"listen": "test",
@@ -1360,6 +1350,45 @@
 			"response": []
 		},
 		{
+			"name": "GET all global achievements",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains achievements(s)\", function(){\r",
+							"    var jsonInfo = pm.response.json();\r",
+							"    pm.expect(jsonInfo.achievements).to.be.an(\"array\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/achievements",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"achievements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "GET test achievement",
 			"event": [
 				{
@@ -1379,15 +1408,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/{{test_achievement_id}}",
+					"raw": "{{host}}/api/v1/achievements/{{test_achievement_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"users",
-						"{{userID}}",
 						"achievements",
 						"{{test_achievement_id}}"
 					]
@@ -1415,15 +1442,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/{{streak_achievement_id}}",
+					"raw": "{{host}}/api/v1/achievements/{{streak_achievement_id}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"v1",
-						"users",
-						"{{userID}}",
 						"achievements",
 						"{{streak_achievement_id}}"
 					]
@@ -1432,7 +1457,7 @@
 			"response": []
 		},
 		{
-			"name": "Update test achievement",
+			"name": "Complete test achievement",
 			"event": [
 				{
 					"listen": "test",
@@ -1444,12 +1469,8 @@
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
-							"pm.test(\"Request should change the name of the test achievement\", function(){\r",
-							"    pm.expect(jsonInfo.achievement.name).to.eql(\"Succesfull Name Change\");\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Request should change the condition of the achievement\", function(){\r",
-							"    pm.expect(jsonInfo.achievement.condition).to.eql(\"Succesfull Condition Change\");\r",
+							"pm.test(\"Request should complete achievement\", function(){\r",
+							"    pm.expect(jsonInfo.achievement.completed).to.eql(true);\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1468,7 +1489,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"type\": \"TestAchievement\",\r\n  \"name\": \"Succesfull Name Change\",\r\n  \"isTriggered\": false,\r\n  \"condition\": \"Succesfull Condition Change\"\r\n}",
+					"raw": "{\r\n    \"type\": \"TestAchievement\",\r\n    \"completed\" : true\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1493,7 +1514,7 @@
 			"response": []
 		},
 		{
-			"name": "Update streak achievement",
+			"name": "Complete streak achievement",
 			"event": [
 				{
 					"listen": "test",
@@ -1505,12 +1526,8 @@
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
-							"pm.test(\"Request should change the name of the test achievement\", function(){\r",
-							"    pm.expect(jsonInfo.achievement.name).to.eql(\"Succesfull Name Change\");\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Request should change the streak counter of the achievement\", function(){\r",
-							"    pm.expect(jsonInfo.achievement.streakCounter).to.eql(5);\r",
+							"pm.test(\"Request should complete achievement\", function(){\r",
+							"    pm.expect(jsonInfo.achievement.completed).to.eql(true);\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1529,7 +1546,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"type\": \"StreakAchievement\",\r\n  \"name\": \"Succesfull Name Change\",\r\n  \"streakCounter\": 5\r\n}",
+					"raw": "{\r\n    \"type\": \"StreakAchievement\",\r\n    \"completed\" : true\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1548,47 +1565,6 @@
 						"{{userID}}",
 						"achievements",
 						"{{streak_achievement_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete all achievements",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Content has been deleted\", function(){\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "X-HTTP-Method-Override",
-						"value": "DELETE",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/api/v1/users/{{userID}}/achievements",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"users",
-						"{{userID}}",
-						"achievements"
 					]
 				}
 			},

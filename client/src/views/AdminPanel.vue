@@ -44,7 +44,7 @@
       <div id="achievements-list">
         <div v-for="achievement in achievements"
            :key="achievement._id"
-           :class="{'achievement-completed': achievement.isTriggered, 'container': true}">
+           :class="{'achievement-completed': achievement.completed, 'container': true}">
           <h2>Achievement: {{ achievement.name }}</h2>
           <p><strong>Condition: </strong> {{ achievement.condition || achievement.streakCounter }} </p>
           <button @click="deleteAchievement(achievement._id)" class="button">🗑️ Delete</button>
@@ -55,10 +55,7 @@
   </template>
 
 <script>
-import axios from 'axios'
-
-// specify the base URL for the API server
-axios.defaults.baseURL = 'http://localhost:3000'
+import { Api } from '@/Api.js'
 
 export default {
   name: 'Achievements',
@@ -67,7 +64,6 @@ export default {
       type: '',
       testName: '',
       streakName: '',
-      isTriggered: false,
       condition: '',
       streakCounter: 0,
       achievements: [],
@@ -77,7 +73,7 @@ export default {
   methods: {
     async fetchUsers() {
       try {
-        const response = await axios.get('/api/v1/users')
+        const response = await Api.get('/v1/users')
         if (response.data && Array.isArray(response.data)) {
           this.users = response.data
         } else {
@@ -88,7 +84,7 @@ export default {
       }
     },
     async fetchAchievements() {
-      const response = await axios.get('/api/v1/achievements')
+      const response = await Api.get('/v1/achievements')
       try {
         if (response.data && Array.isArray(response.data.achievements)) {
           this.achievements = response.data.achievements
@@ -100,36 +96,51 @@ export default {
       }
     },
     async createTestAchievement() {
-      const userId = localStorage.getItem('userId')
-      if (userId) {
-        try {
-          const response = await axios.post(`/api/v1/users/${userId}/achievements`, {
-            type: 'TestAchievement',
-            name: this.testName,
-            isTriggered: this.isTriggered,
-            condition: this.condition
-          })
-          console.log('New Achievement:', response.data.achievement)
-          this.achievements.push(response.data.achievement)
-        } catch (error) {
-          alert('Failed to create achievement: ' + error.message)
+      try {
+        const response = await Api.post('/v1/achievements', {
+          type: 'TestAchievement',
+          name: this.testName,
+          condition: this.condition
+        })
+
+        const newAchievement = response.data.achievement
+        console.log('New Global Achievement:', newAchievement)
+        await this.fetchUsers()
+        if (this.users && Array.isArray(this.users)) {
+          for (const user of this.users) {
+            await Api.post(`/v1/users/${user._id}/achievements/${newAchievement._id}`, {
+              achievement: newAchievement._id,
+              completed: false
+            })
+          }
         }
-      } else {
-        alert('Failed to fetch user')
+        this.achievements.push(newAchievement)
+      } catch (error) {
+        alert('Failed to create achievement: ' + error.message)
       }
     },
     async createStreakAchievement() {
       const userId = localStorage.getItem('userId')
       if (userId) {
         try {
-          const response = await axios.post(`/api/v1/users/${userId}/achievements`, {
+          const response = await Api.post('/v1/achievements', {
             type: 'StreakAchievement',
             name: this.streakName,
-            isTriggered: this.isTriggered,
             streakCounter: this.streakCounter
           })
-          console.log('New Achievement:', response.data.achievement)
-          this.achievements.push(response.data.achievement)
+
+          const newAchievement = response.data.achievement
+          console.log('New Global Achievement:', newAchievement)
+          await this.fetchUsers()
+          if (this.users && Array.isArray(this.users)) {
+            for (const user of this.users) {
+              await Api.post(`/v1/users/${user._id}/achievements/${newAchievement._id}`, {
+                achievement: newAchievement._id,
+                completed: false
+              })
+            }
+          }
+          this.achievements.push(newAchievement)
         } catch (error) {
           alert('Failed to create achievement: ' + error.message)
         }
@@ -144,17 +155,31 @@ export default {
         return
       }
       try {
-        await axios.delete(`/api/v1/users/${userId}/achievements/${achievementId}`)
-        console.log(`Achievement ${achievementId} was deleted`)
-        alert('achievement deleted')
+        await Api.delete(`/v1/achievements/${achievementId}`)
+        console.log(`Global achievement ${achievementId} was deleted`)
+        await this.fetchUsers()
+        if (this.users && Array.isArray(this.users)) {
+          for (const user of this.users) {
+            try {
+              await Api.delete(`/v1/users/${user._id}/achievements/${achievementId}`)
+            } catch (error) {
+              if (error.response && error.response.status === 404) {
+                console.warn(`User ${user._id} does not have achievement ${achievementId}.`)
+              } else {
+                alert('Failed to delete user achievement: ' + error.message)
+              }
+            }
+          }
+        }
+        alert('Achievement deleted successfully')
         this.achievements = this.achievements.filter(achievement => achievement._id !== achievementId)
       } catch (error) {
-        alert('Failed to delete achievement: ' + error.message)
+        alert('Failed to delete global achievement: ' + error.message)
       }
     },
     async deleteUser(userId) {
       try {
-        await axios.delete(`/api/v1/users/${userId}`)
+        await Api.delete(`/v1/users/${userId}`)
         console.log(`User ${userId} was deleted`)
         alert('User was deleted')
         this.users = this.users.filter(user => user._id !== userId)
@@ -164,7 +189,7 @@ export default {
     },
     async deleteAllUsers() {
       try {
-        await axios.delete('/api/v1/users')
+        await Api.delete('/v1/users')
         alert('All user accounts deleted successfully')
         this.users = []
       } catch (error) {
