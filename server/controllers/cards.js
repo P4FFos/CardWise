@@ -32,6 +32,11 @@ router.post('/api/v1/users/:userID/decks/:deckID/cards', async function(req, res
                 "rel": "self",
                 "href": `http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}/cards/${card._id}`
             },
+            "edit": {
+                "rel": "edit",
+                "href": `http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}/cards/${card._id}`,
+                "method": "PUT"
+            },
             "delete": {
                 "rel": "delete",
                 "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}/cards/${card._id}`,

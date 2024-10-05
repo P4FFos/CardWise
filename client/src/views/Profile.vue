@@ -54,7 +54,8 @@ export default {
       newEmail: '',
       newPassword: '',
       errorMessage: '',
-      successMessage: ''
+      successMessage: '',
+      links: {}
     }
   },
   methods: {
@@ -64,6 +65,7 @@ export default {
         const response = await Api.get(`/v1/users/${userId}`)
 
         this.user = response.data.user
+        this.links = response.data._links
         this.newEmail = this.user.email
         this.newUsername = this.user.username
       } catch (error) {
@@ -72,8 +74,8 @@ export default {
     },
     async updateUsername() {
       try {
-        const userId = localStorage.getItem('userId')
-        await Api.patch(`/v1/users/${userId}/username`, { username: this.newUsername })
+        const updateUrl = this.links['update username'].href
+        await Api.patch(updateUrl, { username: this.newUsername })
 
         this.successMessage = 'Username updated successfully'
         this.getUserData()
@@ -83,8 +85,8 @@ export default {
     },
     async updateEmail() {
       try {
-        const userId = localStorage.getItem('userId')
-        await Api.put(`/v1/users/${userId}`, { email: this.newEmail })
+        const updateUrl = this.links.update.href
+        await Api.put(updateUrl, { email: this.newEmail })
 
         this.successMessage = 'Email updated successfully'
         this.getUserData()
@@ -94,8 +96,8 @@ export default {
     },
     async updatePassword() {
       try {
-        const userId = localStorage.getItem('userId')
-        await Api.put(`/v1/users/${userId}`, { password: this.newPassword })
+        const updateUrl = this.links.update.href
+        await Api.put(updateUrl, { password: this.newPassword })
 
         this.successMessage = 'Password updated successfully'
         this.getUserData()
