@@ -7,6 +7,7 @@ import Main from './views/Main.vue'
 import Profile from './views/Profile.vue'
 import AdminPanel from './views/AdminPanel.vue'
 import Deck from './views/Deck.vue'
+import Practice from './views/Practice.vue'
 
 const routes = [
   { path: '/', name: 'home', component: Home },
@@ -17,6 +18,7 @@ const routes = [
   { path: '/profile', name: 'profile', component: Profile },
   { path: '/admin-panel', name: 'admin panel', component: AdminPanel },
   { path: '/deck/:deckId', name: 'deck', component: Deck, props: true },
+  { path: '/deck/:deckId/practice', name: 'practice', component: Practice, props: true },
   { path: '/profile', name: 'profile', component: Profile }
 ]
 
