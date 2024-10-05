@@ -9,6 +9,9 @@
                 <button @click="handleCard('easy')">Easy</button>
                 <button @click="handleCard('hard')">Hard</button>
             </div>
+            <p>Not Practiced: {{ this.practiceCards.length + 1 }}</p>
+            <p>Understood: {{ this.easyCards.length }}</p>
+            <p>Hard: {{ this.hardCards.length }}</p>
         </div>
         <div v-else>
             <p>All cards completed for this practice round</p>
@@ -31,6 +34,7 @@ export default {
     return {
       practiceCards: [],
       hardCards: [],
+      easyCards: [],
       showExplanation: false,
       currentCard: null
     }
@@ -67,8 +71,10 @@ export default {
       if (difficulty === 'hard') {
         this.hardCards.push(this.currentCard)
         console.log('Current card has been labeled as hard: ', this.currentCard)
+      } else if (difficulty === 'easy') {
+        this.easyCards.push(this.currentCard)
+        console.log('Current card has been labeled as easy: ', this.currentCard)
       }
-      console.log('Current card has been labeled as easy: ', this.currentCard)
       this.nextCard()
     }
   }
