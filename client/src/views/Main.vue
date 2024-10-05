@@ -33,6 +33,8 @@
       <li v-for="deck in deckInfo" :key="deck._id" @contextmenu.prevent="showContextMenu($event, deck._id)">
         <router-link :to="{ name: 'deck', params: { deckId: deck._id } }">
           <p>Name: {{ deck.name }}</p>
+          <p v-if="deck.cards.length > 0">Cards: {{ deck.cards.length }}</p>
+          <p v-else>No cards in the deck</p>
           <p>Deck ID: {{ deck._id }}</p>
         </router-link>
       </li>
