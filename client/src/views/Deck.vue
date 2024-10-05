@@ -10,6 +10,9 @@
         </div>
         <button @click="getAllCards">Show cards info</button>
         <button @click="deleteAllCards">Delete all cards</button>
+        <router-link :to="{ name: 'practice', params: { deckId: this.deckId } }">
+          Go to Practice Mode
+        </router-link>
         <ul>
             <li v-for="card in cardInfo" :key="card._id">
                 <p>Card ID: {{ card._id }}</p>
