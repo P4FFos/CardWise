@@ -84,6 +84,8 @@ router.get('/api/v1/users/:userID/decks/sort', async function(req, res, next) {
 
     try {
         let decks;
+        let user = await User.findById(req.params.userID).populate("decks").exec();
+
         if (sortField === 'cardAmount') {
             decks = await Deck.aggregate([
                 { $match: { _id: { $in: user.decks } } },

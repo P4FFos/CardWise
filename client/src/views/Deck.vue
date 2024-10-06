@@ -59,6 +59,7 @@ export default {
       try {
         const newCard = { content: this.cardContent, explanation: this.cardExplanation }
         const response = await Api.post(`/v1/users/${userId}/decks/${this.deckId}/cards`, newCard)
+        this.links = response.data._links
         const addedCard = response.data.card
         this.cardInfo.push(addedCard)
 
@@ -73,7 +74,7 @@ export default {
         await Api.delete(`/v1/users/${userId}/decks/${this.deckId}/cards/${cardId}`)
         this.cardInfo = this.cardInfo.filter(card => card._id !== cardId)
       } catch (error) {
-        console.error('Failed to add new card:', error)
+        console.error('Failed to delete the card:', error)
       }
     },
     async editCardInfo(cardId) {
@@ -81,7 +82,8 @@ export default {
       try {
         console.log(userId, this.deckId, cardId)
         console.log(this.editCardContent, this.editCardExplanation)
-        const response = await Api.put(`/v1/users/${userId}/decks/${this.deckId}/cards/${cardId}`, {
+        const editUrl = this.links.edit.href
+        const response = await Api.put(editUrl, {
           content: this.editCardContent,
           explanation: this.editCardExplanation
         })
@@ -116,7 +118,7 @@ export default {
         console.log(this.cardInfo)
         this.showCards = true
       } catch (error) {
-        console.error('Failed to get all decks:', error)
+        console.error('Failed to get all cards:', error)
       }
     },
     async deleteAllCards() {
@@ -126,7 +128,7 @@ export default {
         await Api.delete(`/v1/users/${userId}/decks/${this.deckId}/cards`)
         this.cardInfo = []
       } catch (error) {
-        console.error('Failed to delete all decks:', error)
+        console.error('Failed to delete all cards:', error)
       }
     }
   }
