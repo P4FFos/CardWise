@@ -17,7 +17,6 @@
             <p>All cards completed for this practice round</p>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -35,6 +34,7 @@ export default {
       practiceCards: [],
       hardCards: [],
       easyCards: [],
+      practiced: 0,
       showExplanation: false,
       currentCard: null
     }
@@ -53,6 +53,7 @@ export default {
         this.nextCard()
       } else {
         this.currentCard = null
+        this.updatePractiseCounter()
       }
     },
     async getPracticeCards() {
@@ -76,6 +77,19 @@ export default {
         console.log('Current card has been labeled as easy: ', this.currentCard)
       }
       this.nextCard()
+    },
+    async updatePracticeCounter() {
+      const userId = localStorage.getItem('userId')
+      const response = await Api.get(`/v1/users/${userId}/decks/${this.deckId}`)
+      const deck = response.data
+      let PracticeCount = deck.practiced || 0
+      try {
+        await Api.patch(`/v1/users/${userId}/decks/${this.deckId}`, {
+          practiced: PracticeCount += 1
+        })
+      } catch (error) {
+        console.error('Error updating practice counter: ', error)
+      }
     }
   }
 }
