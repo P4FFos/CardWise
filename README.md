@@ -58,6 +58,18 @@ npm run serve
 
 Open the `server` and `client` in separate VSCode workspaces or open the combined [backend-frontend.code-workspace](./backend-frontend.code-workspace). Otherwise, workspace-specific settings don't work properly.
 
+## Advanced Functionality Proposal
+During the development of this project, we realized that a notification system would be ideal for the purpose of the flashcard system. Since the system is supposed to promote learning we thought this would be a perfect way to ensure that the user of the system would be reminded to, for example, practice their new deck!
+
+This is why we wanted to use Nodemailer together with our custom date-keeping system, which will decide when the email should be sent to the user. 
+
+
+#### Frontend
+The frontend aspect of this feature will be located in the user profile. This is where the user can configure their email notifcation settings. They will for example be able to decive when during the day the email will be sent, how many times per day and what kind of notifications they should be (reminding them to practice, notify them if they have an empty deck etc).
+
+#### Backend
+In the backend Nodemailers inbuilt methods for creating emails will be used aswell as its functionality for sending emails to multiple different email providers. We have the email of the user saved in the database, which will be utilized when seraching for a specific user id for sending a notification. The configurations saved from the frontend will be sent back to the backend through an endpoint with the user id as the route parameter.
+
 ## System Definition (MS0)
 
 ### Purpose
