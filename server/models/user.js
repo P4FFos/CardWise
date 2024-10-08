@@ -18,4 +18,12 @@ var userSchema = new Schema({
   decks: [{type: Schema.Types.ObjectId, ref: "deck"}]
 });
 
+userSchema.virtual('deckAmount').get(function() {
+  return this.decks ? this.decks.length: 0;
+});
+
+userSchema.set('id' , false);
+
+userSchema.set('toJSON', { virtuals: true });
+
 module.exports = mongoose.model('user', userSchema);
