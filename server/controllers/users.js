@@ -7,10 +7,20 @@ var User = require('../models/user.js');
 // create specific user
 router.post('/api/v1/users', async function (req, res, next) {
     try {
-        // Check if the user already exists
-        var existingUser = await User.findOne({ email: req.body.email });
-        if (existingUser) {
-            return res.status(409).json({ "message": "User already exists" });
+        // Check if the user already exists by email or username
+        var existingUserEmail = await User.findOne({ email: req.body.email })
+        var existingUsername = await User.findOne({ username: req.body.username })
+
+        if (existingUsername && existingUserEmail) {
+            return res.status(409).json({ "message": "User with this email and username already exists" });
+        }
+
+        if (existingUserEmail) {
+            return res.status(409).json({ "message": "User with this email already exists" });
+        }
+
+        if (existingUsername) {
+            return res.status(409).json({ "message": "User with this username already exists" });
         }
 
         var user = new User(req.body);
