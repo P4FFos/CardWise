@@ -23,7 +23,8 @@ export default {
     return {
       username: '',
       password: '',
-      errorMessage: ''
+      errorMessage: '',
+      streak: 0
     }
   },
   methods: {
@@ -40,6 +41,7 @@ export default {
         if (user) {
           localStorage.setItem('userId', user._id)
           this.$router.push('/main')
+          await this.updateUserStreak(user)
         } else {
           this.errorMessage = 'Invalid username or password'
         }
@@ -52,6 +54,31 @@ export default {
         }
       } catch (error) {
         this.errorMessage = 'An error occurred while trying to login'
+      }
+    },
+    async updateUserStreak(user) {
+      const currentDate = new Date()
+      const lastStreakDate = new Date(user.lastStreakDate || 0)
+
+      const oneDay = 24 * 60 * 60 * 1000
+      const timeSinceLastStreak = currentDate - lastStreakDate
+
+      let streak = user.streak || 0
+
+      if (timeSinceLastStreak <= oneDay) {
+        streak += 1
+      } else if (timeSinceLastStreak > oneDay) {
+        streak = 1
+      }
+
+      try {
+        await Api.patch(`/v1/users/${user._id}`, {
+          lastLoginDate: currentDate,
+          lastStreakDate: currentDate,
+          streak
+        })
+      } catch (error) {
+        console.error('Failed to update user streak:', error)
       }
     }
   }

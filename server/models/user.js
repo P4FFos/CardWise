@@ -10,6 +10,8 @@ var userSchema = new Schema({
   username: { type: String },
   registrationDate: { type: Date },
   lastLoginDate: { type: Date },
+  lastStreakDate: { type: Date },
+  streak: { type: Number, default: 0 },
   password: { type: String },
   email: { type: String },
   achievements: [userAchievementSchema],
