@@ -41,7 +41,7 @@ export default {
         localStorage.setItem('userId', userId)
         this.$router.push('/login')
       } catch (error) {
-        this.errorMessage = 'Registration failed'
+        this.errorMessage = error.response.data.message
       }
     }
   }
