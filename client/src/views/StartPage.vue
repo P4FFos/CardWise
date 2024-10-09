@@ -1,11 +1,12 @@
 <template>
-  <div class="content-container">
+  <div class="startPage-container">
     <div class="button-container">
-      <button @click="goToLogin">Login</button>
-      <button @click="goToSignup">Sign up</button>
+      <button class="loginButton" @click="goToLogin">Login</button>
+      <button class="signupButton" @click="goToSignup">Sign up</button>
     </div>
     <hr class="thick-separator" />
-    <img src="@/assets/startPageLogo.svg" alt="Icon" />
+    <img class="startPage-logo-pc" src="../assets/logos/startPageLogoPc.svg" alt="Logo" />
+    <img class="startPage-logo-mobile" src="../assets/logos/startPageLogoMobile.svg" alt="Logo" />
   </div>
 </template>
 
@@ -30,68 +31,91 @@ export default {
 
 <style>
 
-.content-container {
-  text-align: center;
-}
-
-.button-container {
-  margin: 15px;
-  text-align: right;
-}
-
-button {
-  width: 150px;
-}
-
-.thick-separator {
-  border: none;
-  height: 3px;
-  width: 98%;
-  margin: auto auto;
-  background-color: #1b1b1b;
-}
-
-.content-container img {
-  margin: 10% auto 0 auto;
-  width: 90%;
-}
-
-@media (max-width: 450px) {
+@media (min-width: 320px) {
   .button-container {
-    margin: 30px auto auto auto;
+    order: 4;
+    margin-top: 30px;
+    width: 90%;
     text-align: center;
   }
 
-  .content-container {
+  .startPage-container {
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  button {
-    width: 300px;
+  .loginButton, .signupButton {
+    width: 250px;
+    height: 40px;
   }
 
-  .content-container img {
+  .startPage-logo-mobile {
+    display: block;
     order: 1;
-    margin: 50px auto auto auto;
+    margin-top: 100px;
+    margin-bottom: 30px;
+    width: 90%;
+  }
 
+  .startPage-logo-pc {
+    display: none;
+  }
+
+  .thick-separator {
+    order: 3;
+    width: 90%;
+    height: 3px;
+    background-color: #1b1b1b;
+  }
+}
+
+@media (min-width: 450px) {
+  .startPage-logo-pc {
+    display: block;
+    order: 1;
+    margin-top: 150px;
+    margin-bottom: 50px;
+    width: 90%;
+  }
+
+  .startPage-logo-mobile {
+    display: none;
   }
 
   .button-container {
-    order: 3;
+    text-align: center;
+    width: 50%;
+    margin-top: 50px;
+  }
+
+  .loginButton, .signupButton {
+    width: 300px;
+    height: 45px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .button-container {
+    order: 1;
+    width: 98%;
+    text-align: right;
+    margin-top: 16px;
+  }
+
+  .loginButton, .signupButton {
+    width: 150px;
+    height: 50px;
   }
 
   .thick-separator {
     order: 2;
-    width: 90%;
-    margin: 50px auto auto auto;
+    width: 98%;
   }
-}
 
-@media (max-width: 1024px) {
-  .button-container {
-    text-align: center;
+  .startPage-logo-pc {
+    order: 3;
   }
 }
 </style>
