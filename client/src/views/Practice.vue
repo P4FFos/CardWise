@@ -1,21 +1,31 @@
 <template>
-    <div>
+    <div class="practiceContainer">
+      <b-container class="practicePage">
         <h1>Practice Mode</h1>
         <div v-if="currentCard">
-            <p v-if="!showExplanation"> {{ currentCard.content }}</p>
-            <p v-else>{{ currentCard.explanation }}</p>
-            <button v-if="!showExplanation" @click="showExplanation = true">Explanation</button>
-            <div v-else>
-                <button @click="handleCard('easy')">Easy</button>
-                <button @click="handleCard('hard')">Hard</button>
-            </div>
-            <p>Not Practiced: {{ this.practiceCards.length + 1 }}</p>
-            <p>Understood: {{ this.easyCards.length }}</p>
-            <p>Hard: {{ this.hardCards.length }}</p>
-        </div>
-        <div v-else>
+            <b-row class="practiceCard" >
+              <b-col >
+                <p class="cardText" v-if="!showExplanation"> {{ currentCard.content }}</p>
+                <p class="cardText" v-else>{{ currentCard.explanation }}</p>
+                <button class="practiceButtons" v-if="!showExplanation" @click="showExplanation = true">
+                  <p>
+                    Explanation
+                  </p>
+                </button>
+                <div class="difficultyButtonsBox" v-else>
+                  <button class="practiceButtons" @click="handleCard('easy')">Easy</button>
+                  <button class="practiceButtons" @click="handleCard('hard')">Hard</button>
+                </div>
+              </b-col>
+            </b-row>
+          </div>
+          <p>Cards Left: {{ this.practiceCards.length + 1 }}</p>
+          <p>Understood: {{ this.easyCards.length }}</p>
+          <p>Repeat: {{ this.hardCards.length }}</p>
+          <div v-if="!currentCard">
             <p>All cards completed for this practice round</p>
-        </div>
+          </div>
+        </b-container>
     </div>
 
 </template>
@@ -81,3 +91,58 @@ export default {
 }
 
 </script>
+
+<style scoped>
+
+.practiceContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.practicePage {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  background-color: #DEDBCC;
+}
+
+.practiceCard {
+  background-color: #6A6A6A;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-style: solid;
+  border-radius: 1em;
+  width: fit-content;
+  max-width: 400px;
+  margin: 20px;
+  height: 15em;
+}
+.practiceCard p {
+  color: white;
+  font-size: medium;
+}
+
+.cardText {
+  margin-bottom: 4em;
+ 
+}
+
+.practiceButtons {
+  width: 8em;
+}
+
+.practiceButtons p{
+  font-size: small;
+}
+
+.difficultyButtonsBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+</style>
