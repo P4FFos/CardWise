@@ -95,88 +95,88 @@ export default {
         alert('Failed to fetch achievements: ' + error.message)
       }
     },
-    async createTestAchievement() {
-      try {
-        const response = await Api.post('/v1/achievements', {
-          type: 'TestAchievement',
-          name: this.testName,
-          condition: this.condition
-        })
+    // async createTestAchievement() {
+    //   try {
+    //     const response = await Api.post('/v1/achievements', {
+    //       type: 'TestAchievement',
+    //       name: this.testName,
+    //       condition: this.condition
+    //     })
 
-        const newAchievement = response.data.achievement
-        console.log('New Global Achievement:', newAchievement)
-        await this.fetchUsers()
-        if (this.users && Array.isArray(this.users)) {
-          for (const user of this.users) {
-            await Api.post(`/v1/users/${user._id}/achievements/${newAchievement._id}`, {
-              achievement: newAchievement._id,
-              completed: false
-            })
-          }
-        }
-        this.achievements.push(newAchievement)
-      } catch (error) {
-        alert('Failed to create achievement: ' + error.message)
-      }
-    },
-    async createStreakAchievement() {
-      const userId = localStorage.getItem('userId')
-      if (userId) {
-        try {
-          const response = await Api.post('/v1/achievements', {
-            type: 'StreakAchievement',
-            name: this.streakName,
-            streakCounter: this.streakCounter
-          })
+    //     const newAchievement = response.data.achievement
+    //     console.log('New Global Achievement:', newAchievement)
+    //     await this.fetchUsers()
+    //     if (this.users && Array.isArray(this.users)) {
+    //       for (const user of this.users) {
+    //         await Api.post(`/v1/users/${user._id}/achievements/${newAchievement._id}`, {
+    //           achievement: newAchievement._id,
+    //           completed: false
+    //         })
+    //       }
+    //     }
+    //     this.achievements.push(newAchievement)
+    //   } catch (error) {
+    //     alert('Failed to create achievement: ' + error.message)
+    //   }
+    // },
+    // async createStreakAchievement() {
+    //   const userId = localStorage.getItem('userId')
+    //   if (userId) {
+    //     try {
+    //       const response = await Api.post('/v1/achievements', {
+    //         type: 'StreakAchievement',
+    //         name: this.streakName,
+    //         streakCounter: this.streakCounter
+    //       })
 
-          const newAchievement = response.data.achievement
-          console.log('New Global Achievement:', newAchievement)
-          await this.fetchUsers()
-          if (this.users && Array.isArray(this.users)) {
-            for (const user of this.users) {
-              await Api.post(`/v1/users/${user._id}/achievements/${newAchievement._id}`, {
-                achievement: newAchievement._id,
-                completed: false
-              })
-            }
-          }
-          this.achievements.push(newAchievement)
-        } catch (error) {
-          alert('Failed to create achievement: ' + error.message)
-        }
-      } else {
-        alert('Failed to fetch user')
-      }
-    },
-    async deleteAchievement(achievementId) {
-      const userId = localStorage.getItem('userId')
-      if (!userId) {
-        alert('Failed to fetch user')
-        return
-      }
-      try {
-        await Api.delete(`/v1/achievements/${achievementId}`)
-        console.log(`Global achievement ${achievementId} was deleted`)
-        await this.fetchUsers()
-        if (this.users && Array.isArray(this.users)) {
-          for (const user of this.users) {
-            try {
-              await Api.delete(`/v1/users/${user._id}/achievements/${achievementId}`)
-            } catch (error) {
-              if (error.response && error.response.status === 404) {
-                console.warn(`User ${user._id} does not have achievement ${achievementId}.`)
-              } else {
-                alert('Failed to delete user achievement: ' + error.message)
-              }
-            }
-          }
-        }
-        alert('Achievement deleted successfully')
-        this.achievements = this.achievements.filter(achievement => achievement._id !== achievementId)
-      } catch (error) {
-        alert('Failed to delete global achievement: ' + error.message)
-      }
-    },
+    //       const newAchievement = response.data.achievement
+    //       console.log('New Global Achievement:', newAchievement)
+    //       await this.fetchUsers()
+    //       if (this.users && Array.isArray(this.users)) {
+    //         for (const user of this.users) {
+    //           await Api.post(`/v1/users/${user._id}/achievements/${newAchievement._id}`, {
+    //             achievement: newAchievement._id,
+    //             completed: false
+    //           })
+    //         }
+    //       }
+    //       this.achievements.push(newAchievement)
+    //     } catch (error) {
+    //       alert('Failed to create achievement: ' + error.message)
+    //     }
+    //   } else {
+    //     alert('Failed to fetch user')
+    //   }
+    // },
+    // async deleteAchievement(achievementId) {
+    //   const userId = localStorage.getItem('userId')
+    //   if (!userId) {
+    //     alert('Failed to fetch user')
+    //     return
+    //   }
+    //   try {
+    //     await Api.delete(`/v1/achievements/${achievementId}`)
+    //     console.log(`Global achievement ${achievementId} was deleted`)
+    //     await this.fetchUsers()
+    //     if (this.users && Array.isArray(this.users)) {
+    //       for (const user of this.users) {
+    //         try {
+    //           await Api.delete(`/v1/users/${user._id}/achievements/${achievementId}`)
+    //         } catch (error) {
+    //           if (error.response && error.response.status === 404) {
+    //             console.warn(`User ${user._id} does not have achievement ${achievementId}.`)
+    //           } else {
+    //             alert('Failed to delete user achievement: ' + error.message)
+    //           }
+    //         }
+    //       }
+    //     }
+    //     alert('Achievement deleted successfully')
+    //     this.achievements = this.achievements.filter(achievement => achievement._id !== achievementId)
+    //   } catch (error) {
+    //     alert('Failed to delete global achievement: ' + error.message)
+    //   }
+    // },
     async deleteUser(userId) {
       try {
         await Api.delete(`/v1/users/${userId}`)

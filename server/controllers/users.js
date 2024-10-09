@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
+var axios = require('axios');
 var port = process.env.PORT || 3000;
 
 var User = require('../models/user.js');
+const globalAchievements = require('../config/achievements_data.js');
 
 // create specific user
 router.post('/api/v1/users', async function (req, res, next) {
@@ -28,6 +30,17 @@ router.post('/api/v1/users', async function (req, res, next) {
             res.status(404).json({"message": "Cannot create a null user"})
         }
         await user.save();
+        
+        const achievementRequests = globalAchievements.map(async (achievement) => {
+            try {
+                await axios.post(`http://localhost:3000/api/v1/users/${user._id}/achievements/${achievement.id}`);
+                console.log(`Achievement ${achievement.name} added to user ${user._id}`);
+            } catch (error) {
+                console.error(`Failed to add achievement ${achievement.name}: `, error.message);
+            }
+        });
+
+        await Promise.all(achievementRequests);
 
         res.status(201).json({
             "user": user,

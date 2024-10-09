@@ -7,7 +7,7 @@
            :class="{'achievement-completed': achievement.completed, 'container': true}">
           <h2>Achievement: {{ achievement.name }}</h2>
           <p><strong>Condition: </strong> {{ achievement.description }} </p>
-        <button class="complete-button" @click="completeAchievement(achievement._id, achievement.completed)">🏆 Complete</button>
+        <button class="complete-button" @click="completeAchievement(achievement.id)">🏆 Complete</button>
       </div>
     </div>
   </div>
@@ -45,21 +45,20 @@ export default {
         alert('Failed to fetch achievements: ' + error.message)
       }
     },
-    async completeAchievement(achievementId, completed) {
+    async completeAchievement(achievementId) {
       const userID = localStorage.getItem('userId')
       if (!userID) {
         alert('Failed to fetch user')
         return
       }
       try {
-        const updatedCompleted = !completed
         await Api.put(`/v1/users/${userID}/achievements/${achievementId}`, {
-          completed: updatedCompleted
+          completed: true
         })
-        console.log(`Achievement ${achievementId} completed: ${updatedCompleted}`)
+        console.log(`Achievement ${achievementId} completed`)
         const achievement = this.achievements.find(a => a._id === achievementId)
         if (achievement) {
-          achievement.completed = updatedCompleted
+          achievement.completed = true
         }
         alert('achievement completed')
       } catch (error) {
