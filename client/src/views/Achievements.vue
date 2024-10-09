@@ -5,8 +5,8 @@
       <div v-for="achievement in this.achievements"
            :key="achievement._id"
            :class="{'achievement-completed': achievement.completed, 'container': true}">
-          <h2>Achievement: {{ achievement.achievement.name }}</h2>
-          <p><strong>Condition: </strong> {{ achievement.achievement.condition || achievement.achievement.streakCounter }} </p>
+          <h2>Achievement: {{ achievement.name }}</h2>
+          <p><strong>Condition: </strong> {{ achievement.description }} </p>
         <button class="complete-button" @click="completeAchievement(achievement._id, achievement.completed)">🏆 Complete</button>
       </div>
     </div>

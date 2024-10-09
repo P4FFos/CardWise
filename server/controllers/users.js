@@ -97,7 +97,7 @@ router.get('/api/v1/users/:userID', async function(req, res, next) {
                     "rel": "delete",
                     "href":`http://localhost:${port}/api/v1/users/${userID}/decks`,
                     "method": "DELETE"
-                }, 
+                },
                 "post": {
                     "rel": "post",
                     "href": `http://localhost:${port}/api/v1/users`,
@@ -142,7 +142,7 @@ router.put('/api/v1/users/:id', async function (req, res, next) {
                 "rel": "delete",
                 "href":`http://localhost:${port}/api/v1/users/${userId}`,
                 "method": "DELETE"
-            }, 
+            },
             "post": {
                 "rel": "post",
                 "href": `http://localhost:${port}/api/v1/users`,
@@ -184,7 +184,7 @@ router.patch('/api/v1/users/:id/', async function (req, res, next) {
                 "rel": "delete",
                 "href":`http://localhost:${port}/api/v1/users/${userId}`,
                 "method": "DELETE"
-            }, 
+            },
             "post": {
                 "rel": "post",
                 "href": `http://localhost:${port}/api/v1/users`,

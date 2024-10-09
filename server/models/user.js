@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var userAchievementSchema = new Schema({
-  achievement: { type: Schema.Types.ObjectId, ref: 'Achievement', required: true },
-  completed: { type: Boolean, default: false }      
+  achievement: { type: String, required: true },
+  completed: { type: Boolean, default: false }
 });
 
 var userSchema = new Schema({
