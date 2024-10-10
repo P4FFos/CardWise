@@ -100,7 +100,7 @@ router.get('/api/v1/users/:userID/decks/:deckID/cards/:cardID', async function(r
             },
             "edit": {
                 "rel": "edit",
-                "href": `http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}/cards/${card._id}`,
+                "href": `http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}/cards/${cardID}`,
                 "method": "PUT"
             },
             "post": {
