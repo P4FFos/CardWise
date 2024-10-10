@@ -60,8 +60,6 @@ export default {
       try {
         const response = await Api.get(`/v1/users/${userId}/decks/${this.deckId}/cards`)
         this.practiceCards = response.data.deck.cards
-
-        console.log(response.data.deck.cards)
         this.nextCard()
       } catch (error) {
         console.error('Error fetching cards from deck: ', error)
@@ -70,10 +68,8 @@ export default {
     handleCard(difficulty) {
       if (difficulty === 'hard') {
         this.hardCards.push(this.currentCard)
-        console.log('Current card has been labeled as hard: ', this.currentCard)
       } else if (difficulty === 'easy') {
         this.easyCards.push(this.currentCard)
-        console.log('Current card has been labeled as easy: ', this.currentCard)
       }
       this.nextCard()
     }

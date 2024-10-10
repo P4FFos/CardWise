@@ -122,10 +122,6 @@ export default {
       this.selectedDeckId = deckId
       this.menuPosition.x = event.clientX
       this.menuPosition.y = event.clientY
-
-      console.log(`Context menu position: X: ${this.menuPosition.x}, Y: ${this.menuPosition.y}`)
-      console.log('DeckId: ', deckId)
-
       this.showMenu = true
       document.addEventListener('click', this.handleClickOutside)
     },
