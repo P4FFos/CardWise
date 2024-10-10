@@ -50,7 +50,8 @@ export default {
       editCardId: null,
       editCard: false,
       cardInfo: [],
-      showCards: false
+      showCards: false,
+      links: []
     }
   },
   methods: {
