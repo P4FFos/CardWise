@@ -1,6 +1,8 @@
 <template>
-  <div class="loginPage-container">
-    <img class="mainLogo" src="../assets/logos/mainLogo.svg" alt="Logo" />
+  <div>
+  <img class="mainLogo" src="../assets/logos/mainLogo.svg" alt="Logo"/>
+  <hr class="thick-separator-login-pc"/>
+  <div class="pcScreen-container">
     <form class="registrationForm" @submit.prevent="register">
       <p class="signup-text">Sign Up</p>
       <label class="usernameLabel" for="username">username</label>
@@ -13,11 +15,15 @@
       <input class="passwordField" type="password" id="password" v-model="password" name="password" required>
 
       <button class="signup-button" type="submit">Sign up</button>
-      <p>Already have an account? <router-link to="/login" class="login-link">Login</router-link></p>
+      <p class="question-text">Already have an account?
+        <router-link to="/login" class="login-link">Login</router-link>
+      </p>
+      <p v-if="errorMessage" class="error-text">{{ errorMessage }}</p>
+
     </form>
-    <hr class="thick-separator-login" />
-    <img class="booksLogo" src="../assets/logos/booksLogo.svg" alt="Logo" />
-    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+    <hr class="thick-separator-login-mobile"/>
+    <img class="booksLogo" src="../assets/logos/booksLogo.svg" alt="Logo"/>
+  </div>
   </div>
 </template>
 
@@ -53,11 +59,7 @@ export default {
 </script>
 
 <style>
-@media (min-width: 320px) {
-  .loginPage-container {
-    text-align: center;
-  }
-
+@media (max-width: 767px) {
   .signup-text {
     font-family: 'InstrumentSherif', serif;
     font-size: 50px;
@@ -68,20 +70,22 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 70px;
+    margin-top: 2%;
   }
 
-  .thick-separator-login {
+  .thick-separator-login-mobile, .thick-separator-login-pc {
     width: 90%;
-    margin: 0 auto 0 auto;
+    margin: 5% auto 5% auto;
     height: 3px;
-    background-color: #1b1b1b;
+    background-color: #6A6A6A;
+    border: none;
   }
 
   .signup-button {
     width: 25%;
     font-size: 15px;
-    margin-top: 15px;
+    margin-top: 4%;
+    margin-bottom: 1%;
   }
 
   .login-link {
@@ -91,41 +95,96 @@ export default {
   .booksLogo {
     display: block;
     margin-left: 10%;
-    margin-top: 50px;
+    margin-top: 10%;
     width: 80%;
   }
 
   .mainLogo {
-    display: none;
+    display: block;
+    width: 10%;
+    margin-left: 45%;
+    margin-top: 5%;
+  }
+
+  .error-text {
+    text-align: center;
+    color: #EA9944;
   }
 }
 
-@media (min-width: 760px ) {
-  .mainLogo{
-    display: block;
-    width: 8%;
-    margin-left: 46%;
-    margin-top: 15px;
-  }
-  .registrationForm {
-    margin-top: 5px;
+@media (min-width: 768px ) {
+  .mainLogo {
+    margin: 1% 1% 1% 2.3%;
   }
 
-  .booksLogo {
+  .thick-separator-login-pc {
+    width: 95%;
+    margin: 0 auto 0 auto;
+    height: 3px;
+    background-color: #6A6A6A;
+    border: none;
+  }
+
+  .thick-separator-login-mobile {
+    display: none;
+  }
+
+  .pcScreen-container {
+    display: flex;
+  }
+
+  .registrationForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 50%;
-    margin-left: 25%;
+    margin-top: 6%;
+  }
+
+  .signup-text {
+    font-family: 'InstrumentSherif', serif;
+    font-size: 70px;
+    color: #6A6A6A;
+  }
+
+  .usernameField, .emailField, .passwordField {
+    width: 40%;
+    height: 8%;
+    border: 3px solid #6A6A6A;
+  }
+
+  .usernameLabel, .emailLabel, .passwordLabel {
+    font-size: 20px;
+    margin-top: 1%;
+    margin-bottom: 1%;
   }
 
   .signup-button {
-    width: 18%;
+    width: 15%;
+    height: 9%;
+    font-size: 18px;
+    margin-top: 3%;
+    margin-bottom: 3%;
   }
 
-  .usernameLabel, .usernameField, .emailLabel, .emailField, .passwordLabel, .passwordField {
-    width: 35%;
+  .login-link {
+    color: #7CB6B2;
   }
-}
 
-@media (min-width: 1024px) {
+  .question-text, .error-text {
+    font-size: 22px;
+  }
+
+  .booksLogo {
+    display: block;
+    width: 40%;
+    margin-top: 6%;
+  }
+
+  .error-text {
+    text-align: center;
+    color: #EA9944;
+  }
 
 }
 </style>

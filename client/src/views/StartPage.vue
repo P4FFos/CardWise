@@ -31,7 +31,7 @@ export default {
 
 <style>
 
-@media (min-width: 320px) {
+@media (max-width: 767px) {
   .button-container {
     order: 4;
     margin-top: 30px;
@@ -67,39 +67,22 @@ export default {
     order: 3;
     width: 90%;
     height: 3px;
-    background-color: #1b1b1b;
+    background-color: #6A6A6A;
+    border: none;
   }
 }
 
-@media (min-width: 450px) {
-  .startPage-logo-pc {
-    display: block;
-    order: 1;
-    margin-top: 150px;
-    margin-bottom: 50px;
-    width: 90%;
-  }
-
-  .startPage-logo-mobile {
-    display: none;
-  }
-
-  .button-container {
+@media (min-width: 768px) {
+  .startPage-container {
     text-align: center;
-    width: 50%;
-    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .loginButton, .signupButton {
-    width: 300px;
-    height: 45px;
-  }
-}
-
-@media (min-width: 1024px) {
   .button-container {
     order: 1;
-    width: 98%;
+    width: 95%;
     text-align: right;
     margin-top: 16px;
   }
@@ -111,11 +94,20 @@ export default {
 
   .thick-separator {
     order: 2;
-    width: 98%;
+    width: 95%;
+    height: 3px;
+    background-color: #6A6A6A;
+    border: none;
   }
 
   .startPage-logo-pc {
+    width: 86%;
     order: 3;
+    margin-top: 8%;
+  }
+
+  .startPage-logo-mobile {
+    display: none;
   }
 }
 </style>
