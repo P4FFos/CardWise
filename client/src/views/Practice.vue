@@ -111,6 +111,7 @@ export default {
 
 h1 {
   font-family: 'InstrumentSerif';
+  color: #6A6A6A;
   margin-bottom: 20px;
 }
 
@@ -126,6 +127,7 @@ h1 {
   justify-content: flex-start;
   position: absolute;
   top: 1em;
+  left: 1em;
 }
 
 .practicePage {
@@ -142,7 +144,6 @@ h1 {
   justify-content: center;
   align-items: center;
   text-align: center;
-  border: solid;
   border-radius: 1em;
   width: 12em;
   height: 20em;
@@ -156,12 +157,13 @@ h1 {
 
 .cardsDifficultyText {
   font-weight: bold;
-  color: black;
+  color: #6A6A6A;
   font-size: large;
 }
 
 .practiceButtons {
   background-color: #EA9944;
+  width: 6em;
 }
 
 .practiceButtons p {
@@ -174,6 +176,7 @@ h1 {
     justify-content: center;
     position: relative;
     top: 0;
+    left: 0;
   }
 
   #backToDeck {
