@@ -6,7 +6,6 @@ var port = process.env.PORT || 3000;
 app.use(express.json());
 
 var User = require('../models/user.js');
-// var Achievement = require('../models/achievement.js');
 const globalAchievements = require('../config/achievements_data.js');
 
 // Add an achievement to user's profile

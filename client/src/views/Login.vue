@@ -24,7 +24,8 @@ export default {
       username: '',
       password: '',
       errorMessage: '',
-      streak: 0
+      streak: 0,
+      lastLoginDate: new Date()
     }
   },
   methods: {
@@ -40,8 +41,11 @@ export default {
 
         if (user) {
           localStorage.setItem('userId', user._id)
-          this.$router.push('/main')
+          //   await Api.patch(`/v1/users/${user._id}`, {
+          //     lastLoginDate: lastDate
+          //   })
           await this.updateUserStreak(user)
+          this.$router.push('/main')
         } else {
           this.errorMessage = 'Invalid username or password'
         }
@@ -71,11 +75,13 @@ export default {
         streak = 1
       }
 
-      //   if (streak === 5) {
-      //     await Api.put(`/v1/users/${user._id}/achievements/s1`, {
-      //       completed: true
-      //     })
-      //   }
+      const milestones = [5, 15, 35, 50, 75, 100]
+
+      for (const milestone of milestones) {
+        if (streak === milestone) {
+          await this.completeAchievement(user._id, `s${milestone}`)
+        }
+      }
 
       try {
         await Api.patch(`/v1/users/${user._id}`, {
@@ -85,6 +91,16 @@ export default {
         })
       } catch (error) {
         console.error('Failed to update user streak:', error)
+      }
+    },
+    async completeAchievement(userId, achievementCode) {
+      try {
+        await Api.put(`/v1/users/${userId}/achievements/${achievementCode}`, {
+          completed: true
+        })
+        console.log(`Achievement ${achievementCode} completed!`)
+      } catch (error) {
+        console.error(`Failed to complete achievement ${achievementCode}:`, error)
       }
     }
   }

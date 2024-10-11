@@ -3,9 +3,9 @@
     <h1>User Profile</h1>
     <p>Username: {{ user.username }}</p>
     <p>Email: {{ user.email }}</p>
-    <p>Last Login: {{ user.lastLogin }}</p>
+    <p>Last Login: {{ user.lastLoginDate }}</p>
     <p>Registration Date: {{ user.registrationDate }}</p>
-
+    <p>Streak: {{ user.streak }}</p>
     <div>
       <form @submit.prevent="updateUsername">
         <label for="username">New Username:</label>
@@ -47,7 +47,7 @@ export default {
       user: {
         username: '',
         email: '',
-        lastLogin: '',
+        lastLoginDate: new Date(),
         registrationDate: ''
       },
       newUsername: '',
@@ -68,6 +68,9 @@ export default {
         this.links = response.data._links
         this.newEmail = this.user.email
         this.newUsername = this.user.username
+        this.lastLoginDate = response.data.lastLoginDate
+        this.registrationDate = response.data.registrationDate
+        console.log('last login date: ', response.data.user)
       } catch (error) {
         this.errorMessage = 'Failed to get user data'
       }

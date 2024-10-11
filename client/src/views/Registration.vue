@@ -26,16 +26,21 @@ export default {
       username: '',
       email: '',
       password: '',
-      errorMessage: ''
+      errorMessage: '',
+      lastLoginDate: new Date(),
+      registrationDate: new Date()
     }
   },
   methods: {
     async register() {
+      console.log('username: ', this.username)
       try {
         const response = await Api.post('/v1/users', {
           username: this.username,
           email: this.email,
-          password: this.password
+          password: this.password,
+          lastLoginDate: new Date(),
+          registrationDate: new Date()
         })
         const userId = response.data.user._id
         localStorage.setItem('userId', userId)
