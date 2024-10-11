@@ -167,7 +167,7 @@ h1 {
 }
 
 .practiceButtons p {
-  font-size: large;
+  font-size: medium;
 }
 
 /* Responsive Styling */
@@ -189,10 +189,6 @@ h1 {
 
   .practiceButtons {
     width: fit-content;
-  }
-
-  .practiceButtons p{
-    font-size: medium;
   }
 }
 
