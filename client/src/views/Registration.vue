@@ -39,7 +39,6 @@ export default {
           username: this.username,
           email: this.email,
           password: this.password,
-          lastLoginDate: new Date(),
           registrationDate: new Date()
         })
         const userId = response.data.user._id

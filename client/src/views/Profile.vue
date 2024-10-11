@@ -48,7 +48,8 @@ export default {
         username: '',
         email: '',
         lastLoginDate: new Date(),
-        registrationDate: ''
+        registrationDate: new Date(),
+        streak: 0
       },
       newUsername: '',
       newEmail: '',
@@ -64,12 +65,15 @@ export default {
         const userId = localStorage.getItem('userId')
         const response = await Api.get(`/v1/users/${userId}`)
 
-        this.user = response.data.user
+        this.user = {
+          ...response.data.user,
+          lastLoginDate: new Date(response.data.user.lastLoginDate).toLocaleString(),
+          registrationDate: new Date(response.data.user.registrationDate).toLocaleString(),
+        }
         this.links = response.data._links
         this.newEmail = this.user.email
         this.newUsername = this.user.username
-        this.lastLoginDate = response.data.lastLoginDate
-        this.registrationDate = response.data.registrationDate
+
         console.log('last login date: ', response.data.user)
       } catch (error) {
         this.errorMessage = 'Failed to get user data'

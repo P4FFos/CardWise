@@ -134,6 +134,16 @@ router.put('/api/v1/users/:id', async function (req, res, next) {
         if (updatedUser == null) {
             return res.status(404).json({message: 'User not found'});
         }
+
+        if (updateData.lastLoginDate) {
+            updatedUser.lastLoginDate = updateData.lastLoginDate;
+        }
+        if (updateData.streak) {
+            updatedUser.streak = updateData.streak;
+        }
+        if (updateData.lastStreakDate) {
+            updatedUser.lastStreakDate = updateData.lastStreakDate;
+        }
         updatedUser.set(updateData);
         await updatedUser.save();
     } catch (error) {

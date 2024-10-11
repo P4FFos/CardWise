@@ -41,11 +41,18 @@ export default {
 
         if (user) {
           localStorage.setItem('userId', user._id)
-          //   await Api.patch(`/v1/users/${user._id}`, {
-          //     lastLoginDate: lastDate
-          //   })
-          await this.updateUserStreak(user)
-          this.$router.push('/main')
+          this.lastLoginDate = new Date()
+
+          const patch = await Api.put(`/v1/users/${user._id}`, {
+            lastLoginDate: this.lastLoginDate
+          })
+
+          if (patch.status === 200) {
+            await this.updateUserStreak(user)
+            this.$router.push('/main')
+          } else {
+            this.errorMessage = 'Failed to update last login date'
+          }
         } else {
           this.errorMessage = 'Invalid username or password'
         }
@@ -65,29 +72,32 @@ export default {
       const lastStreakDate = new Date(user.lastStreakDate || 0)
 
       const oneDay = 24 * 60 * 60 * 1000
-      const timeSinceLastStreak = currentDate - lastStreakDate
 
-      let streak = user.streak || 0
+      this.streak = user.streak || 0
 
-      if (timeSinceLastStreak <= oneDay) {
-        streak += 1
-      } else if (timeSinceLastStreak > oneDay) {
-        streak = 1
+      if (!lastStreakDate) {
+        this.streak = 1
+      } else {
+        const timeSinceLastStreak = currentDate - lastStreakDate
+        if (timeSinceLastStreak <= oneDay && timeSinceLastStreak > 0) {
+          this.streak += 1
+        } else if (timeSinceLastStreak > oneDay) {
+          this.streak = 1
+        }
       }
 
       const milestones = [5, 15, 35, 50, 75, 100]
 
       for (const milestone of milestones) {
-        if (streak === milestone) {
+        if (this.streak === milestone) {
           await this.completeAchievement(user._id, `s${milestone}`)
         }
       }
 
       try {
-        await Api.patch(`/v1/users/${user._id}`, {
-          lastLoginDate: currentDate,
+        await Api.put(`/v1/users/${user._id}`, {
           lastStreakDate: currentDate,
-          streak
+          streak: this.streak
         })
       } catch (error) {
         console.error('Failed to update user streak:', error)
