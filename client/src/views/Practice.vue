@@ -1,27 +1,34 @@
 <template>
-    <div class="practiceContainer">
-      <b-container class="practicePage">
-        <h1>Practice Mode</h1>
+  <div class="practiceContainer">
+    <div class="backButtonContainer">
+      <router-link :to="{ name: 'deck', params: { deckId: this.deckId } }">
+          <button class="fontForPracticeText" id="backToDeck">
+            Go Back
+          </button>
+        </router-link>
+    </div>
+        <b-container class="practicePage">
+        <h1>Practice</h1>
         <div v-if="currentCard">
-            <b-row class="practiceCard" >
-              <b-col >
-                <p class="cardText" v-if="!showExplanation"> {{ currentCard.content }}</p>
-                <p class="cardText" v-else>{{ currentCard.explanation }}</p>
-                <button class="practiceButtons" v-if="!showExplanation" @click="showExplanation = true">
-                  <p>
+            <b-row cols="12" md="12" lg="12" class="practiceCard" >
+              <b-col>
+                <p class="fontForPracticeText" v-if="!showExplanation"> {{ currentCard.content }}</p>
+                <p class="fontForPracticeText" :class="getTextClass" v-else>{{ currentCard.explanation }}</p>
+                <button  class="practiceButtons" v-if="!showExplanation" @click="showExplanation = true">
+                  <p class="fontForPracticeText">
                     Explanation
                   </p>
                 </button>
                 <div class="difficultyButtonsBox" v-else>
-                  <button class="practiceButtons" @click="handleCard('easy')">Easy</button>
-                  <button class="practiceButtons" @click="handleCard('hard')">Hard</button>
+                  <button class="practiceButtons" @click="handleCard('easy')"><p>Easy</p></button>
+                  <button class="practiceButtons" @click="handleCard('hard')"><p>Hard</p></button>
                 </div>
               </b-col>
             </b-row>
           </div>
-          <p>Cards Left: {{ this.practiceCards.length + 1 }}</p>
-          <p>Understood: {{ this.easyCards.length }}</p>
-          <p>Repeat: {{ this.hardCards.length }}</p>
+          <p class="cardsDifficultyText">Cards Left: {{ this.practiceCards.length + 1 }}</p>
+          <p class="cardsDifficultyText">Understood: {{ this.easyCards.length }}</p>
+          <p class="cardsDifficultyText">Repeat: {{ this.hardCards.length }}</p>
           <div v-if="!currentCard">
             <p>All cards completed for this practice round</p>
           </div>
@@ -87,6 +94,14 @@ export default {
       }
       this.nextCard()
     }
+  },
+  computed: {
+    getTextClass() {
+      if (this.currentCard && this.showExplanation && this.currentCard.explanation.length > 50) {
+        return 'longText'
+      }
+      return 'normalText'
+    }
   }
 }
 
@@ -94,16 +109,31 @@ export default {
 
 <style scoped>
 
-.practiceContainer{
+h1 {
+  font-family: 'InstrumentSerif';
+  font-size: clamp(1rem, 10vw, 2rem);
+}
+
+.practiceContainer {
   display: flex;
   justify-content: center;
-  align-items: center;
+  flex-direction: column;
   min-height: 100vh;
+}
+
+.backButtonContainer {
+  display: flex;
+  justify-content: flex-start;
+  position: absolute;
+  top: 1em;
+}
+
+#backToDeck {
+  width: fit-content;
 }
 
 .practicePage {
   display: flex;
-  justify-content: center;
   flex-direction: column;
   align-items: center;
   background-color: #DEDBCC;
@@ -111,38 +141,56 @@ export default {
 
 .practiceCard {
   background-color: #6A6A6A;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  border-style: solid;
-  border-radius: 1em;
-  width: fit-content;
-  max-width: 400px;
-  margin: 20px;
-  height: 15em;
-}
-.practiceCard p {
-  color: white;
-  font-size: medium;
-}
-
-.cardText {
-  margin-bottom: 4em;
- 
-}
-
-.practiceButtons {
-  width: 8em;
-}
-
-.practiceButtons p{
-  font-size: small;
-}
-
-.difficultyButtonsBox {
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  border: solid;
+  border-radius: 1em;
+  width: 30vw;
+  height: 40vh;
+  max-width: 20em;
+  max-height: 25em;
+  min-width: 8em;
+  min-height: 10em;
 }
 
+.practiceCard p,
+.fontForPracticeText {
+  font-family: "Inria Sans";
+  font-size: clamp(1rem, 2.5vw, 2rem);
+  color: white;
+}
+
+.cardsDifficultyText {
+  font-family: "Inria Sans";
+  font-weight: bold;
+  color: black;
+  font-size: clamp(1rem, 3vw, 2rem);
+}
+
+.practiceButtons {
+  display: flex;
+  justify-content: center;
+  background-color: #EA9944;
+  width: 100%;
+}
+
+.practiceButtons p {
+  font-family: "Inria Sans";
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  margin: 0;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .backButtonContainer {
+    justify-content: center;
+    position: relative;
+  }
+
+  #backToDeck {
+    width: 10em;
+  }
+}
 </style>
