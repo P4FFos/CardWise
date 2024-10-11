@@ -1233,7 +1233,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/s1",
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/s5",
 					"host": [
 						"{{host}}"
 					],
@@ -1243,7 +1243,7 @@
 						"users",
 						"{{userID}}",
 						"achievements",
-						"s1"
+						"s5"
 					]
 				}
 			},
@@ -1301,12 +1301,7 @@
 							"console.log(jsonInfo);\r",
 							"pm.test(\"Request is CREATED\", function(){\r",
 							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"// pm.test(\"User-specific achievement not found returns 404\", function() {\r",
-							"//     if (pm.response.to.have.status(404) && pm.response.json().message === \"User-specific achievement not found.\") {\r",
-							"//         pm.expect(pm.response.json()).to.have.property(\"message\", \"User-specific achievement not found.\");\r",
-							"//     }\r",
-							"// });"
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -1332,7 +1327,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/s1",
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/s5",
 					"host": [
 						"{{host}}"
 					],
@@ -1342,7 +1337,7 @@
 						"users",
 						"{{userID}}",
 						"achievements",
-						"s1"
+						"s5"
 					]
 				}
 			},
