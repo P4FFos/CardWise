@@ -111,7 +111,7 @@ export default {
 
 h1 {
   font-family: 'InstrumentSerif';
-  font-size: clamp(1rem, 10vw, 2rem);
+  margin-bottom: 20px;
 }
 
 .practiceContainer {
@@ -128,14 +128,11 @@ h1 {
   top: 1em;
 }
 
-#backToDeck {
-  width: fit-content;
-}
-
 .practicePage {
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-style: none;
   background-color: #DEDBCC;
 }
 
@@ -147,18 +144,14 @@ h1 {
   text-align: center;
   border: solid;
   border-radius: 1em;
-  width: 30vw;
-  height: 40vh;
-  max-width: 20em;
-  max-height: 25em;
-  min-width: 8em;
-  min-height: 10em;
+  width: 10em;
+  height: 20em;
 }
 
 .practiceCard p,
 .fontForPracticeText {
   font-family: "Inria Sans";
-  font-size: clamp(1rem, 2.5vw, 2rem);
+  font-size: large;
   color: white;
 }
 
@@ -166,20 +159,16 @@ h1 {
   font-family: "Inria Sans";
   font-weight: bold;
   color: black;
-  font-size: clamp(1rem, 3vw, 2rem);
+  font-size: large;
 }
 
 .practiceButtons {
-  display: flex;
-  justify-content: center;
   background-color: #EA9944;
-  width: 100%;
 }
 
 .practiceButtons p {
   font-family: "Inria Sans";
-  font-size: clamp(1rem, 2vw, 1.5rem);
-  margin: 0;
+  font-size: large;
 }
 
 /* Responsive Styling */
@@ -187,10 +176,24 @@ h1 {
   .backButtonContainer {
     justify-content: center;
     position: relative;
+    top: 0;
   }
 
   #backToDeck {
     width: 10em;
   }
+
+  .cardsDifficultyText {
+    font-size: small;
+  }
+
+  .practiceButtons {
+    width: fit-content;
+  }
+
+  .practiceButtons p{
+    font-size: medium;
+  }
 }
+
 </style>
