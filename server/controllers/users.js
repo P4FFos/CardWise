@@ -30,7 +30,8 @@ router.post('/api/v1/users', async function (req, res, next) {
             res.status(404).json({"message": "Cannot create a null user"})
         }
         await user.save();
-        
+
+        //create user-specific achievements for progress tracking
         const achievementRequests = globalAchievements.map(async (achievement) => {
             try {
                 await axios.post(`http://localhost:3000/api/v1/users/${user._id}/achievements/${achievement.id}`);

@@ -71,6 +71,12 @@ export default {
         streak = 1
       }
 
+      //   if (streak === 5) {
+      //     await Api.put(`/v1/users/${user._id}/achievements/s1`, {
+      //       completed: true
+      //     })
+      //   }
+
       try {
         await Api.patch(`/v1/users/${user._id}`, {
           lastLoginDate: currentDate,

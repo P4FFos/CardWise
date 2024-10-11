@@ -64,6 +64,15 @@ export default {
         this.cardInfo.push(addedCard)
 
         console.log(addedCard)
+
+        // complete achievement t2
+        const deckData = await Api.get(`/v1/users/${userId}/decks/${this.deckId}`)
+        const deck = deckData.data.deck
+        if (deck.cardAmount >= 42) {
+          await Api.put(`/v1/users/${userId}/achievements/t2`, {
+            completed: true
+          })
+        }
       } catch (error) {
         console.error('Failed to add new card:', error)
       }
@@ -88,7 +97,10 @@ export default {
           explanation: this.editCardExplanation
         })
         console.log('API response:', response)
-
+        // complete achievement t5
+        await Api.put(`/v1/users/${userId}/achievements/t5`, {
+          completed: true
+        })
         const updatedCard = response.data.card
 
         console.log(updatedCard)

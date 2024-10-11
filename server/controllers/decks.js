@@ -40,7 +40,7 @@ router.post('/api/v1/users/:userID/decks', async function(req, res, next) {
                 "rel": "delete",
                 "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deck._id}`,
                 "method": "DELETE"
-            }, 
+            },
             "post": {
                 "rel": "post",
                 "href": `http://localhost:${port}/api/v1/users/${userID}/decks`,
@@ -139,7 +139,7 @@ router.get('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
                     "rel": "delete",
                     "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}`,
                     "method": "DELETE"
-                }, 
+                },
                 "post": {
                     "rel": "post",
                     "href": `http://localhost:${port}/api/v1/users/${userID}/decks`,
@@ -182,15 +182,15 @@ router.put('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
                     "rel": "delete",
                     "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}`,
                     "method": "DELETE"
-                }, 
+                },
                 "post": {
                     "rel": "post",
                     "href": `http://localhost:${port}/api/v1/users/${userID}/decks`,
                     "method": "POST"
                 }
             }});
-    } catch (err) { 
-        return next(err); 
+    } catch (err) {
+        return next(err);
     }
 });
 
@@ -207,6 +207,7 @@ router.patch('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
         }
         deck.name = req.body.name || deck.name;
         deck.cards = req.body.cards || deck.cards;
+        deck.practiced = req.body.practiced || deck.practiced;
 
         await deck.save();
         res.status(200).json({
@@ -225,15 +226,15 @@ router.patch('/api/v1/users/:userID/decks/:id', async function(req, res, next) {
                     "rel": "delete",
                     "href":`http://localhost:${port}/api/v1/users/${userID}/decks/${deckID}`,
                     "method": "DELETE"
-                }, 
+                },
                 "post": {
                     "rel": "post",
                     "href": `http://localhost:${port}/api/v1/users/${userID}/decks`,
                     "method": "POST"
                 }
             }});
-    } catch (err) { 
-        return next(err); 
+    } catch (err) {
+        return next(err);
     }
 });
 
@@ -247,7 +248,7 @@ router.delete('/api/v1/users/:userID/decks', async function(req, res, next) {
         }
         var deckIDs = user.decks.map(deck => deck._id);
         var deletedDecks = await Deck.deleteMany({ _id: { $in: deckIDs}});
-        
+
         user.decks = [];
         await user.save();
 

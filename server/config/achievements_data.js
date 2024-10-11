@@ -2,7 +2,7 @@
 const globalAchievements = [
     { id: 's1', name: 'High five!', description: 'Log in for 5 consecutive days' },
     { id: 's2', name: 'Crystal Anniversary', description: 'Log in for 15 consecutive days' },
-    { id: 's3', name: 'Bromin sounds cool…', description: 'Log in for 35 consecutive days' },
+    { id: 's3', name: 'Bromine sounds cool…', description: 'Log in for 35 consecutive days' },
     { id: 's4', name: 'United Streak of America', description: 'Log in for 50 consecutive days' },
     { id: 's5', name: 'Wow! You are consistent', description: 'Log in for 75 consecutive days' },
     { id: 's6', name: 'Century', description: 'Log in for 100 consecutive days' },
