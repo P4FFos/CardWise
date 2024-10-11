@@ -73,14 +73,23 @@ export default {
       this.editDeckCalled = false
       this.editDeckName = ''
     },
+    async getSpecDeck() {
+      const userId = localStorage.getItem('userId')
+      try {
+        const response = await Api.get(`/v1/users/${userId}/decks/${this.deckId}`)
+        this.links = response.data._links
+      } catch (error) {
+        console.error('Failed to get specific deck:', error)
+      }
+    },
     async saveNewDeckName() {
+      await this.getSpecDeck()
       try {
         this.editDeckCalled = false
-        const userId = localStorage.getItem('userId')
-        await Api.patch(`/v1/users/${userId}/decks/${this.deckId}`, {
+        const editUrl = this.links['update deck name'].href
+        await Api.patch(editUrl, {
           name: this.editDeckName
         })
-        console.log('Edit deck with Id: ', this.deckId)
         this.editDeckName = ''
       } catch (error) {
         console.log('Failed to edit the deck: ', error)
@@ -90,7 +99,6 @@ export default {
       try {
         const userId = localStorage.getItem('userId')
         await Api.delete(`/v1/users/${userId}/decks/${this.deckId}`)
-        console.log('Deleted deck with Id: ', this.deckId)
       } catch (error) {
         console.log('Failed to delete deck: ', error)
       }

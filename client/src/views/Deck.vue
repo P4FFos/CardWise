@@ -50,7 +50,8 @@ export default {
       editCardId: null,
       editCard: false,
       cardInfo: [],
-      showCards: false
+      showCards: false,
+      links: []
     }
   },
   methods: {
@@ -59,11 +60,8 @@ export default {
       try {
         const newCard = { content: this.cardContent, explanation: this.cardExplanation }
         const response = await Api.post(`/v1/users/${userId}/decks/${this.deckId}/cards`, newCard)
-        this.links = response.data._links
         const addedCard = response.data.card
         this.cardInfo.push(addedCard)
-
-        console.log(addedCard)
 
         // complete achievement t2
         const deckData = await Api.get(`/v1/users/${userId}/decks/${this.deckId}`)
@@ -86,24 +84,29 @@ export default {
         console.error('Failed to delete the card:', error)
       }
     },
-    async editCardInfo(cardId) {
+    async getSpecCard() {
       const userId = localStorage.getItem('userId')
       try {
-        console.log(userId, this.deckId, cardId)
-        console.log(this.editCardContent, this.editCardExplanation)
+        const response = await Api.get(`/v1/users/${userId}/decks/${this.deckId}/cards/${this.editCardId}`)
+        this.links = response.data._links
+      } catch (error) {
+        console.error('Failed to get specific card:', error)
+      }
+    },
+    async editCardInfo(cardId) {
+      await this.getSpecCard()
+      try {
         const editUrl = this.links.edit.href
         const response = await Api.put(editUrl, {
           content: this.editCardContent,
           explanation: this.editCardExplanation
         })
-        console.log('API response:', response)
         // complete achievement t5
         await Api.put(`/v1/users/${userId}/achievements/t5`, {
           completed: true
         })
         const updatedCard = response.data.card
 
-        console.log(updatedCard)
         const cardIndex = this.cardInfo.findIndex(card => card._id === cardId)
         if (cardIndex !== -1) {
           this.cardInfo[cardIndex] = updatedCard
@@ -118,8 +121,6 @@ export default {
     },
     toggleEditCard(card) {
       this.editCardId = card._id
-      console.log(card._id)
-      console.log(this.editCardId)
     },
     async getAllCards() {
       const userId = localStorage.getItem('userId')
@@ -127,7 +128,6 @@ export default {
       try {
         const response = await Api.get(`/v1/users/${userId}/decks/${this.deckId}/cards`)
         this.cardInfo = response.data.deck.cards
-        console.log(this.cardInfo)
         this.showCards = true
       } catch (error) {
         console.error('Failed to get all cards:', error)
