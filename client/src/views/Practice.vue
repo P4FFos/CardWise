@@ -144,19 +144,17 @@ h1 {
   text-align: center;
   border: solid;
   border-radius: 1em;
-  width: 10em;
+  width: 12em;
   height: 20em;
 }
 
 .practiceCard p,
 .fontForPracticeText {
-  font-family: "Inria Sans";
   font-size: large;
   color: white;
 }
 
 .cardsDifficultyText {
-  font-family: "Inria Sans";
   font-weight: bold;
   color: black;
   font-size: large;
@@ -167,7 +165,6 @@ h1 {
 }
 
 .practiceButtons p {
-  font-family: "Inria Sans";
   font-size: large;
 }
 
