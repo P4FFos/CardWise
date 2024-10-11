@@ -51,7 +51,7 @@ export default {
       editCard: false,
       cardInfo: [],
       showCards: false,
-      links: {}
+      links: []
     }
   },
   methods: {
