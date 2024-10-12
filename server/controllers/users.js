@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
+var axios = require('axios');
 var port = process.env.PORT || 3000;
 
 var User = require('../models/user.js');
+const globalAchievements = require('../config/achievements_data.js');
 
 // create specific user
 router.post('/api/v1/users', async function (req, res, next) {
@@ -28,6 +30,18 @@ router.post('/api/v1/users', async function (req, res, next) {
             res.status(404).json({"message": "Cannot create a null user"})
         }
         await user.save();
+
+        //create user-specific achievements for progress tracking
+        const achievementRequests = globalAchievements.map(async (achievement) => {
+            try {
+                await axios.post(`http://localhost:3000/api/v1/users/${user._id}/achievements/${achievement.id}`);
+                console.log(`Achievement ${achievement.name} added to user ${user._id}`);
+            } catch (error) {
+                console.error(`Failed to add achievement ${achievement.name}: `, error.message);
+            }
+        });
+
+        await Promise.all(achievementRequests);
 
         res.status(201).json({
             "user": user,
@@ -97,7 +111,7 @@ router.get('/api/v1/users/:userID', async function(req, res, next) {
                     "rel": "delete",
                     "href":`http://localhost:${port}/api/v1/users/${userID}/decks`,
                     "method": "DELETE"
-                }, 
+                },
                 "post": {
                     "rel": "post",
                     "href": `http://localhost:${port}/api/v1/users`,
@@ -119,6 +133,16 @@ router.put('/api/v1/users/:id', async function (req, res, next) {
         updatedUser = await User.findById(userId);
         if (updatedUser == null) {
             return res.status(404).json({message: 'User not found'});
+        }
+
+        if (updateData.lastLoginDate) {
+            updatedUser.lastLoginDate = updateData.lastLoginDate;
+        }
+        if (updateData.streak) {
+            updatedUser.streak = updateData.streak;
+        }
+        if (updateData.lastStreakDate) {
+            updatedUser.lastStreakDate = updateData.lastStreakDate;
         }
         updatedUser.set(updateData);
         await updatedUser.save();
@@ -142,7 +166,7 @@ router.put('/api/v1/users/:id', async function (req, res, next) {
                 "rel": "delete",
                 "href":`http://localhost:${port}/api/v1/users/${userId}`,
                 "method": "DELETE"
-            }, 
+            },
             "post": {
                 "rel": "post",
                 "href": `http://localhost:${port}/api/v1/users`,
@@ -184,7 +208,7 @@ router.patch('/api/v1/users/:id/', async function (req, res, next) {
                 "rel": "delete",
                 "href":`http://localhost:${port}/api/v1/users/${userId}`,
                 "method": "DELETE"
-            }, 
+            },
             "post": {
                 "rel": "post",
                 "href": `http://localhost:${port}/api/v1/users`,

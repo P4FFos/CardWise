@@ -34,7 +34,6 @@
           </div>
         </b-container>
     </div>
-
 </template>
 
 <script>
@@ -52,6 +51,7 @@ export default {
       practiceCards: [],
       hardCards: [],
       easyCards: [],
+      practiced: 0,
       showExplanation: false,
       currentCard: null
     }
@@ -70,6 +70,7 @@ export default {
         this.nextCard()
       } else {
         this.currentCard = null
+        this.updatePracticeCounter()
       }
     },
     async getPracticeCards() {
@@ -89,6 +90,30 @@ export default {
         this.easyCards.push(this.currentCard)
       }
       this.nextCard()
+    },
+    async updatePracticeCounter() {
+      const userId = localStorage.getItem('userId')
+      try {
+        const response = await Api.get(`/v1/users/${userId}/decks/${this.deckId}`)
+        const deck = response.data.deck
+        this.practised = deck.practiced || 0
+
+        this.practiced = deck.practiced + 1
+
+        await Api.patch(`/v1/users/${userId}/decks/${this.deckId}`, {
+          practiced: this.practiced
+        })
+        console.log('PracticeCount after update:', this.practiced)
+
+        // complete acievement t3
+        if (this.practiced >= 5) {
+          await Api.put(`/v1/users/${userId}/achievements/t3`, {
+            completed: true
+          })
+        }
+      } catch (error) {
+        console.error('Error updating practice counter: ', error)
+      }
     }
   },
   computed: {

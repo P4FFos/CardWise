@@ -87,6 +87,14 @@ export default {
         const newDeck = { name: this.newDeckName, cards: [] }
         const response = await Api.post(`/v1/users/${userId}/decks`, newDeck)
         this.deckInfo.push(response.data.deck)
+        // complete achievement t1
+        const userData = await Api.get(`/v1/users/${userId}`)
+        const user = userData.data.user
+        if (user.deckAmount >= 10) {
+          await Api.put(`/v1/users/${userId}/achievements/t1`, {
+            completed: true
+          })
+        }
       } catch (error) {
         console.error('Failed to add new deck:', error)
       }
@@ -98,6 +106,10 @@ export default {
       try {
         await Api.delete(`/v1/users/${userId}/decks`)
         this.deckInfo = []
+        // complete achievement t4
+        await Api.put(`/v1/users/${userId}/achievements/t4`, {
+          completed: true
+        })
       } catch (error) {
         console.error('Failed to delete all decks:', error)
       }
