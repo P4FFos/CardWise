@@ -1,12 +1,7 @@
 <template>
     <div class="deckWithCards">
       <div class="topLevelContainer">
-        <img class="mainLogoDeck" src="../assets/logos/mainLogo.svg" alt="Logo"/>
-        <router-link id="backToMainPage" :to="{ name: 'main'}">
-          <button class="backToMain">
-            Go back
-          </button>
-        </router-link>
+        <img class="mainLogoDeck" @click="goToMain" src="../assets/logos/mainLogo.svg" alt="Logo"/>
       </div>
       <hr class="thick-separator-deck-pc"/>
       <div id="deckName">
@@ -16,11 +11,11 @@
       </div>
       <div class="createCardContainer">
         <div id="cardContentContainer">
-          <label for="cardContent">name </label>
+          <label for="cardContent">Name </label>
           <input type="text" id="cardContent" v-model="cardContent" placeholder="Enter card name">
         </div>
         <div id="cardExplanationContainer">
-          <label for="cardExplanation">explanation</label>
+          <label for="cardExplanation">Explanation</label>
           <input type="text" id="cardExplanation" v-model="cardExplanation" placeholder="Enter card explanation">
         </div>
         <button class="addButton" @click="addNewCard">Add +</button>
@@ -173,6 +168,9 @@ export default {
       } catch (error) {
         alert('Failed to delete all cards')
       }
+    },
+    goToMain() {
+      this.$router.push({ name: 'main' })
     }
   },
   mounted() {
@@ -201,25 +199,15 @@ export default {
   margin-top: 0;
 }
 
-#backToMainPage {
-  align-self: center;
-  margin-right: 2.5%;
-}
-
-.backToMain, .addButton {
-  width: 120px;
-  height: 40px;
-}
-
-.editCardButton, .deleteCardButton, .submitButton {
+.editCardButton, .deleteCardButton, .submitButton, .addButton {
   width: 100px;
   height: 35px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .mainLogoDeck {
-  margin: 15px 1% 1% 2.3%;
-  width: 3%;
+  margin: 10px 1% 1% 2.3%;
+  width: 4%;
 }
 
 .thick-separator-deck-pc {
@@ -313,21 +301,17 @@ label {
 
 @media (max-width: 768px) {
   .thick-separator-deck-pc{
-    height: 10px;
-  }
-
-  #backToMainPage {
-    align-self: center;
-    margin-right: 10px;
-    margin-bottom: 5px;
+    height: 3px;
+    width: 90%;
   }
 
   .mainLogoDeck {
-    margin: 0 1% 1% 2.3%;
+    display: block;
     width: 10%;
+    margin: 4% 0 4% 45%;
   }
 
-  .addButton, .backToMain {
+  .addButton {
     margin-top: 10px;
     width: 100px;
     height: 35px;
@@ -336,7 +320,7 @@ label {
   .allCards {
     grid-template-columns: repeat(1, 1fr);
     width: 290px;
-    max-height: none;
+    height: 390px;
     justify-content: center;
     align-self: center;
   }
@@ -357,6 +341,10 @@ label {
 
   label {
     text-align: center;
+  }
+
+  #deckName {
+    margin-top: 10%;
   }
 
   #deckName p {
