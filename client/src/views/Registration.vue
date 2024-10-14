@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main">
   <img class="mainLogo" src="../assets/logos/mainLogo.svg" alt="Logo"/>
   <hr class="thick-separator-login-pc"/>
   <div class="pcScreen-container">
@@ -166,7 +166,6 @@ export default {
   .signup-button {
     width: 15%;
     height: 9%;
-    font-size: 18px;
     margin-top: 3%;
     margin-bottom: 3%;
   }
