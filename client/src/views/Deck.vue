@@ -1,33 +1,53 @@
 <template>
-    <div>
-        <div>Deck page showing cards</div>
-        <div>
-          <label for="cardContent">Card content:</label>
-          <input type="text" id="cardContent" v-model="cardContent" placeholder="Enter card name">
-          <label for="cardExplanation">Card explanation:</label>
-          <input type="text" id="cardExplanation" v-model="cardExplanation" placeholder="Enter card explanation">
-          <button @click="addNewCard">Add new card</button>
-        </div>
-        <button @click="getAllCards">Show cards info</button>
-        <button @click="deleteAllCards">Delete all cards</button>
-        <router-link :to="{ name: 'practice', params: { deckId: this.deckId } }">
-          Go to Practice Mode
+    <div class="deckWithCards">
+      <div class="topLevelContainer">
+        <img class="mainLogoDeck" src="../assets/logos/mainLogo.svg" alt="Logo"/>
+        <router-link id="backToMainPage" :to="{ name: 'main'}">
+          <button>
+            Go Back
+          </button>
         </router-link>
-        <ul>
-            <li v-for="card in cardInfo" :key="card._id">
-                <p>Card ID: {{ card._id }}</p>
-                <p>Content: {{ card.content }}</p>
-                <p>Explanation: {{ card.explanation }}</p>
-                <button @click="toggleEditCard(card)">Edit Card</button>
-                <button @click="deleteCard(card._id)">Delete card</button>
-
-                <div v-if="editCardId === card._id">
-                    <input type="text" v-model="editCardContent" placeholder="Enter new content for card">
-                    <input type="text" v-model="editCardExplanation" placeholder="Enter new explanation for card">
-                    <button @click="editCardInfo(card._id)">Submit</button>
-                </div>
-            </li>
+      </div>
+      <hr class="thick-separator-deck-pc"/>
+      <div id="deckName">
+        <p>
+          Deckname: {{ this.deckName }}
+        </p>
+      </div>
+      <div class="createCardContainer">
+        <div>
+          <label for="cardContent">Name:</label>
+          <input type="text" id="cardContent" v-model="cardContent" placeholder="Enter card name">
+        </div>
+        <div id="cardExplanationContainer">
+          <label for="cardExplanation">Explanation:</label>
+          <input type="text" id="cardExplanation" v-model="cardExplanation" placeholder="Enter card explanation">
+        </div>
+        <button @click="addNewCard">Add +</button>
+        </div>
+        <ul class="allCards">
+          <li v-for="card in cardInfo" :key="card._id" class="card">
+            <p id="cardName">{{ card.content }}</p>
+            <p>{{ card.explanation }}</p>
+            <div class="changeCard">
+              <button @click="toggleEditCard(card)">Edit Card</button>
+              <button @click="deleteCard(card._id)">Delete card</button>
+            </div>
+            <div v-if="editCardId === card._id">
+              <input type="text" v-model="editCardContent" placeholder="Enter new name...">
+              <input type="text" v-model="editCardExplanation" placeholder="Enter new explanation...">
+              <button @click="editCardInfo(card._id)">Submit</button>
+            </div>
+          </li>
         </ul>
+        <div class="bottomButtonsContainer">
+          <router-link :to="{ name: 'practice', params: { deckId: this.deckId } }">
+            <button>
+              Go to Practice Mode
+            </button>
+          </router-link>
+          <button id="deleteAllCardsButton" @click="deleteAllCards">Delete all cards</button>
+        </div>
     </div>
 </template>
 
@@ -51,6 +71,7 @@ export default {
       editCard: false,
       cardInfo: [],
       showCards: false,
+      deckName: null,
       links: []
     }
   },
@@ -75,6 +96,15 @@ export default {
         console.error('Failed to add new card:', error)
       }
     },
+    async getDeckName() {
+      const userId = localStorage.getItem('userId')
+      try {
+        const deckData = await Api.get(`/v1/users/${userId}/decks/${this.deckId}`)
+        this.deckName = deckData.data.deck.name
+      } catch (error) {
+        console.error('Failed to get the name of the deck: ', error)
+      }
+    },
     async deleteCard(cardId) {
       const userId = localStorage.getItem('userId')
       try {
@@ -94,6 +124,7 @@ export default {
       }
     },
     async editCardInfo(cardId) {
+      const userId = localStorage.getItem('userId')
       await this.getSpecCard()
       try {
         const editUrl = this.links.edit.href
@@ -143,6 +174,156 @@ export default {
         console.error('Failed to delete all cards:', error)
       }
     }
+  },
+  mounted() {
+    this.getAllCards()
+    this.getDeckName()
   }
 }
 </script>
+
+<style scoped>
+
+.deckWithCards {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 20px;
+}
+
+.topLevelContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#backToMainPage {
+  align-self: center;
+  margin-right: 30px;
+
+}
+
+.mainLogoDeck {
+  margin: 0% 1% 1% 2.3%;
+  width: 3%;
+}
+
+.thick-separator-deck-pc {
+  width: 95%;
+  margin: 0 auto 0 auto;
+  height: 3px;
+  background-color: #6A6A6A;
+  border: none;
+}
+
+#deckName {
+  align-self: center;
+}
+
+#deckName p {
+  font-size: larger;
+  font-family: 'InstrumentSerif';
+
+}
+
+.createCardContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  align-self: center;
+  margin: 20px;
+}
+
+.allCards {
+  display: grid;
+  align-self: center;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  justify-items: center;
+  align-items: center;
+  overflow-y: auto;
+  flex-grow: 1;
+  width: 60vw;
+  max-height: 360px;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 10px;
+  margin: 25px;
+  padding: 10px;
+}
+
+.card {
+  background-color: #6A6A6A;
+  min-width: 250px;
+  max-width: 200px;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  border-radius: 5%;
+}
+
+.changeCard {
+  margin-top: auto;
+}
+
+.card p{
+  color: white;
+}
+
+#cardName {
+  font-size: larger;
+}
+
+.bottomButtonsContainer {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  justify-content: flex-end;
+}
+
+#deleteAllCardsButton {
+  margin: 20px;
+}
+
+@media (max-width: 768px) {
+  #backToMainPage {
+    align-self: center;
+    margin-right: 10px;
+  }
+
+  .mainLogoDeck {
+    margin: 0% 1% 1% 2.3%;
+    width: 10%;
+  }
+
+  .allCards {
+    grid-template-columns: repeat(1, 1fr);
+    width: 280px;
+    max-height: none;
+    justify-content: center;
+    align-self: center;
+  }
+
+ .createCardContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #cardExplanationContainer {
+    margin-right: 40px;
+  }
+  .bottomButtonsContainer {
+    justify-content: center;
+  }
+
+}
+
+</style>
