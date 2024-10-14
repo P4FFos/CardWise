@@ -2,20 +2,24 @@
     <div class="deckWithCards">
       <div id="deckName">
         <p>
-          {{ this.deckName }}
+          Deckname: {{ this.deckName }}
         </p>
       </div>
+      <router-link id="backToMainPage" :to="{ name: 'main'}">
+        <button>
+          Go Back
+        </button>
+      </router-link>
       <div class="createCardContainer">
-          <router-link id="backToMainPage" :to="{ name: 'main'}">
-            <button>
-              Go Back
-            </button>
-          </router-link>
+        <div>
           <label for="cardContent">Name:</label>
           <input type="text" id="cardContent" v-model="cardContent" placeholder="Enter card name">
+        </div>
+        <div id="cardExplanationContainer">
           <label for="cardExplanation">Explanation:</label>
           <input type="text" id="cardExplanation" v-model="cardExplanation" placeholder="Enter card explanation">
-          <button @click="addNewCard">Add +</button>
+        </div>
+        <button @click="addNewCard">Add +</button>
         </div>
         <ul class="allCards">
           <li v-for="card in cardInfo" :key="card._id" class="card">
@@ -26,8 +30,8 @@
               <button @click="deleteCard(card._id)">Delete card</button>
             </div>
             <div v-if="editCardId === card._id">
-              <input type="text" v-model="editCardContent" placeholder="Enter new content for card">
-              <input type="text" v-model="editCardExplanation" placeholder="Enter new explanation for card">
+              <input type="text" v-model="editCardContent" placeholder="Enter new name...">
+              <input type="text" v-model="editCardExplanation" placeholder="Enter new explanation...">
               <button @click="editCardInfo(card._id)">Submit</button>
             </div>
           </li>
@@ -181,7 +185,8 @@ export default {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: 20px;
 }
 
 #deckName {
@@ -190,13 +195,16 @@ export default {
 
 #deckName p {
   font-size: larger;
+  font-family: 'InstrumentSerif';
+
 }
 
 .createCardContainer {
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
   align-items: center;
-  justify-content: space-between;
+  margin: 20px;
 }
 
 .allCards {
@@ -205,6 +213,7 @@ export default {
   grid-gap: 20px;
   justify-items: center;
   overflow-y: auto;
+  flex-grow: 1;
   max-height: 360px;
   border-style: double;
   align-items: center;
@@ -259,9 +268,15 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   }
-
+  
+  #cardExplanationContainer {
+    margin-right: 40px;
+  }
+  .bottomButtonsContainer {
+    justify-content: center;
+  }
  
 }
 
