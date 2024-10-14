@@ -1,15 +1,19 @@
 <template>
     <div class="deckWithCards">
+      <div class="topLevelContainer">
+        <img class="mainLogoDeck" src="../assets/logos/mainLogo.svg" alt="Logo"/>
+        <router-link id="backToMainPage" :to="{ name: 'main'}">
+          <button>
+            Go Back
+          </button>
+        </router-link>
+      </div>
+      <hr class="thick-separator-deck-pc"/>
       <div id="deckName">
         <p>
           Deckname: {{ this.deckName }}
         </p>
       </div>
-      <router-link id="backToMainPage" :to="{ name: 'main'}">
-        <button>
-          Go Back
-        </button>
-      </router-link>
       <div class="createCardContainer">
         <div>
           <label for="cardContent">Name:</label>
@@ -181,12 +185,38 @@ export default {
 <style scoped>
 
 .deckWithCards {
+  position: fixed;
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding-top: 20px;
+}
+
+.topLevelContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#backToMainPage {
+  align-self: center;
+  margin-right: 30px;
+
+}
+
+.mainLogoDeck {
+  margin: 0% 1% 1% 2.3%;
+  width: 3%;
+}
+
+.thick-separator-deck-pc {
+  width: 95%;
+  margin: 0 auto 0 auto;
+  height: 3px;
+  background-color: #6A6A6A;
+  border: none;
 }
 
 #deckName {
@@ -202,21 +232,26 @@ export default {
 .createCardContainer {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  align-self: center;
   margin: 20px;
 }
 
 .allCards {
   display: grid;
+  align-self: center;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 20px;
   justify-items: center;
+  align-items: center;
   overflow-y: auto;
   flex-grow: 1;
+  width: 60vw;
   max-height: 360px;
-  border-style: double;
-  align-items: center;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 10px;
   margin: 25px;
   padding: 10px;
 }
@@ -248,6 +283,7 @@ export default {
 .bottomButtonsContainer {
   display: flex;
   align-items: center;
+  align-self: center;
   justify-content: flex-end;
 }
 
@@ -256,28 +292,38 @@ export default {
 }
 
 @media (max-width: 768px) {
- .allCards {
-  grid-template-columns: repeat(1, 1fr);
-  width: 280px;
-  max-height: none;
-  justify-content: center;
-  align-self: center;
- }
+  #backToMainPage {
+    align-self: center;
+    margin-right: 10px;
+  }
+
+  .mainLogoDeck {
+    margin: 0% 1% 1% 2.3%;
+    width: 10%;
+  }
+
+  .allCards {
+    grid-template-columns: repeat(1, 1fr);
+    width: 280px;
+    max-height: none;
+    justify-content: center;
+    align-self: center;
+  }
 
  .createCardContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
-  
+
   #cardExplanationContainer {
     margin-right: 40px;
   }
   .bottomButtonsContainer {
     justify-content: center;
   }
- 
+
 }
 
 </style>
