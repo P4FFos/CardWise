@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main">
   <img class="mainLogo" src="../assets/logos/mainLogo.svg" alt="Logo"/>
   <hr class="thick-separator-login-pc"/>
   <div class="pcScreen-container">
@@ -86,8 +86,7 @@ export default {
   }
 
   .signup-button {
-    width: 25%;
-    font-size: 15px;
+    width: 20%;
     margin-top: 4%;
     margin-bottom: 1%;
   }
@@ -158,25 +157,19 @@ export default {
   }
 
   .usernameLabel, .emailLabel, .passwordLabel {
-    font-size: 20px;
     margin-top: 1%;
     margin-bottom: 1%;
   }
 
   .signup-button {
     width: 15%;
-    height: 9%;
-    font-size: 18px;
+    height: 8%;
     margin-top: 3%;
     margin-bottom: 3%;
   }
 
   .login-link {
     color: #7CB6B2;
-  }
-
-  .question-text, .error-text {
-    font-size: 22px;
   }
 
   .booksLogo {

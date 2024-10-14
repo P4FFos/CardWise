@@ -23,3 +23,12 @@ label, p {
     font-family: 'IriaSans', sans-serif;
     color: #6A6A6A;
 }
+
+input:focus {
+    outline: none;
+}
+
+.main {
+    position: fixed;
+    width: 100%;
+}

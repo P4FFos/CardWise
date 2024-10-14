@@ -3,7 +3,7 @@
     <div class="backButtonContainer">
       <router-link :to="{ name: 'deck', params: { deckId: this.deckId } }">
           <button class="fontForPracticeText" id="backToDeck">
-            Go Back
+            Go back
           </button>
         </router-link>
     </div>
@@ -131,7 +131,7 @@ export default {
 <style scoped>
 
 h1 {
-  font-family: 'InstrumentSerif';
+  font-family: 'InstrumentSerif', serif;
   color: #6A6A6A;
   margin-bottom: 20px;
 }
@@ -139,6 +139,8 @@ h1 {
 .practiceContainer {
   display: flex;
   justify-content: center;
+  position: fixed;
+  width: 100%;
   flex-direction: column;
   min-height: 100vh;
 }

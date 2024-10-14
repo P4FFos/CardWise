@@ -1,16 +1,24 @@
 <template>
-  <div>
-    <h1>Login Page</h1>
-    <form @submit.prevent="login">
-      <label for="username">Username:</label>
-      <input type="text" id="username" v-model="username" name="username" required>
+  <div class="main">
+    <div>
+      <img class="main-logo" src="../assets/logos/mainLogo.svg" alt="Logo"/>
+      <hr class="thick-separator-loginPC"/>
+    </div>
+    <div class="pc-login-form">
+      <form class="login-form" @submit.prevent="login">
+        <p class="login-text">Log in</p>
+        <label class="username-label" for="username">username</label>
+        <input class="username-field" type="text" id="username" v-model="username" name="username" required>
 
-      <label for="password">Password:</label>
-      <input type="password" id="password" v-model="password" name="password" required>
+        <label class="password-label" for="password">password</label>
+        <input class="password-field" type="password" id="password" v-model="password" name="password" required>
 
-      <button type="submit">Login</button>
-    </form>
-    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+        <button class="login-button" type="submit">Login</button>
+        <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      </form>
+      <hr class="thick-separator-loginMobile"/>
+      <img class="handsWithTextLogo" src="../assets/logos/handsWithText.svg" alt="Logo"/>
+    </div>
   </div>
 </template>
 
@@ -118,4 +126,118 @@ export default {
 </script>
 
 <style>
+@media (max-width: 767px) {
+  .login-text {
+    font-family: 'InstrumentSherif', serif;
+    font-size: 50px;
+    color: #6A6A6A;
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .thick-separator-loginPC, .thick-separator-loginMobile {
+    width: 90%;
+    margin: 5% auto 5% auto;
+    height: 3px;
+    background-color: #6A6A6A;
+    border: none;
+  }
+
+  .login-button {
+    width: 20%;
+    margin-top: 4%;
+    margin-bottom: 1%;
+  }
+
+  .handsWithTextLogo {
+    display: block;
+    margin-left: 14%;
+    margin-top: 15%;
+    width: 80%;
+  }
+
+  .main-logo {
+    display: block;
+    width: 10%;
+    margin-left: 45%;
+    margin-top: 5%;
+  }
+
+  .error-message {
+    text-align: center;
+    color: #EA9944;
+  }
+}
+
+@media (min-width: 768px) {
+  .main-logo {
+    margin: 1% 1% 1% 2.3%;
+  }
+
+  .thick-separator-loginPC {
+    width: 95%;
+    margin: 0 auto 0 auto;
+    height: 3px;
+    background-color: #6A6A6A;
+    border: none;
+  }
+
+  .thick-separator-loginMobile {
+    display: none;
+  }
+
+  .pc-login-form {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .login-form {
+    order: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    margin-top: 6%;
+  }
+
+  .login-text {
+    font-family: 'InstrumentSherif', serif;
+    font-size: 70px;
+    color: #6A6A6A;
+  }
+
+  .username-field, .password-field {
+    width: 40%;
+    height: 6%;
+    border: 3px solid #6A6A6A;
+  }
+
+  .username-label, .password-label {
+    margin-top: 1%;
+    margin-bottom: 1%;
+  }
+
+  .login-button {
+    width: 15%;
+    height: 6%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+  }
+
+  .handsWithTextLogo {
+    order: 1;
+    width: 55%;
+  }
+
+  .error-message {
+    text-align: center;
+    color: #EA9944;
+  }
+}
 </style>
