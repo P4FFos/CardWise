@@ -30,7 +30,7 @@
           <p class="cardsDifficultyText">Understood: {{ this.easyCards.length }}</p>
           <p class="cardsDifficultyText">Repeat: {{ this.hardCards.length }}</p>
           <div v-if="!currentCard">
-            <p>All cards completed for this practice round</p>
+            <p class="passTestAlert">All cards completed for this practice round</p>
           </div>
         </b-container>
     </div>
@@ -80,7 +80,7 @@ export default {
         this.practiceCards = response.data.deck.cards
         this.nextCard()
       } catch (error) {
-        console.error('Error fetching cards from deck: ', error)
+        alert('Error fetching cards from deck')
       }
     },
     handleCard(difficulty) {
@@ -103,7 +103,7 @@ export default {
         await Api.patch(`/v1/users/${userId}/decks/${this.deckId}`, {
           practiced: this.practiced
         })
-        console.log('PracticeCount after update:', this.practiced)
+        alert('PracticeCount after update')
 
         // complete acievement t3
         if (this.practiced >= 5) {
@@ -112,7 +112,7 @@ export default {
           })
         }
       } catch (error) {
-        console.error('Error updating practice counter: ', error)
+        alert('Error updating practice counter')
       }
     }
   },
@@ -185,12 +185,15 @@ h1 {
 }
 
 .practiceButtons {
-  background-color: #EA9944;
   width: 6em;
 }
 
 .practiceButtons p {
   font-size: medium;
+}
+
+.passTestAlert{
+  color: #EA9944;
 }
 
 /* Responsive Styling */
@@ -203,7 +206,8 @@ h1 {
   }
 
   #backToDeck {
-    width: 10em;
+    width: 100px;
+    height: 35px;
   }
 
   .cardsDifficultyText {

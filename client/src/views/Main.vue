@@ -76,7 +76,7 @@ export default {
         const response = await Api.get(`/v1/users/${userId}/decks`)
         this.deckInfo = response.data.decks
       } catch (error) {
-        console.error('Failed to get all decks:', error)
+        alert('Failed to get all decks')
       }
     },
     // create new deck and save in to the database for current user
@@ -96,7 +96,7 @@ export default {
           })
         }
       } catch (error) {
-        console.error('Failed to add new deck:', error)
+        alert('Failed to add new deck')
       }
     },
     // delete all decks from the database of current user
@@ -111,7 +111,7 @@ export default {
           completed: true
         })
       } catch (error) {
-        console.error('Failed to delete all decks:', error)
+        alert('Failed to delete all decks')
       }
     },
     // sort all decks based on the sort field and order
@@ -127,7 +127,7 @@ export default {
         })
         this.deckInfo = response.data
       } catch (error) {
-        console.error('Failed to sort decks:', error)
+        alert('Failed to sort decks')
       }
     },
     showContextMenu(event, deckId) {

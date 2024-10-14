@@ -73,8 +73,6 @@ export default {
         this.links = response.data._links
         this.newEmail = this.user.email
         this.newUsername = this.user.username
-
-        console.log('last login date: ', response.data.user)
       } catch (error) {
         this.errorMessage = 'Failed to get user data'
       }

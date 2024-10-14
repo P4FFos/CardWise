@@ -36,9 +36,8 @@ export default {
 
         if (response.data && Array.isArray(response.data.achievements)) {
           this.achievements = response.data.achievements
-          console.log(this.achievements)
         } else {
-          console.log('No achievements found')
+          alert('No achievements found')
         }
       } catch (error) {
         alert('Failed to fetch achievements: ' + error.message)
@@ -54,7 +53,7 @@ export default {
         await Api.put(`/v1/users/${userID}/achievements/${achievementId}`, {
           completed: true
         })
-        console.log(`Achievement ${achievementId} completed`)
+        alert(`Achievement ${achievementId} completed`)
         const achievement = this.achievements.find(a => a._id === achievementId)
         if (achievement) {
           achievement.completed = true

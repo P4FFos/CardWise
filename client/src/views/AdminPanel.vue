@@ -40,7 +40,7 @@ export default {
         if (response.data && Array.isArray(response.data)) {
           this.users = response.data
         } else {
-          console.log('No users found')
+          alert('No users found')
         }
       } catch (error) {
         alert('Failed to fetch users: ' + error.message)
@@ -52,7 +52,7 @@ export default {
         if (response.data && Array.isArray(response.data.achievements)) {
           this.achievements = response.data.achievements
         } else {
-          console.log('No achievements found')
+          alert('No achievements found')
         }
       } catch (error) {
         alert('Failed to fetch achievements: ' + error.message)
@@ -61,7 +61,7 @@ export default {
     async deleteUser(userId) {
       try {
         await Api.delete(`/v1/users/${userId}`)
-        console.log(`User ${userId} was deleted`)
+        alert(`User ${userId} was deleted`)
         alert('User was deleted')
         this.users = this.users.filter(user => user._id !== userId)
       } catch (error) {

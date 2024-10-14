@@ -79,7 +79,7 @@ export default {
         const response = await Api.get(`/v1/users/${userId}/decks/${this.deckId}`)
         this.links = response.data._links
       } catch (error) {
-        console.error('Failed to get specific deck:', error)
+        alert('Failed to get specific deck')
       }
     },
     async saveNewDeckName() {
@@ -92,7 +92,7 @@ export default {
         })
         this.editDeckName = ''
       } catch (error) {
-        console.log('Failed to edit the deck: ', error)
+        alert('Failed to edit the deck')
       }
     },
     async deleteDeck() {
@@ -100,7 +100,7 @@ export default {
         const userId = localStorage.getItem('userId')
         await Api.delete(`/v1/users/${userId}/decks/${this.deckId}`)
       } catch (error) {
-        console.log('Failed to delete deck: ', error)
+        alert('Failed to delete deck')
       }
     }
   }

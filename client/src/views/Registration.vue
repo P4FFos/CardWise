@@ -43,7 +43,6 @@ export default {
   },
   methods: {
     async register() {
-      console.log('username: ', this.username)
       try {
         const response = await Api.post('/v1/users', {
           username: this.username,

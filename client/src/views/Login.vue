@@ -108,7 +108,7 @@ export default {
           streak: this.streak
         })
       } catch (error) {
-        console.error('Failed to update user streak:', error)
+        alert('Failed to update user streak')
       }
     },
     async completeAchievement(userId, achievementCode) {
@@ -116,9 +116,9 @@ export default {
         await Api.put(`/v1/users/${userId}/achievements/${achievementCode}`, {
           completed: true
         })
-        console.log(`Achievement ${achievementCode} completed!`)
+        alert(`Achievement ${achievementCode} completed!`)
       } catch (error) {
-        console.error(`Failed to complete achievement ${achievementCode}:`, error)
+        alert(`Failed to complete achievement ${achievementCode}`)
       }
     }
   }
