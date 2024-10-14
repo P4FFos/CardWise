@@ -1,5 +1,10 @@
 <template>
     <div class="deckWithCards">
+      <div id="deckName">
+        <p>
+          {{ this.deckName }}
+        </p>
+      </div>
       <div class="createCardContainer">
           <router-link id="backToMainPage" :to="{ name: 'main'}">
             <button>
@@ -58,6 +63,7 @@ export default {
       editCard: false,
       cardInfo: [],
       showCards: false,
+      deckName: null,
       links: []
     }
   },
@@ -80,6 +86,15 @@ export default {
         }
       } catch (error) {
         console.error('Failed to add new card:', error)
+      }
+    },
+    async getDeckName() {
+      const userId = localStorage.getItem('userId')
+      try {
+        const deckData = await Api.get(`/v1/users/${userId}/decks/${this.deckId}`)
+        this.deckName = deckData.data.deck.name
+      } catch (error) {
+        console.error('Failed to get the name of the deck: ', error)
       }
     },
     async deleteCard(cardId) {
@@ -154,6 +169,7 @@ export default {
   },
   mounted() {
     this.getAllCards()
+    this.getDeckName()
   }
 }
 </script>
@@ -166,6 +182,14 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+#deckName {
+  align-self: center;
+}
+
+#deckName p {
+  font-size: larger;
 }
 
 .createCardContainer {
@@ -212,8 +236,6 @@ export default {
   font-size: larger;
 }
 
-
-
 .bottomButtonsContainer {
   display: flex;
   align-items: center;
@@ -228,6 +250,7 @@ export default {
  .allCards {
   grid-template-columns: repeat(1, 1fr);
   width: 280px;
+  max-height: none;
   justify-content: center;
   align-self: center;
  }
@@ -237,7 +260,9 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-}
+  }
+
+ 
 }
 
 </style>
