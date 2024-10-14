@@ -13,7 +13,7 @@
         <label class="password-label" for="password">password</label>
         <input class="password-field" type="password" id="password" v-model="password" name="password" required>
 
-        <button class="submit-button" type="submit">Login</button>
+        <button class="login-button" type="submit">Login</button>
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       </form>
       <hr class="thick-separator-loginMobile"/>
@@ -147,9 +147,8 @@ export default {
     border: none;
   }
 
-  .submit-button {
-    width: 25%;
-    font-size: 15px;
+  .login-button {
+    width: 20%;
     margin-top: 4%;
     margin-bottom: 1%;
   }
@@ -215,17 +214,16 @@ export default {
 
   .username-field, .password-field {
     width: 40%;
-    height: 7%;
+    height: 6%;
     border: 3px solid #6A6A6A;
   }
 
   .username-label, .password-label {
-    font-size: 20px;
     margin-top: 1%;
     margin-bottom: 1%;
   }
 
-  .submit-button {
+  .login-button {
     width: 15%;
     height: 6%;
     margin-top: 3%;
