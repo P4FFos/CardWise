@@ -2,6 +2,7 @@
     <div class="deckWithCards">
       <div class="topLevelContainer">
         <img class="mainLogoDeck" @click="goToMain" src="../assets/logos/mainLogo.svg" alt="Logo"/>
+        <p class="goToMain" @click="goToMain"> Go back</p>
       </div>
       <hr class="thick-separator-deck-pc"/>
       <div id="deckName">
@@ -182,6 +183,13 @@ export default {
 
 <style scoped>
 
+.goToMain{
+  font-size: 30px;
+  color: #6A6A6A;
+  margin: 1.5% 3% 1% 0;
+  text-align: right;
+}
+
 .deckWithCards {
   position: fixed;
   width: 100vw;
@@ -300,6 +308,10 @@ label {
 }
 
 @media (max-width: 768px) {
+  .goToMain {
+    display: none;
+  }
+
   .thick-separator-deck-pc{
     height: 3px;
     width: 90%;

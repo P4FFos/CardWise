@@ -1,11 +1,7 @@
 <template>
   <div class="practiceContainer">
     <div class="backButtonContainer">
-      <router-link :to="{ name: 'deck', params: { deckId: this.deckId } }">
-          <button class="fontForPracticeText" id="backToDeck">
-            Go back
-          </button>
-        </router-link>
+      <p class="goToDeck" @click="goToDeck"> Go back</p>
     </div>
         <b-container class="practicePage">
         <h1>Practice</h1>
@@ -113,6 +109,9 @@ export default {
       } catch (error) {
         alert('Error updating practice counter')
       }
+    },
+    goToDeck() {
+      this.$router.push({ name: 'deck' })
     }
   },
   computed: {
@@ -135,6 +134,13 @@ h1 {
   margin-bottom: 20px;
 }
 
+.goToDeck{
+  font-size: 30px;
+  color: #6A6A6A;
+  margin: 1% 0 0 1%;
+  text-align: right;
+}
+
 .practiceContainer {
   display: flex;
   justify-content: center;
@@ -150,11 +156,7 @@ h1 {
   position: absolute;
   top: 1em;
   left: 1em;
-}
-
-#backToDeck {
-  width: 120px;
-  height: 40px;
+  width: 100%;
 }
 
 .practicePage {
@@ -202,16 +204,17 @@ h1 {
 
 /* Responsive Styling */
 @media (max-width: 768px) {
+  .goToDeck{
+    font-size: 30px;
+    margin-left: 5px;
+    color: #6A6A6A;
+  }
+
   .backButtonContainer {
     justify-content: center;
     position: relative;
     top: 0;
     left: 0;
-  }
-
-  #backToDeck {
-    width: 100px;
-    height: 35px;
   }
 
   .cardsDifficultyText {
