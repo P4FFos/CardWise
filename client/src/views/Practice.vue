@@ -103,9 +103,8 @@ export default {
         await Api.patch(`/v1/users/${userId}/decks/${this.deckId}`, {
           practiced: this.practiced
         })
-        alert('PracticeCount after update')
 
-        // complete acievement t3
+        // complete achievement t3
         if (this.practiced >= 5) {
           await Api.put(`/v1/users/${userId}/achievements/t3`, {
             completed: true
@@ -151,6 +150,11 @@ h1 {
   position: absolute;
   top: 1em;
   left: 1em;
+}
+
+#backToDeck {
+  width: 120px;
+  height: 40px;
 }
 
 .practicePage {

@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div>
-      <img class="main-logo" src="../assets/logos/mainLogo.svg" alt="Logo"/>
+      <img class="main-logo" @click="goToStart" src="../assets/logos/mainLogo.svg" alt="Logo"/>
       <hr class="thick-separator-loginPC"/>
     </div>
     <div class="pc-login-form">
@@ -120,6 +120,9 @@ export default {
       } catch (error) {
         alert(`Failed to complete achievement ${achievementCode}`)
       }
+    },
+    goToStart() {
+      this.$router.push({ name: 'start-page' })
     }
   }
 }
@@ -147,6 +150,11 @@ export default {
     border: none;
   }
 
+  .username-label, .password-label {
+    margin-top: 1%;
+    margin-bottom: 1%;
+  }
+
   .login-button {
     width: 20%;
     margin-top: 4%;
@@ -155,9 +163,8 @@ export default {
 
   .handsWithTextLogo {
     display: block;
-    margin-left: 14%;
     margin-top: 15%;
-    width: 80%;
+    width: 130%;
   }
 
   .main-logo {
