@@ -1,9 +1,8 @@
 <template>
   <div>
     <div class="mainPage">
-      <h1>Main Page</h1>
       <div class="sideNavBar">
-        <div>
+        <div class="userProfileRoute">
           <img id="userProfileIcon" src="../assets/icons/userProfileIcon.svg" alt="">
           <button @click="openUserProfile"><p><b>User Profile</b></p></button>
         </div>
@@ -11,14 +10,18 @@
           <img id="achievementsIcon" src="../assets/icons/achievementIcon.svg" alt="">
           <button @click="openAchievements"><p><b>Achievements</b></p></button>
         </div>
-        <button @click="logout"><p><b>Logout</b></p></button>
+        <div class="logoutButton">
+          <button @click="logout"><p><b>Logout</b></p></button>
+        </div>
       </div>
       <div class="contentContainer">
         <div class="deckOperationsContainer">
-          <label for="deckName">New deck name:</label>
-          <input type="text" id="deckName" v-model="newDeckName" placeholder="Enter deck name">
-          <button @click="addNewDeck">Add new deck</button>
-          <div>
+          <div class="createDeckContainer">
+            <label for="deckName">New deck name:</label>
+            <input type="text" id="deckName" v-model="newDeckName" placeholder="Enter deck name">
+            <button @click="addNewDeck">Add new deck</button>
+          </div>
+          <div class="filterDecks">
             <label for="sortField">Sort by:</label>
             <select v-model="sortField" @change="sortDecks">
               <option value="name">Name</option>
@@ -41,6 +44,14 @@
                 <p v-if="deck.cards.length > 0">Cards: {{ deck.cards.length }}</p>
                 <p v-else>No cards in the deck</p>
               </router-link>
+              <div class="changeCard">
+              <button @click="toggleEditDeck(deck)">Edit Deck</button>
+              <button @click="deleteDeck()">Delete Deck</button>
+              </div>
+              <div v-if="this.deckId === deck._id">
+              <input type="text" v-model="editDeckName" placeholder="Enter new name...">
+              <button @click="saveNewDeckName(deck)">Submit</button>
+            </div>
             </li>
           </div>
           <context-menu v-if="showMenu"
@@ -64,12 +75,15 @@ export default {
     return {
       deckId: '',
       deckName: '',
+      editDeckName: '',
+      editDeckId: null,
       newDeckName: '',
       deckInfo: [],
       sortField: 'name',
       sortOrder: 'asc',
       selectedDeckId: null,
       showMenu: false,
+      links: [],
       menuPosition: { x: 0, y: 0 }
     }
   },
@@ -118,6 +132,42 @@ export default {
         })
       } catch (error) {
         console.error('Failed to delete all decks:', error)
+      }
+    },
+    async getSpecDeck() {
+      const userId = localStorage.getItem('userId')
+      try {
+        const response = await Api.get(`/v1/users/${userId}/decks/${this.deckId}`)
+        console.log(response.data)
+        this.links = response.data._links
+      } catch (error) {
+        console.error('Failed to get specific deck:', error)
+      }
+    },
+    async toggleEditDeck(deck) {
+      this.deckId = deck._id
+    },
+    async saveNewDeckName() {
+      await this.getSpecDeck()
+      try {
+        this.editDeckCalled = false
+        const editUrl = this.links['update deck name'].href
+        await Api.patch(editUrl, {
+          name: this.editDeckName
+        })
+        this.editDeckName = ''
+        this.getAllDecks()
+      } catch (error) {
+        console.error('Failed to edit the deck: ', error)
+      }
+    },
+    async deleteDeck() {
+      try {
+        const userId = localStorage.getItem('userId')
+        await Api.delete(`/v1/users/${userId}/decks/${this.deckId}`)
+        this.getAllDecks()
+      } catch (error) {
+        console.error('Failed to delete deck: ', error)
       }
     },
     // sort all decks based on the sort field and order
@@ -195,6 +245,15 @@ export default {
   .deckOperationsContainer {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .createDeckContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
   }
 
   .deckOperationsContainer, .allDecks {
@@ -208,31 +267,43 @@ export default {
     justify-content: center;
     width: 20%;
     height: 100vh;
-    border-right: 3px solid #6A6A6A ;
+    border-right: 3px solid #6A6A6A;
+    gap: 20px;
   }
 
   .sideNavBar button {
     background: none;
+    align-self: center;
   }
   .sideNavBar button p {
     color: #6A6A6A;
     font-size: x-large;
   }
 
+  .userProfileRoute {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-left: 20px;
+  }
+
   .achievementsRoute {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-right: 25px;
+    justify-content: flex-start;
+  }
+
+  .logoutButton {
+    align-self: center;
   }
 
   #userProfileIcon {
-    width: 25%;
+    width: 20%;
   }
 
   #achievementsIcon {
-    width: 40%;
+    width: 30%;
   }
 
   #deleteAllDecksButton {
@@ -240,6 +311,7 @@ export default {
     margin: 20px;
 
   }
+
   .allDecks {
   display: grid;
   align-self: center;
@@ -257,6 +329,7 @@ export default {
   margin: 25px;
   padding: 10px;
 }
+
 .deck {
   background-color: #6A6A6A;
   list-style: none;
@@ -277,5 +350,37 @@ export default {
   #deckTitle {
     font-size: xx-large;
   }
+  @media (max-width: 768px) {
+    .contentContainer {
+      width: 100vw;
+      align-items: center;
+    }
 
+    .createDeckContainer {
+      flex-direction: column;
+    }
+    .sideNavBar {
+      display: none;
+      width: 0%;
+    }
+
+    .deckOperationsContainer {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .filterDecks {
+      font-size: smaller;
+    }
+
+    .allDecks {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    #deleteAllDecksButton {
+      align-self: center;
+      margin: 20px;
+    }
+  }
 </style>
