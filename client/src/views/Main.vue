@@ -46,7 +46,7 @@
               </router-link>
               <div class="changeCard">
               <button @click="toggleEditDeck(deck)">Edit Deck</button>
-              <button @click="deleteDeck()">Delete Deck</button>
+              <button @click="deleteDeck(deck)">Delete Deck</button>
               </div>
               <div v-if="this.deckId === deck._id">
               <input type="text" v-model="editDeckName" placeholder="Enter new name...">
@@ -138,7 +138,6 @@ export default {
       const userId = localStorage.getItem('userId')
       try {
         const response = await Api.get(`/v1/users/${userId}/decks/${this.deckId}`)
-        console.log(response.data)
         this.links = response.data._links
       } catch (error) {
         console.error('Failed to get specific deck:', error)
@@ -161,10 +160,10 @@ export default {
         console.error('Failed to edit the deck: ', error)
       }
     },
-    async deleteDeck() {
+    async deleteDeck(deck) {
       try {
         const userId = localStorage.getItem('userId')
-        await Api.delete(`/v1/users/${userId}/decks/${this.deckId}`)
+        await Api.delete(`/v1/users/${userId}/decks/${deck._id}`)
         this.getAllDecks()
       } catch (error) {
         console.error('Failed to delete deck: ', error)
