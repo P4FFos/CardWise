@@ -79,6 +79,7 @@ export default {
 <style scoped>
   .achievementsContainer, .go-back {
       -moz-osx-font-smoothing: grayscale;
+    position: fixed;
   }
 
   h1 {
@@ -94,6 +95,7 @@ export default {
     width: 100%;
     flex-direction: column;
     min-height: 100vh;
+    position: fixed;
   }
 
   .achievementsPage {
@@ -147,10 +149,10 @@ export default {
     }
 
   .goToMain{
-    font-size: 24px;
+    font-size: 30px;
     font-weight: 600;
-    color: #363529;
-    margin: 1.5% 3% 1% 4%;
+    color: #6A6A6A;
+    margin: 1.5% 3% 1% 3%;
     text-align: left;
   }
 

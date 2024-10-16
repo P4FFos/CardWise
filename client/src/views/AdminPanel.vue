@@ -92,6 +92,7 @@ export default {
 
   .adminContainer {
     display: flex;
+    position: fixed;
     justify-content: center;
     width: 100%;
     flex-direction: column;

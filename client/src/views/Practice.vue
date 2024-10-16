@@ -136,9 +136,10 @@ h1 {
 
 .goToDeck{
   font-size: 30px;
+  font-weight: 600;
   color: #6A6A6A;
-  margin: 1% 0 0 1%;
-  text-align: right;
+  margin: 1% 0 0 2%;
+  text-align: left;
 }
 
 .practiceContainer {
@@ -206,7 +207,7 @@ h1 {
 @media (max-width: 768px) {
   .goToDeck{
     font-size: 30px;
-    margin-left: 5px;
+    margin-right: 15px;
     color: #6A6A6A;
   }
 
