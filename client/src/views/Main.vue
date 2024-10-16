@@ -51,11 +51,11 @@
                 <p v-if="deck.cards.length > 0">Cards: {{ deck.cards.length }}</p>
                 <p v-else>No cards in the deck</p>
               </router-link>
-              <div class="changeCard">
+              <div v-if="editDeckId !== deck._id" class="changeCard">
               <button @click="toggleEditDeck(deck)">Edit Deck</button>
               <button @click="deleteDeck(deck)">Delete Deck</button>
               </div>
-              <div v-if="deckId === deck._id">
+              <div class="submitEditDeck" v-if="deckId === deck._id">
                 <input type="text" v-model="editDeckName" placeholder="Enter new name...">
                 <button @click="saveNewDeckName(deck)">Submit</button>
               </div>
@@ -154,6 +154,7 @@ export default {
     },
     toggleEditDeck(deck) {
       this.deckId = deck._id
+      this.editDeckId = deck._id
     },
     toggleNavBar() {
       if (this.isSmallScreen) {
@@ -178,6 +179,7 @@ export default {
         })
         this.editDeckName = ''
         this.deckId = null
+        this.editDeckId = null
         this.getAllDecks()
       } catch (error) {
         console.error('Failed to edit the deck: ', error)
@@ -297,6 +299,13 @@ export default {
     align-items: center;
     margin-top: 40px;
   }
+
+  .submitEditDeck {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
 
   .createDeckContainer{
     display: flex;
