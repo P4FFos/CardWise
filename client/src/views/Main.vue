@@ -4,21 +4,23 @@
       <div class="hamburgerMenu" v-if="isSmallScreen" @click="toggleNavBar">
         <img src="../assets/icons/hamburgerIcon.svg" alt="">
       </div>
-      <div :class="['sideNavBar', { 'sideNavBar-visible': isNavVisible, 'sideNavBar-hidden': isSmallScreen && !isNavVisible }]" v-if="isNavVisible || !isSmallScreen">
+      <div
+        :class="['sideNavBar', { 'sideNavBar-visible': isNavVisible, 'sideNavBar-hidden': isSmallScreen && !isNavVisible }]"
+        v-if="isNavVisible || !isSmallScreen">
         <div class="cardWise">
-          <img  class="mainLogo" src="../assets/logos/mainLogo.svg" alt="">
-          <p>CardWise</p>
+          <img class="mainLogo" src="../assets/logos/mainLogo.svg" alt="">
+          <p class="sideBarText">CardWise</p>
         </div>
         <div class="userProfileRoute">
           <img id="userProfileIcon" src="../assets/icons/userProfileIcon.svg" alt="">
-          <button @click="openUserProfile"><p><b>User Profile</b></p></button>
+          <button @click="openUserProfile"><p class="sideBarText">User Profile</p></button>
         </div>
         <div class="achievementsRoute">
           <img id="achievementsIcon" src="../assets/icons/achievementIcon.svg" alt="">
-          <button @click="openAchievements"><p><b>Achievements</b></p></button>
+          <button @click="openAchievements"><p class="sideBarText">Achievements</p></button>
         </div>
         <div class="logoutButton">
-          <button @click="logout"><p><b>Logout</b></p></button>
+          <button @click="logout"><p class="logoutButton">Logout</p></button>
         </div>
       </div>
       <div class="contentContainer" :class="{ 'hiddenContent': isSmallScreen && isNavVisible }">
@@ -26,7 +28,7 @@
           <div class="createDeckContainer">
             <label for="deckName">New deck name:</label>
             <input type="text" id="deckName" v-model="newDeckName" placeholder="Enter deck name">
-            <button @click="addNewDeck">Add new deck</button>
+            <button class="addNewDeckButton" @click="addNewDeck">Add new deck</button>
           </div>
           <div class="filterDecks">
             <label for="sortField">Sort by:</label>
@@ -41,43 +43,37 @@
             </select>
           </div>
           <div id="deleteAllDecksButton">
-            <button @click="deleteAllDecks">Delete all decks</button>
+            <button class="deleteAllDecksButton" @click="deleteAllDecks">Delete all decks</button>
           </div>
         </div>
-          <div v-if="deckInfo" class="allDecks">
-            <li class="deck" v-for="deck in deckInfo" :key="deck._id" @contextmenu.prevent="showContextMenu($event, deck._id)">
-              <router-link :to="{ name: 'deck', params: { deckId: deck._id } }">
-                <p id="deckTitle">{{ deck.name }}</p>
-                <p v-if="deck.cards.length > 0">Cards: {{ deck.cards.length }}</p>
-                <p v-else>No cards in the deck</p>
-              </router-link>
-              <div v-if="editDeckId !== deck._id" class="changeCard">
-              <button @click="toggleEditDeck(deck)">Edit Deck</button>
-              <button @click="deleteDeck(deck)">Delete Deck</button>
-              </div>
-              <div class="submitEditDeck" v-if="deckId === deck._id">
-                <input type="text" v-model="editDeckName" placeholder="Enter new name...">
-                <button @click="saveNewDeckName(deck)">Submit</button>
-              </div>
-            </li>
-          </div>
-          <context-menu v-if="showMenu"
-          :deckId="selectedDeckId"
-          :style="{ top: menuPosition.y + 'px', left: menuPosition.x + 'px' , position: 'absolute' }">
-        </context-menu>
+        <div v-if="deckInfo" class="allDecks">
+          <li class="deck" v-for="deck in deckInfo" :key="deck._id"
+              @contextmenu.prevent="showContextMenu($event, deck._id)">
+            <router-link style="text-decoration: none" :to="{ name: 'deck', params: { deckId: deck._id } }">
+              <p id="deckTitle">{{ deck.name }}</p>
+              <p v-if="deck.cards.length > 0">Cards: {{ deck.cards.length }}</p>
+              <p v-else>No cards in the deck</p>
+            </router-link>
+            <div v-if="editDeckId !== deck._id" class="changeCard">
+              <button class="editAndDeleteButtons" @click="toggleEditDeck(deck)">Edit Deck</button>
+              <button class="editAndDeleteButtons" @click="deleteDeck(deck)">Delete Deck</button>
+            </div>
+            <div class="submitEditDeck" v-if="deckId === deck._id">
+              <input class="newDeckNameField" type="text" v-model="editDeckName" placeholder="Enter new name...">
+              <button @click="saveNewDeckName(deck)">Submit</button>
+            </div>
+          </li>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ContextMenu from '@/components/ContextMenu.vue'
 import { Api } from '@/Api.js'
 
 export default {
-  components: {
-    'context-menu': ContextMenu
-  },
+  components: {},
   data() {
     return {
       deckId: '',
@@ -92,8 +88,7 @@ export default {
       showMenu: false,
       isSmallScreen: false,
       isNavVisible: false,
-      links: [],
-      menuPosition: { x: 0, y: 0 }
+      links: []
     }
   },
   methods: {
@@ -255,222 +250,249 @@ export default {
 
 <style scoped>
 
-  .mainPage {
-    position: fixed;
-    display: flex;
-    flex-direction: row;
-    width: 100vw;
-    height: 100vh;
+.editAndDeleteButtons {
+  width: 100px;
+  height: 30px;
+}
 
+.addNewDeckButton, .deleteAllDecksButton {
+  width: 150px;
+  height: 35px;
+}
+
+select {
+  background: #DEDBCC;
+  border-radius: 5px;
+  border: 2px solid #6A6A6A;
+  height: 30px;
+  width: 120px;
+  color: #6A6A6A;
+}
+
+.changeCard {
+  margin-bottom: 10px;
+}
+
+.newDeckNameField {
+  width: 60%;
+  margin-left: 7%;
+}
+
+.mainPage {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+
+}
+
+.hamburgerMenu {
+  display: none;
+}
+
+.cardWise, .userProfileRoute, .achievementsRoute {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  width: 90%;
+  margin-bottom: 30px;
+  gap: 15px;
+}
+
+.sideBarText {
+  font-size: x-large;
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.mainLogo {
+  width: 20%;
+  margin: 0 2% 0 0;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  height: 100vh;
+}
+
+.deckOperationsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 40px;
+  align-self: center;
+  gap: 10px;
+}
+
+.submitEditDeck {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.createDeckContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.sideNavBar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 20%;
+  height: 100vh;
+  border-right: 3px solid #6A6A6A;
+  gap: 10px;
+}
+
+.sideNavBar button {
+  background: none;
+  align-self: center;
+}
+
+.sideNavBar button p {
+  color: #6A6A6A;
+  font-size: x-large;
+}
+
+.logoutButton {
+  align-self: center;
+  text-align: center;
+  width: 100%;
+  font-weight: 600;
+}
+
+#userProfileIcon {
+  width: 20%;
+}
+
+#achievementsIcon {
+  width: 20%;
+}
+
+#deleteAllDecksButton {
+  align-self: flex-end;
+  margin: 20px;
+}
+
+.allDecks {
+  display: grid;
+  align-self: center;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  justify-items: center;
+  align-items: center;
+  overflow-y: auto;
+  flex-grow: 1;
+  width: 70%;
+  max-height: 500px;
+  border-style: none;
+  margin: 25px;
+  padding: 10px;
+}
+
+.deck {
+  background-color: #6A6A6A;
+  list-style: none;
+  min-width: 250px;
+  max-width: 200px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  border-radius: 15px;
+}
+
+.filterDecks {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.deck p {
+  color: white;
+}
+
+label {
+  font-size: large;
+}
+
+#deckTitle {
+  font-size: xx-large;
+}
+
+@media (max-width: 768px) {
+
+  label {
+    font-size: large;
   }
 
-  .hamburgerMenu {
+  .hiddenContent {
     display: none;
   }
 
-  .cardWise {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 3em;
-  }
-
-  .cardWise p {
-    font-size: xx-large;
-  }
-
-  .mainLogo {
-    margin: 0% 1% 1% 2.3%;
-    width: 50%;
-  }
-
   .contentContainer {
-    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .createDeckContainer {
     flex-direction: column;
-    width: 80vw;
-    height: 100vh;
   }
 
-  .deckOperationsContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 40px;
+  .hamburgerMenu {
+    display: block;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
   }
 
-  .submitEditDeck {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-
-  .createDeckContainer{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .deckOperationsContainer, .allDecks {
-    width: 80vw;
+  .hamburgerMenu img {
+    width: 10%;
   }
 
   .sideNavBar {
-    display: flex;
-    flex-direction: column;
+    position: fixed;
     align-items: center;
     justify-content: center;
-    width: 20%;
+    width: 100vw;
     height: 100vh;
-    border-right: 3px solid #6A6A6A;
-    gap: 10px;
+    z-index: 999;
   }
-
-  .sideNavBar button {
-    background: none;
-    align-self: center;
-  }
-  .sideNavBar button p {
-    color: #6A6A6A;
-    font-size: x-large;
-  }
-
-  .userProfileRoute {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 15px;
-    margin-left: 20px;
-  }
-
-  .achievementsRoute {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-  }
-
-  .logoutButton {
-    align-self: center;
-  }
-
-  #userProfileIcon {
-    width: 20%;
-  }
-
-  #achievementsIcon {
-    width: 30%;
-  }
-
-  #deleteAllDecksButton {
-    align-self: flex-end;
-    margin: 20px;
-
-  }
-
-    .allDecks {
-    display: grid;
-    align-self: center;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 20px;
-    justify-items: center;
-    align-items: center;
-    overflow-y: auto;
-    flex-grow: 1;
-    width: 60vw;
-    max-height: 460px;
-    border-style: solid;
-    border-width: 2px;
-    border-radius: 10px;
-    margin: 25px;
-    padding: 10px;
-  }
-
-  .deck {
-    background-color: #6A6A6A;
-    list-style: none;
-    min-width: 250px;
-    max-width: 200px;
-    height: 150px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    text-align: center;
-    border-radius: 5%;
-  }
-
-  .deck p {
-    color: white;
-  }
-
-  #deckTitle {
-    font-size: xx-large;
-  }
-  @media (max-width: 768px) {
-
-    .hiddenContent {
-      display: none;
-    }
-
-    .contentContainer {
-      align-items: center;
-      width: 100vw;
-    }
-
-    .createDeckContainer {
-      flex-direction: column;
-    }
-
-    .hamburgerMenu {
-      display: block;
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      z-index: 1000;
-    }
-
-    .hamburgerMenu img {
-      width: 10%;
-    }
-
-    .sideNavBar {
-      position: fixed;
-      align-items: center;
-      justify-content: center;
-      width: 100vw;
-      height: 100vh;
-      z-index: 999;
-    }
 
   .userProfileRoute {
     margin-left: 50px;
   }
 
-  .achievementsRoute {
-    margin-left: 25px;
+  .deckOperationsContainer {
+    margin-top: 70px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
-    .deckOperationsContainer {
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .filterDecks {
-      font-size: smaller;
-    }
-
-    .allDecks {
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    }
-
-    #deleteAllDecksButton {
-      align-self: center;
-      margin: 20px;
-    }
+  .filterDecks {
+    font-size: smaller;
   }
+
+  .allDecks {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  #deleteAllDecksButton {
+    align-self: center;
+  }
+}
 
 </style>
