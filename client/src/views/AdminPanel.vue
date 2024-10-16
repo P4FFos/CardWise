@@ -1,19 +1,22 @@
 <template>
-    <div>
-      <h1>Admin Panel</h1>
-      <div class="panel">
-        <h2>Users</h2>
-        <div id="list">
-          <div v-for="user in users"
-              :key="user._id"
-              class="container">
-              <h2>User: {{ user.username }}</h2>
-              <p>Password: {{ user.password }}</p>
-              <button @click="deleteUser(user._id)" class="button">🗑️ Delete</button>
+    <div class="adminContainer">
+      <b-container class="adminPage">
+      <h1 class="fontForTopText">Admin Panel</h1>
+          <h2 class="fontForListName">Users:</h2>
+          <div id="users-list">
+            <div v-for="user in users"
+                :key="user._id"
+                class="user-container">
+                <div id="userControls">
+                    <h2 class="fontForUsersName">User: {{ user.username }}</h2>
+                    <button @click="deleteUser(user._id)" class="delete-user-button">🗑️ Delete</button>
+                </div>
+                <p class="fontForUsersDescription">Password: {{ user.password }}</p>
+                <p class="fontForUsersDescription">Streak: {{ user.streak }} 🔥</p>
+            </div>
           </div>
-        </div>
-      </div>
-      <button @click="deleteAllUsers" class="button">🗑️ Delete All Users</button>
+        <button @click="deleteAllUsers" class="delete-all-users-button">🗑️ Delete All Users</button>
+      </b-container>
     </div>
   </template>
 
@@ -46,18 +49,6 @@ export default {
         alert('Failed to fetch users: ' + error.message)
       }
     },
-    async fetchAchievements() {
-      const response = await Api.get('/v1/achievements')
-      try {
-        if (response.data && Array.isArray(response.data.achievements)) {
-          this.achievements = response.data.achievements
-        } else {
-          console.log('No achievements found')
-        }
-      } catch (error) {
-        alert('Failed to fetch achievements: ' + error.message)
-      }
-    },
     async deleteUser(userId) {
       try {
         await Api.delete(`/v1/users/${userId}`)
@@ -80,13 +71,43 @@ export default {
   },
   mounted() {
     this.fetchUsers()
-    this.fetchAchievements()
   }
 }
 </script>
 
-<style>
-  #list {
+<style scoped>
+  h1 {
+    font-family: 'InstrumentSerif', serif;
+    font-size: 96px;
+    color: #6A6A6A;
+    margin-bottom: 20px;
+  }
+
+  .fontForListName {
+    font-weight: bold;
+    font-size: 32px;
+    color: #6A6A6A;
+    margin-bottom: 20px;
+  }
+
+  .adminContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .adminPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-style: none;
+    background-color: #DEDBCC;
+    width: 100%;
+  }
+
+  #users-list {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -95,34 +116,50 @@ export default {
     width: 50%;
   }
 
-  .container {
+  .user-container {
     border: 1px solid #ccc;
     padding: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
-    border-radius: 15px;
+    border-radius: 30px;
     background-color: #6A6A6A;
   }
 
-  .container h2 {
-    margin: 0;
-    font-size: 1.5em;
+  #userControls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
 
-  .container p {
-    margin: 5px 0;
-  }
+  .user-container h2,
+    .fontForUsersName {
+        font-weight: bold;
+        color: white;
+        margin: 0;
+        font-size: 1.5em;
+    }
 
-  .panel {
-    border: 2px solid #6c6c6c;
-    padding: 0px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-  }
+  .user-container p,
+    .fontForUsersDescription {
+        font-size: large;
+        color: white;
+        margin: 5px 0;
+    }
 
-  .button {
+  .delete-all-users-button {
+    font-weight: bold;
+    padding: 1em;
     margin-left: 5px;
     margin-right: 5px;
+    background-color: #EA9944;
+  }
+
+  .delete-user-button {
+    font-weight: bold;
+    padding: 0.5em;
+    margin-left: 5px;
+    margin-right: 5px;
+    background-color: #EA9944;
   }
 </style>

@@ -6,7 +6,7 @@
       <div id="achievements-list">
         <div v-for="achievement in this.achievements"
            :key="achievement._id"
-           :class="{'achievement-completed': achievement.completed, 'container': true}">
+           :class="{'achievement-completed': achievement.completed, 'achievement': true}">
           <h2 class="fontForAchievementsName">Achievement: {{ achievement.name }}</h2>
           <p class="fontForAchievementsText"><strong>Condition: {{ achievement.description }} </strong></p>
         </div>
@@ -120,7 +120,7 @@ export default {
     padding: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
-    border-radius: 30px;
+    border-radius: 15px;
     background-color: #6A6A6A;
   }
 
@@ -156,7 +156,7 @@ export default {
   }
 
 /* Responsive Styling */
-@media (max-width: 768px) {
+@media (max-width: 995px) {
     h1 {
       font-size: 64px;
     }
