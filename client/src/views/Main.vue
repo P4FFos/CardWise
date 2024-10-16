@@ -1,7 +1,14 @@
 <template>
   <div>
     <div class="mainPage">
-      <div class="sideNavBar">
+      <div class="hamburgerMenu" v-if="isSmallScreen" @click="toggleNavBar">
+        <img src="../assets/icons/hamburgerIcon.svg" alt="">
+      </div>
+      <div :class="['sideNavBar', { 'sideNavBar-visible': isNavVisible, 'sideNavBar-hidden': isSmallScreen && !isNavVisible }]" v-if="isNavVisible || !isSmallScreen">
+        <div class="cardWise">
+          <img  class="mainLogo" src="../assets/logos/mainLogo.svg" alt="">
+          <p>CardWise</p>
+        </div>
         <div class="userProfileRoute">
           <img id="userProfileIcon" src="../assets/icons/userProfileIcon.svg" alt="">
           <button @click="openUserProfile"><p><b>User Profile</b></p></button>
@@ -14,7 +21,7 @@
           <button @click="logout"><p><b>Logout</b></p></button>
         </div>
       </div>
-      <div class="contentContainer">
+      <div class="contentContainer" :class="{ 'hiddenContent': isSmallScreen && isNavVisible }">
         <div class="deckOperationsContainer">
           <div class="createDeckContainer">
             <label for="deckName">New deck name:</label>
@@ -48,10 +55,10 @@
               <button @click="toggleEditDeck(deck)">Edit Deck</button>
               <button @click="deleteDeck(deck)">Delete Deck</button>
               </div>
-              <div v-if="this.deckId === deck._id">
-              <input type="text" v-model="editDeckName" placeholder="Enter new name...">
-              <button @click="saveNewDeckName(deck)">Submit</button>
-            </div>
+              <div v-if="deckId === deck._id">
+                <input type="text" v-model="editDeckName" placeholder="Enter new name...">
+                <button @click="saveNewDeckName(deck)">Submit</button>
+              </div>
             </li>
           </div>
           <context-menu v-if="showMenu"
@@ -83,6 +90,8 @@ export default {
       sortOrder: 'asc',
       selectedDeckId: null,
       showMenu: false,
+      isSmallScreen: false,
+      isNavVisible: false,
       links: [],
       menuPosition: { x: 0, y: 0 }
     }
@@ -143,8 +152,21 @@ export default {
         console.error('Failed to get specific deck:', error)
       }
     },
-    async toggleEditDeck(deck) {
+    toggleEditDeck(deck) {
       this.deckId = deck._id
+    },
+    toggleNavBar() {
+      if (this.isSmallScreen) {
+        this.isNavVisible = !this.isNavVisible
+      }
+    },
+    handleResize() {
+      this.isSmallScreen = window.innerWidth <= 768
+      if (!this.isSmallScreen) {
+        this.isNavVisible = true
+      } else {
+        this.isNavVisible = false
+      }
     },
     async saveNewDeckName() {
       await this.getSpecDeck()
@@ -155,6 +177,7 @@ export default {
           name: this.editDeckName
         })
         this.editDeckName = ''
+        this.deckId = null
         this.getAllDecks()
       } catch (error) {
         console.error('Failed to edit the deck: ', error)
@@ -219,6 +242,11 @@ export default {
   },
   mounted() {
     this.getAllDecks()
+    this.handleResize()
+    window.addEventListener('resize', this.handleResize)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.handleResize)
   }
 }
 </script>
@@ -234,6 +262,27 @@ export default {
 
   }
 
+  .hamburgerMenu {
+    display: none;
+  }
+
+  .cardWise {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3em;
+  }
+
+  .cardWise p {
+    font-size: xx-large;
+  }
+
+  .mainLogo {
+    margin: 0% 1% 1% 2.3%;
+    width: 50%;
+  }
+
   .contentContainer {
     display: flex;
     flex-direction: column;
@@ -246,6 +295,7 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    margin-top: 40px;
   }
 
   .createDeckContainer{
@@ -267,7 +317,7 @@ export default {
     width: 20%;
     height: 100vh;
     border-right: 3px solid #6A6A6A;
-    gap: 20px;
+    gap: 10px;
   }
 
   .sideNavBar button {
@@ -311,36 +361,36 @@ export default {
 
   }
 
-  .allDecks {
-  display: grid;
-  align-self: center;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 20px;
-  justify-items: center;
-  align-items: center;
-  overflow-y: auto;
-  flex-grow: 1;
-  width: 60vw;
-  max-height: 460px;
-  border-style: solid;
-  border-width: 2px;
-  border-radius: 10px;
-  margin: 25px;
-  padding: 10px;
-}
+    .allDecks {
+    display: grid;
+    align-self: center;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+    justify-items: center;
+    align-items: center;
+    overflow-y: auto;
+    flex-grow: 1;
+    width: 60vw;
+    max-height: 460px;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    margin: 25px;
+    padding: 10px;
+  }
 
-.deck {
-  background-color: #6A6A6A;
-  list-style: none;
-  min-width: 250px;
-  max-width: 200px;
-  height: 150px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  text-align: center;
-  border-radius: 5%;
-}
+  .deck {
+    background-color: #6A6A6A;
+    list-style: none;
+    min-width: 250px;
+    max-width: 200px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    border-radius: 5%;
+  }
 
   .deck p {
     color: white;
@@ -350,18 +400,48 @@ export default {
     font-size: xx-large;
   }
   @media (max-width: 768px) {
+
+    .hiddenContent {
+      display: none;
+    }
+
     .contentContainer {
-      width: 100vw;
       align-items: center;
+      width: 100vw;
     }
 
     .createDeckContainer {
       flex-direction: column;
     }
-    .sideNavBar {
-      display: none;
-      width: 0%;
+
+    .hamburgerMenu {
+      display: block;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
     }
+
+    .hamburgerMenu img {
+      width: 10%;
+    }
+
+    .sideNavBar {
+      position: fixed;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      height: 100vh;
+      z-index: 999;
+    }
+
+  .userProfileRoute {
+    margin-left: 50px;
+  }
+
+  .achievementsRoute {
+    margin-left: 25px;
+  }
 
     .deckOperationsContainer {
       flex-direction: column;
@@ -377,9 +457,11 @@ export default {
     .allDecks {
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
+
     #deleteAllDecksButton {
       align-self: center;
       margin: 20px;
     }
   }
+
 </style>
