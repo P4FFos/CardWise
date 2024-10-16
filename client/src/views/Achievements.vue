@@ -1,14 +1,17 @@
 <template>
-  <div>
-    <h1>Achievements</h1>
-    <div id="achievements-list">
-      <div v-for="achievement in this.achievements"
+  <div class="achievementsContainer">
+    <p class="goToMain" @click="goToMain"> Go back</p>
+    <b-container class="achievementsPage">
+    <h1 class="fontForTopText">Achievements</h1>
+      <div id="achievements-list">
+        <div v-for="achievement in this.achievements"
            :key="achievement._id"
            :class="{'achievement-completed': achievement.completed, 'container': true}">
-          <h2>Achievement: {{ achievement.name }}</h2>
-          <p><strong>Condition: </strong> {{ achievement.description }} </p>
+          <h2 class="fontForAchievementsName">Achievement: {{ achievement.name }}</h2>
+          <p class="fontForAchievementsText"><strong>Condition: {{ achievement.description }} </strong></p>
+        </div>
       </div>
-    </div>
+    </b-container>
   </div>
 </template>
 
@@ -63,6 +66,9 @@ export default {
       } catch (error) {
         alert('Failed to complete achievement: ' + error.message)
       }
+    },
+    goToMain() {
+      this.$router.push({ name: 'main' })
     }
   },
   mounted() {
@@ -71,7 +77,35 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  .achievementsContainer, .go-back {
+      -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1 {
+    font-family: 'InstrumentSerif', serif;
+    font-size: 96px;
+    color: #6A6A6A;
+    margin-bottom: 20px;
+  }
+
+  .achievementsContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .achievementsPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-style: none;
+    background-color: #DEDBCC;
+    width: 100%;
+  }
+
   #achievements-list {
     display: block;
     margin-left: auto;
@@ -86,8 +120,8 @@ export default {
     padding: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
-    border-radius: 10px;
-    background-color: #f9f9f9;
+    border-radius: 30px;
+    background-color: #6A6A6A;
   }
 
   .achievement-completed {
@@ -95,16 +129,63 @@ export default {
     padding: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
-    border-radius: 10px;
-    background-color: #b2f2b2;
+    border-radius: 15px;
+    background-color: #68bd76;
   }
 
-  .achievement h2 {
-    margin: 0;
-    font-size: 1.5em;
+  .achievement h2,
+    .fontForAchievementsName{
+        font-weight: bold;
+        color: white;
+        margin: 0;
+        font-size: 1.5em;
+    }
+
+  .achievement p,
+    .fontForAchievementsText {
+        font-size: large;
+        color: white;
+    }
+
+  .goToMain{
+    font-size: 24px;
+    font-weight: 600;
+    color: #363529;
+    margin: 1.5% 3% 1% 4%;
+    text-align: left;
   }
 
-  .achievement p {
-    margin: 5px 0;
+/* Responsive Styling */
+@media (max-width: 768px) {
+    h1 {
+      font-size: 64px;
+    }
+
+    .achievementsPage {
+      width: 100%;
+    }
+
+    #achievements-list {
+      width: 100%;
+      padding: 0 10px;
+    }
+
+    .achievement,
+    .achievement-completed {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .fontForAchievementsText {
+      font-size: medium;
+    }
+
+    .fontForAchievementsName {
+      font-size: large;
+    }
+
+    .goToMain {
+        display: none;
+    }
   }
 </style>
