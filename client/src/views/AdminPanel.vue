@@ -100,17 +100,8 @@ export default {
     padding: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-  }
-
-  .achievement-completed {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    background-color: #b2f2b2;
+    border-radius: 15px;
+    background-color: #6A6A6A;
   }
 
   .container h2 {
