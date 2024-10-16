@@ -162,4 +162,28 @@ export default {
     margin-right: 5px;
     background-color: #EA9944;
   }
+
+  /* Responsive Styling */
+@media (max-width: 995px) {
+    h1 {
+      font-size: 64px;
+    }
+
+    .adminPage {
+      width: 100%;
+    }
+
+    #users-list {
+      width: 100%;
+      padding: 0 10px;
+    }
+
+    .fontForUsersDescription {
+      font-size: medium;
+    }
+
+    .fontForUsersName {
+      font-size: large;
+    }
+}
 </style>
