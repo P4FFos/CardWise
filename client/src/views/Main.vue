@@ -47,8 +47,7 @@
           </div>
         </div>
         <div v-if="deckInfo" class="allDecks">
-          <li class="deck" v-for="deck in deckInfo" :key="deck._id"
-              @contextmenu.prevent="showContextMenu($event, deck._id)">
+          <li class="deck" v-for="deck in deckInfo" :key="deck._id">
             <router-link style="text-decoration: none" :to="{ name: 'deck', params: { deckId: deck._id } }">
               <p id="deckTitle">{{ deck.name }}</p>
               <p v-if="deck.cards.length > 0">Cards: {{ deck.cards.length }}</p>
@@ -85,7 +84,6 @@ export default {
       sortField: 'name',
       sortOrder: 'asc',
       selectedDeckId: null,
-      showMenu: false,
       isSmallScreen: false,
       isNavVisible: false,
       links: []
@@ -144,7 +142,7 @@ export default {
         const response = await Api.get(`/v1/users/${userId}/decks/${this.deckId}`)
         this.links = response.data._links
       } catch (error) {
-        console.error('Failed to get specific deck:', error)
+        alert('Failed to get specific deck')
       }
     },
     toggleEditDeck(deck) {
@@ -177,7 +175,7 @@ export default {
         this.editDeckId = null
         this.getAllDecks()
       } catch (error) {
-        console.error('Failed to edit the deck: ', error)
+        alert('Failed to edit the deck')
       }
     },
     async deleteDeck(deck) {
@@ -186,7 +184,7 @@ export default {
         await Api.delete(`/v1/users/${userId}/decks/${deck._id}`)
         this.getAllDecks()
       } catch (error) {
-        console.error('Failed to delete deck: ', error)
+        alert('Failed to delete deck')
       }
     },
     // sort all decks based on the sort field and order
@@ -204,24 +202,6 @@ export default {
       } catch (error) {
         alert('Failed to sort decks')
       }
-    },
-    showContextMenu(event, deckId) {
-      this.selectedDeckId = deckId
-      this.menuPosition.x = event.clientX
-      this.menuPosition.y = event.clientY
-      this.showMenu = true
-      document.addEventListener('click', this.handleClickOutside)
-    },
-    handleClickOutside() {
-      const contextMenu = this.$el.querySelector('.contextMenu')
-      if (contextMenu && !contextMenu.contains(event.target)) {
-        this.hideContextMenu()
-      }
-    },
-    hideContextMenu() {
-      this.showMenu = false
-
-      document.removeEventListener('click', this.handleClickOutside)
     },
     // open achievements page
     openAchievements() {
@@ -392,7 +372,7 @@ select {
   align-items: center;
   overflow-y: auto;
   flex-grow: 1;
-  width: 70%;
+  width: 71%;
   max-height: 500px;
   border-style: none;
   margin: 25px;
