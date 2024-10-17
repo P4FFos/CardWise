@@ -1,10 +1,11 @@
 <template>
   <div class="achievementsContainer">
     <p class="goToMain" @click="goToMain"> Go back</p>
+    <img class="goBackIcon" @click="goToMain" src="../assets/icons/backButton.svg" alt="Logo"/>
     <b-container class="achievementsPage">
     <h1 class="fontForTopText">Achievements</h1>
       <div id="achievements-list">
-        <div v-for="achievement in this.achievements"
+        <div class="achievement" v-for="achievement in this.achievements"
            :key="achievement._id"
            :class="{'achievement-completed': achievement.completed, 'achievement': true}">
           <h2 class="fontForAchievementsName">Achievement: {{ achievement.name }}</h2>
@@ -46,26 +47,6 @@ export default {
         alert('Failed to fetch achievements: ' + error.message)
       }
     },
-    async completeAchievement(achievementId) {
-      const userID = localStorage.getItem('userId')
-      if (!userID) {
-        alert('Failed to fetch user')
-        return
-      }
-      try {
-        await Api.put(`/v1/users/${userID}/achievements/${achievementId}`, {
-          completed: true
-        })
-        alert(`Achievement ${achievementId} completed`)
-        const achievement = this.achievements.find(a => a._id === achievementId)
-        if (achievement) {
-          achievement.completed = true
-        }
-        alert('achievement completed')
-      } catch (error) {
-        alert('Failed to complete achievement: ' + error.message)
-      }
-    },
     goToMain() {
       this.$router.push({ name: 'main' })
     }
@@ -77,9 +58,8 @@ export default {
 </script>
 
 <style scoped>
-  .achievementsContainer, .go-back {
-      -moz-osx-font-smoothing: grayscale;
-    position: fixed;
+  .goBackIcon{
+     display: none;
   }
 
   h1 {
@@ -87,6 +67,10 @@ export default {
     font-size: 96px;
     color: #6A6A6A;
     margin-bottom: 20px;
+  }
+
+  .achievement{
+    width: 95%;
   }
 
   .achievementsContainer {
@@ -114,6 +98,8 @@ export default {
     margin-top: 20px;
     gap: 20px;
     width: 50%;
+    overflow-y: auto;
+    max-height: 520px;
   }
 
   .achievement {
@@ -166,8 +152,17 @@ export default {
       width: 100%;
     }
 
+    .goBackIcon{
+       display: block;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 10%;
+    }
+
     #achievements-list {
       width: 100%;
+      max-height: 640px;
       padding: 0 10px;
     }
 

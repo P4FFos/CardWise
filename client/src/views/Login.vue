@@ -79,7 +79,7 @@ export default {
       const currentDate = new Date()
       const lastStreakDate = new Date(user.lastStreakDate || 0)
 
-      const oneDay = 24 * 60 * 60 * 1000
+      const oneDay = 24
 
       this.streak = user.streak || 0
 

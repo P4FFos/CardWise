@@ -1,5 +1,6 @@
 <template>
   <div class="practiceContainer">
+    <img class="goBackIcon" @click="goToDeck" src="../assets/icons/backButton.svg" alt="Logo"/>
     <div class="backButtonContainer">
       <p class="goToDeck" @click="goToDeck"> Go back</p>
     </div>
@@ -126,6 +127,10 @@ export default {
 
 <style scoped>
 
+.goBackIcon{
+  display: none;
+}
+
 h1 {
   font-family: 'InstrumentSerif', serif;
   color: #6A6A6A;
@@ -206,6 +211,14 @@ h1 {
 @media (max-width: 768px) {
   .goToDeck{
     display: none;
+  }
+
+  .goBackIcon{
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 10%;
   }
 
   .backButtonContainer {

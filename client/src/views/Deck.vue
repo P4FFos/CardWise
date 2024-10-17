@@ -2,6 +2,7 @@
     <div class="deckWithCards">
       <div class="topLevelContainer">
         <img class="mainLogoDeck" @click="goToMain" src="../assets/logos/mainLogo.svg" alt="Logo"/>
+        <img class="goBackIcon" @click="goToMain" src="../assets/icons/backButton.svg" alt="Logo"/>
         <p class="goToMain" @click="goToMain"> Go back</p>
       </div>
       <hr class="thick-separator-deck-pc"/>
@@ -183,6 +184,10 @@ export default {
 
 <style scoped>
 
+.goBackIcon{
+  display: none;
+}
+
 .goToMain{
   font-size: 30px;
   color: #363529;
@@ -328,6 +333,14 @@ label {
     margin-top: 10px;
     width: 100px;
     height: 35px;
+  }
+
+  .goBackIcon{
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 10%;
   }
 
   .allCards {

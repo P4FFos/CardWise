@@ -19,8 +19,8 @@
           <img id="achievementsIcon" src="../assets/icons/achievementIcon.svg" alt="">
           <button @click="openAchievements"><p class="sideBarText">Achievements</p></button>
         </div>
-        <div class="logoutButton">
-          <button @click="logout"><p class="logoutButton">Logout</p></button>
+        <div class="logoutButtonDiv">
+          <button class="logoutButton" @click="logout">Logout</button>
         </div>
       </div>
       <div class="contentContainer" :class="{ 'hiddenContent': isSmallScreen && isNavVisible }">
@@ -353,10 +353,16 @@ select {
   font-size: x-large;
 }
 
-.logoutButton {
+.logoutButtonDiv {
   align-self: center;
   text-align: center;
   width: 100%;
+  font-weight: 600;
+}
+
+.logoutButton {
+  color: #363529;
+  font-size: 30px;
   font-weight: 600;
 }
 
@@ -477,7 +483,9 @@ label {
   }
 
   .allDecks {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(1, minmax(150px, 1fr));
+    justify-content: center;
+    align-self: center;
   }
 
   #deleteAllDecksButton {

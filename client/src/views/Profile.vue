@@ -2,7 +2,7 @@
     <div class="profile-container">
     <p class="goToMain" @click="goToMain"> Go back</p>
       <img class="faceLogo" src="../assets/logos/face-profile.svg" alt="Logo"/>
-
+      <img class="goBackIcon" @click="goToMain" src="../assets/icons/backButton.svg" alt="Logo"/>
       <div class="profile-content">
         <h1>{{ user.username }}</h1>
         <p class="fontForMainInfo"><strong>Streak</strong> {{ user.streak }} 🔥</p>
@@ -139,6 +139,10 @@ export default {
 </script>
 
 <style scoped>
+  .goBackIcon{
+    display: none;
+  }
+
   h1 {
     font-size: 64px;
     font-weight: bold;
@@ -256,6 +260,18 @@ export default {
   }
 
   @media (max-width: 500px) {
+    .goToMain{
+      display: none;
+    }
+
+    .goBackIcon{
+      display: block;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 10%;
+    }
+
     .profile-content {
       width: 100%;
       display: flex;
