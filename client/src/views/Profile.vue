@@ -1,42 +1,49 @@
 <template>
-  <div>
-    <h1>User Profile</h1>
-    <p>Username: {{ user.username }}</p>
-    <p>Email: {{ user.email }}</p>
-    <p>Last Login: {{ user.lastLoginDate }}</p>
-    <p>Registration Date: {{ user.registrationDate }}</p>
-    <p>Streak: {{ user.streak }}</p>
-    <div>
-      <form @submit.prevent="updateUsername">
-        <label for="username">New Username:</label>
-        <input type="text" id="username" v-model="newUsername" required>
-        <button type="submit">Update Username</button>
-      </form>
+    <div class="profile-container">
+    <p class="goToMain" @click="goToMain"> Go back</p>
+      <img class="faceLogo" src="../assets/logos/face-profile.svg" alt="Logo"/>
+
+      <div class="profile-content">
+        <h1>{{ user.username }}</h1>
+        <p class="fontForMainInfo"><strong>Streak</strong> {{ user.streak }} 🔥</p>
+
+        <h2 class="fontForHeadingText">Personal Details</h2>
+        <p class="fontForMainInfo"><strong>E-mail: </strong> {{ user.email }}</p>
+        <p class="fontForMainInfo"><strong>Last Login: </strong> {{ user.lastLoginDate }}</p>
+        <p class="fontForRegularText">Account was created on {{ user.registrationDate }}</p>
+
+        <h2 class="fontForHeadingText">Edit Profile</h2>
+        <div>
+          <form @submit.prevent="updateUsername">
+            <label for="username" class="fontForMainInfo">New Username:</label>
+            <input type="text" id="username" v-model="newUsername" required>
+            <button type="submit" class="button">Update Username</button>
+          </form>
+        </div>
+
+        <div>
+          <form @submit.prevent="updateEmail">
+            <label for="email" class="fontForMainInfo">New Email:</label>
+            <input type="email" id="email" v-model="newEmail" required>
+            <button type="submit" class="button">Update Email</button>
+          </form>
+        </div>
+
+        <div>
+          <form @submit.prevent="updatePassword">
+            <label for="newPassword" class="fontForMainInfo">New Password:</label>
+            <input type="password" id="newPassword" v-model="newPassword" required>
+            <button type="submit" class="button">Update Password</button>
+          </form>
+        </div>
+
+        <button @click="deleteAccount" class="delete-account-button">Delete Account</button>
+
+        <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+        <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
+      </div>
     </div>
-
-    <div>
-      <form @submit.prevent="updateEmail">
-        <label for="email">New Email:</label>
-        <input type="email" id="email" v-model="newEmail" required>
-        <button type="submit">Update Email</button>
-      </form>
-    </div>
-
-    <div>
-      <form @submit.prevent="updatePassword">
-        <label for="newPassword">New Password:</label>
-        <input type="password" id="newPassword" v-model="newPassword" required>
-        <button type="submit">Update Password</button>
-      </form>
-    </div>
-
-    <button @click="deleteAccount">Delete Account</button>
-    <button @click="backToMain">Main Page</button>
-
-    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-    <p v-if="successMessage" class="success">{{ successMessage }}</p>
-  </div>
-</template>
+  </template>
 
 <script>
 import { Api } from '@/Api.js'
@@ -68,7 +75,7 @@ export default {
         this.user = {
           ...response.data.user,
           lastLoginDate: new Date(response.data.user.lastLoginDate).toLocaleString(),
-          registrationDate: new Date(response.data.user.registrationDate).toLocaleString(),
+          registrationDate: new Date(response.data.user.registrationDate).toLocaleString()
         }
         this.links = response.data._links
         this.newEmail = this.user.email
@@ -123,7 +130,7 @@ export default {
         this.errorMessage = 'Failed to delete account'
       }
     },
-    backToMain() {
+    goToMain() {
       this.$router.push('/main')
     }
   },
@@ -133,6 +140,151 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  h1 {
+    font-size: 64px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
 
+  .profile-content h2,
+  fontForHeadingText {
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 1em;
+    font-size: 2em;
+  }
+
+  p, .fontForMainInfo {
+    color: #363529;
+  }
+
+  p, .fontForRegularText {
+    color: #6A6A6A;
+  }
+
+  .profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  .faceLogo {
+    max-height: 80%;
+    margin-right: 20%;
+  }
+
+  .profile-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 600px;
+    text-align: left;
+  }
+
+  .goToMain{
+    font-size: 30px;
+    font-weight: 600;
+    color: #363529;
+    margin: 1.5% 3% 1% 4%;
+    text-align: left;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  .delete-account-button {
+    font-weight: bold;
+    padding: 0.75em;
+    margin-left: 5px;
+    margin-right: 5px;
+    background-color: #EA9944;
+  }
+
+  .button {
+    padding: 0.5em;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  label {
+    margin-bottom: 5px;
+    margin-right: 20px;
+    font-weight: bold;
+  }
+
+  h2, p {
+    margin: 10px 0;
+  }
+
+  form {
+    margin-bottom: 20px;
+  }
+
+  button {
+    margin-right: 10px;
+  }
+
+  .error-message {
+    text-align: center;
+    color: #EA9944;
+  }
+
+  .success-message {
+    color: #009179;
+  }
+
+  @media (max-width: 1195px) {
+    .faceLogo {
+      display: none;
+    }
+  }
+
+  @media (max-width: 995px) {
+    .profile-content {
+      width: 100%;
+    }
+
+    .fontForMainInfo {
+      font-size: medium;
+    }
+
+    .fontForAchievementsName {
+      font-size: large;
+    }
+
+    .goToMain {
+        display: none;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .profile-content {
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    form {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    label {
+      margin-bottom: 5px;
+    }
+
+    input {
+      margin-bottom: 10px;
+      padding: 5px;
+      width: 100%;
+      max-width: 400px;
+    }
+  }
 </style>
