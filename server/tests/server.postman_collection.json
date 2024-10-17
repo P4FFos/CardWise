@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "b18f18c5-b236-463c-9240-9edb819dd01d",
+		"_postman_id": "acbb91f5-72f1-431f-9eb9-5595afaf8b93",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38095200"
+		"_exporter_id": "38409323"
 	},
 	"item": [
 		{
@@ -87,8 +87,8 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"username\", \"admin\");",
-							"pm.environment.set(\"password\", \"password\");",
+							"pm.environment.set(\"username\", \"admin1\");",
+							"pm.environment.set(\"password\", \"password1\");",
 							""
 						],
 						"type": "text/javascript",
@@ -112,12 +112,12 @@
 							"",
 							"pm.test(\"Response contains username\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.have.property(\"username\", \"admin\");",
+							"    pm.expect(jsonData).to.have.property(\"username\", \"admin1\");",
 							"});",
 							"",
 							"pm.test(\"Response contains password\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.have.property(\"password\", \"password\");",
+							"    pm.expect(jsonData).to.have.property(\"password\", \"password1\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1388,6 +1388,56 @@
 						"v1",
 						"users",
 						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Admin account has been deleted (200 OK)\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "DELETE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/api/v1/admins/{{adminID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"admins",
+						"{{adminID}}"
 					]
 				}
 			},
