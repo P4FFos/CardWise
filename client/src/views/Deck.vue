@@ -185,7 +185,7 @@ export default {
 
 .goToMain{
   font-size: 30px;
-  color: #6A6A6A;
+  color: #363529;
   font-weight: 600;
   margin: 1.5% 3% 1% 0;
   text-align: right;

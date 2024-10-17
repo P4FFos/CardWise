@@ -271,7 +271,7 @@ select {
   display: none;
 }
 
-.cardWise, .userProfileRoute, .achievementsRoute {
+.cardWise, .userProfileRoute {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -279,6 +279,16 @@ select {
   width: 90%;
   margin-bottom: 30px;
   gap: 15px;
+}
+
+.achievementsRoute{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  width: 95%;
+  margin-bottom: 30px;
+  gap: 5px;
 }
 
 .sideBarText {
@@ -355,7 +365,7 @@ select {
 }
 
 #achievementsIcon {
-  width: 20%;
+  width: 25%;
 }
 
 #deleteAllDecksButton {
@@ -372,8 +382,8 @@ select {
   align-items: center;
   overflow-y: auto;
   flex-grow: 1;
-  width: 71%;
-  max-height: 500px;
+  width: 90%;
+  max-height: 700px;
   border-style: none;
   margin: 25px;
   padding: 10px;
@@ -382,14 +392,13 @@ select {
 .deck {
   background-color: #6A6A6A;
   list-style: none;
-  min-width: 250px;
-  max-width: 200px;
-  height: 150px;
+  min-width: 300px;
+  height: 180px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   text-align: center;
-  border-radius: 15px;
+  border-radius: 20px;
 }
 
 .filterDecks {
@@ -410,7 +419,12 @@ label {
 #deckTitle {
   font-size: xx-large;
 }
-
+@media (min-width: 1920px){
+  .allDecks{
+    grid-template-columns: repeat(4, 1fr);
+    max-height: 800px;
+  }
+}
 @media (max-width: 768px) {
 
   label {
@@ -449,10 +463,6 @@ label {
     width: 100vw;
     height: 100vh;
     z-index: 999;
-  }
-
-  .userProfileRoute {
-    margin-left: 50px;
   }
 
   .deckOperationsContainer {

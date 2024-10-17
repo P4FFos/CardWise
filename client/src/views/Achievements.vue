@@ -151,7 +151,7 @@ export default {
   .goToMain{
     font-size: 30px;
     font-weight: 600;
-    color: #6A6A6A;
+    color: #363529;
     margin: 1.5% 3% 1% 3%;
     text-align: left;
   }

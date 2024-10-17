@@ -11,13 +11,11 @@
                 <p class="fontForPracticeText" v-if="!showExplanation"> {{ currentCard.content }}</p>
                 <p class="fontForPracticeText" :class="getTextClass" v-else>{{ currentCard.explanation }}</p>
                 <button  class="practiceButtons" v-if="!showExplanation" @click="showExplanation = true">
-                  <p class="fontForPracticeText">
                     Explanation
-                  </p>
                 </button>
                 <div class="difficultyButtonsBox" v-else>
-                  <button class="practiceButtons" @click="handleCard('easy')"><p>Easy</p></button>
-                  <button class="practiceButtons" @click="handleCard('hard')"><p>Hard</p></button>
+                  <button class="practiceButtons" @click="handleCard('easy')">Easy</button>
+                  <button class="practiceButtons" @click="handleCard('hard')">Hard</button>
                 </div>
               </b-col>
             </b-row>
@@ -137,7 +135,7 @@ h1 {
 .goToDeck{
   font-size: 30px;
   font-weight: 600;
-  color: #6A6A6A;
+  color: #363529;
   margin: 1% 0 0 2%;
   text-align: left;
 }
@@ -193,6 +191,7 @@ h1 {
 
 .practiceButtons {
   width: 6em;
+  height: 30px;
 }
 
 .practiceButtons p {
@@ -206,9 +205,7 @@ h1 {
 /* Responsive Styling */
 @media (max-width: 768px) {
   .goToDeck{
-    font-size: 30px;
-    margin-right: 15px;
-    color: #6A6A6A;
+    display: none;
   }
 
   .backButtonContainer {

@@ -251,12 +251,7 @@ export default {
       font-size: medium;
     }
 
-    .fontForAchievementsName {
-      font-size: large;
-    }
-
     .goToMain {
-        display: none;
     }
   }
 
