@@ -53,4 +53,20 @@ router.get('/api/v1/admins/:adminID', async function(req, res, next) {
     }
 });
 
+// delete admin
+router.delete('/api/v1/admins/:adminId', async function (req, res, next) {
+    var adminId = req.params.adminId;
+
+    try {
+        var deletedAdmin = await Admin.findById(adminId);
+        if (!deletedAdmin) {
+            return res.status(404).json({message: 'Admin not found'});
+        }
+        await Admin.deleteOne({ _id: adminId });
+    } catch (error) {
+        return next(error);
+    }
+
+    res.json({message: 'Admin account deleted successfully'});
+});
 module.exports = router;
