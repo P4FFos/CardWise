@@ -95,7 +95,7 @@ CardWise is a tool that utilises cards for learning purposes. The user creates d
 
 ### Entity-Relationship (ER) Diagram
 
-![ER Diagram](./images/er_diagram.png)
+![ER Diagram](./images/ER.drawio.png)
 
 ## Teaser (MS3)
 
