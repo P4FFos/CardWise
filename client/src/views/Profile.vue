@@ -37,6 +37,20 @@
           </form>
         </div>
 
+        <div>
+          <p>Email Configuration</p>
+          <form @submit.prevent="updateEmailConfig">
+            <label for="newTypeOfEmail">Notification Type:</label>
+            <select v-model="newTypeOfEmail">
+              <option value="reminder">Reminder</option>
+              <option value="none">None</option>
+            </select>
+            <label for="newTimeIntervall">Time Interval:</label>
+            <input type="number" v-model="newTimeInterval">
+            <button type="submit" class="button">Update Email Config</button>
+          </form>
+        </div>
+
         <button @click="deleteAccount" class="delete-account-button">Delete Account</button>
 
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
@@ -56,10 +70,13 @@ export default {
         email: '',
         lastLoginDate: new Date(),
         registrationDate: new Date(),
+        notifications: '',
+        reminderInterval: 1,
         streak: 0
       },
       newUsername: '',
       newEmail: '',
+      newTypeOfEmail: 'reminder',
       newPassword: '',
       errorMessage: '',
       successMessage: '',
@@ -75,11 +92,15 @@ export default {
         this.user = {
           ...response.data.user,
           lastLoginDate: new Date(response.data.user.lastLoginDate).toLocaleString(),
-          registrationDate: new Date(response.data.user.registrationDate).toLocaleString()
+          registrationDate: new Date(response.data.user.registrationDate).toLocaleString(),
+          notifications: response.data.user.notifications || 'reminder',
+          reminderInterval: response.data.user.reminderInterval || 1
         }
         this.links = response.data._links
         this.newEmail = this.user.email
         this.newUsername = this.user.username
+        this.newTypeOfEmail = this.user.notifications
+        this.newTimeInterval = this.user.reminderInterval
       } catch (error) {
         this.errorMessage = 'Failed to get user data'
       }
@@ -115,6 +136,20 @@ export default {
         this.getUserData()
       } catch (error) {
         this.errorMessage = 'Failed to update password'
+      }
+    },
+    async updateEmailConfig() {
+      try {
+        const updateUrl = this.links['update email config'].href
+        console.log(updateUrl)
+        await Api.patch(updateUrl, {
+          notifications: this.newTypeOfEmail,
+          reminderInterval: this.newTimeInterval
+        })
+        this.successMessage = 'Email configuration updated successfully'
+        this.getUserData()
+      } catch (error) {
+        this.errorMessage = 'Failed to update email configuration'
       }
     },
     async deleteAccount() {
