@@ -1,10 +1,11 @@
 <template>
   <div class="achievementsContainer">
     <p class="goToMain" @click="goToMain"> Go back</p>
+    <img class="goBackIcon" @click="goToMain" src="../assets/icons/backButton.svg" alt="Logo"/>
     <b-container class="achievementsPage">
     <h1 class="fontForTopText">Achievements</h1>
       <div id="achievements-list">
-        <div v-for="achievement in this.achievements"
+        <div class="achievement" v-for="achievement in this.achievements"
            :key="achievement._id"
            :class="{'achievement-completed': achievement.completed, 'achievement': true}">
           <h2 class="fontForAchievementsName">Achievement: {{ achievement.name }}</h2>
@@ -39,32 +40,11 @@ export default {
 
         if (response.data && Array.isArray(response.data.achievements)) {
           this.achievements = response.data.achievements
-          console.log(this.achievements)
         } else {
-          console.log('No achievements found')
+          alert('No achievements found')
         }
       } catch (error) {
         alert('Failed to fetch achievements: ' + error.message)
-      }
-    },
-    async completeAchievement(achievementId) {
-      const userID = localStorage.getItem('userId')
-      if (!userID) {
-        alert('Failed to fetch user')
-        return
-      }
-      try {
-        await Api.put(`/v1/users/${userID}/achievements/${achievementId}`, {
-          completed: true
-        })
-        console.log(`Achievement ${achievementId} completed`)
-        const achievement = this.achievements.find(a => a._id === achievementId)
-        if (achievement) {
-          achievement.completed = true
-        }
-        alert('achievement completed')
-      } catch (error) {
-        alert('Failed to complete achievement: ' + error.message)
       }
     },
     goToMain() {
@@ -78,8 +58,8 @@ export default {
 </script>
 
 <style scoped>
-  .achievementsContainer, .go-back {
-      -moz-osx-font-smoothing: grayscale;
+  .goBackIcon{
+     display: none;
   }
 
   h1 {
@@ -89,12 +69,17 @@ export default {
     margin-bottom: 20px;
   }
 
+  .achievement{
+    width: 95%;
+  }
+
   .achievementsContainer {
     display: flex;
     justify-content: center;
     width: 100%;
     flex-direction: column;
     min-height: 100vh;
+    position: fixed;
   }
 
   .achievementsPage {
@@ -113,6 +98,8 @@ export default {
     margin-top: 20px;
     gap: 20px;
     width: 50%;
+    overflow-y: auto;
+    max-height: 520px;
   }
 
   .achievement {
@@ -148,10 +135,10 @@ export default {
     }
 
   .goToMain{
-    font-size: 24px;
+    font-size: 30px;
     font-weight: 600;
     color: #363529;
-    margin: 1.5% 3% 1% 4%;
+    margin: 1.5% 3% 1% 3%;
     text-align: left;
   }
 
@@ -165,8 +152,17 @@ export default {
       width: 100%;
     }
 
+    .goBackIcon{
+       display: block;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 10%;
+    }
+
     #achievements-list {
       width: 100%;
+      max-height: 640px;
       padding: 0 10px;
     }
 

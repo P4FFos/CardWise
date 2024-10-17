@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-  <img class="mainLogo" src="../assets/logos/mainLogo.svg" alt="Logo"/>
+  <img class="mainLogo" @click="goToStart" src="../assets/logos/mainLogo.svg" alt="Logo"/>
   <hr class="thick-separator-login-pc"/>
   <div class="pcScreen-container">
     <form class="registrationForm" @submit.prevent="register">
@@ -43,7 +43,6 @@ export default {
   },
   methods: {
     async register() {
-      console.log('username: ', this.username)
       try {
         const response = await Api.post('/v1/users', {
           username: this.username,
@@ -57,6 +56,9 @@ export default {
       } catch (error) {
         this.errorMessage = error.response.data.message
       }
+    },
+    goToStart() {
+      this.$router.push({ name: 'start-page' })
     }
   }
 }
@@ -85,6 +87,11 @@ export default {
     border: none;
   }
 
+  .usernameLabel, .emailLabel, .passwordLabel {
+    margin-top: 1%;
+    margin-bottom: 1%;
+  }
+
   .signup-button {
     width: 20%;
     margin-top: 4%;
@@ -93,6 +100,7 @@ export default {
 
   .login-link {
     color: #7CB6B2;
+    text-decoration: none;
   }
 
   .booksLogo {
@@ -170,6 +178,7 @@ export default {
 
   .login-link {
     color: #7CB6B2;
+    text-decoration: none;
   }
 
   .booksLogo {

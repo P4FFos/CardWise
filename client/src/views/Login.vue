@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div>
-      <img class="main-logo" src="../assets/logos/mainLogo.svg" alt="Logo"/>
+      <img class="main-logo" @click="goToStart" src="../assets/logos/mainLogo.svg" alt="Logo"/>
       <hr class="thick-separator-loginPC"/>
     </div>
     <div class="pc-login-form">
@@ -79,7 +79,7 @@ export default {
       const currentDate = new Date()
       const lastStreakDate = new Date(user.lastStreakDate || 0)
 
-      const oneDay = 24 * 60 * 60 * 1000
+      const oneDay = 24
 
       this.streak = user.streak || 0
 
@@ -108,7 +108,7 @@ export default {
           streak: this.streak
         })
       } catch (error) {
-        console.error('Failed to update user streak:', error)
+        alert('Failed to update user streak')
       }
     },
     async completeAchievement(userId, achievementCode) {
@@ -116,10 +116,13 @@ export default {
         await Api.put(`/v1/users/${userId}/achievements/${achievementCode}`, {
           completed: true
         })
-        console.log(`Achievement ${achievementCode} completed!`)
+        alert(`Achievement ${achievementCode} completed!`)
       } catch (error) {
-        console.error(`Failed to complete achievement ${achievementCode}:`, error)
+        alert(`Failed to complete achievement ${achievementCode}`)
       }
+    },
+    goToStart() {
+      this.$router.push({ name: 'start-page' })
     }
   }
 }
@@ -147,6 +150,11 @@ export default {
     border: none;
   }
 
+  .username-label, .password-label {
+    margin-top: 1%;
+    margin-bottom: 1%;
+  }
+
   .login-button {
     width: 20%;
     margin-top: 4%;
@@ -155,9 +163,8 @@ export default {
 
   .handsWithTextLogo {
     display: block;
-    margin-left: 14%;
     margin-top: 15%;
-    width: 80%;
+    width: 130%;
   }
 
   .main-logo {

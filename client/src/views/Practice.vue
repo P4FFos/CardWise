@@ -1,11 +1,8 @@
 <template>
   <div class="practiceContainer">
+    <img class="goBackIcon" @click="goToDeck" src="../assets/icons/backButton.svg" alt="Logo"/>
     <div class="backButtonContainer">
-      <router-link :to="{ name: 'deck', params: { deckId: this.deckId } }">
-          <button class="fontForPracticeText" id="backToDeck">
-            Go back
-          </button>
-        </router-link>
+      <p class="goToDeck" @click="goToDeck"> Go back</p>
     </div>
         <b-container class="practicePage">
         <h1>Practice</h1>
@@ -15,13 +12,11 @@
                 <p class="fontForPracticeText" v-if="!showExplanation"> {{ currentCard.content }}</p>
                 <p class="fontForPracticeText" :class="getTextClass" v-else>{{ currentCard.explanation }}</p>
                 <button  class="practiceButtons" v-if="!showExplanation" @click="showExplanation = true">
-                  <p class="fontForPracticeText">
                     Explanation
-                  </p>
                 </button>
                 <div class="difficultyButtonsBox" v-else>
-                  <button class="practiceButtons" @click="handleCard('easy')"><p>Easy</p></button>
-                  <button class="practiceButtons" @click="handleCard('hard')"><p>Hard</p></button>
+                  <button class="practiceButtons" @click="handleCard('easy')">Easy</button>
+                  <button class="practiceButtons" @click="handleCard('hard')">Hard</button>
                 </div>
               </b-col>
             </b-row>
@@ -30,7 +25,7 @@
           <p class="cardsDifficultyText">Understood: {{ this.easyCards.length }}</p>
           <p class="cardsDifficultyText">Repeat: {{ this.hardCards.length }}</p>
           <div v-if="!currentCard">
-            <p>All cards completed for this practice round</p>
+            <p class="passTestAlert">All cards completed for this practice round</p>
           </div>
         </b-container>
     </div>
@@ -80,7 +75,7 @@ export default {
         this.practiceCards = response.data.deck.cards
         this.nextCard()
       } catch (error) {
-        console.error('Error fetching cards from deck: ', error)
+        alert('Error fetching cards from deck')
       }
     },
     handleCard(difficulty) {
@@ -103,17 +98,19 @@ export default {
         await Api.patch(`/v1/users/${userId}/decks/${this.deckId}`, {
           practiced: this.practiced
         })
-        console.log('PracticeCount after update:', this.practiced)
 
-        // complete acievement t3
+        // complete achievement t3
         if (this.practiced >= 5) {
           await Api.put(`/v1/users/${userId}/achievements/t3`, {
             completed: true
           })
         }
       } catch (error) {
-        console.error('Error updating practice counter: ', error)
+        alert('Error updating practice counter')
       }
+    },
+    goToDeck() {
+      this.$router.push({ name: 'deck' })
     }
   },
   computed: {
@@ -130,10 +127,22 @@ export default {
 
 <style scoped>
 
+.goBackIcon{
+  display: none;
+}
+
 h1 {
   font-family: 'InstrumentSerif', serif;
   color: #6A6A6A;
   margin-bottom: 20px;
+}
+
+.goToDeck{
+  font-size: 30px;
+  font-weight: 600;
+  color: #363529;
+  margin: 1% 0 0 2%;
+  text-align: left;
 }
 
 .practiceContainer {
@@ -151,6 +160,7 @@ h1 {
   position: absolute;
   top: 1em;
   left: 1em;
+  width: 100%;
 }
 
 .practicePage {
@@ -185,25 +195,37 @@ h1 {
 }
 
 .practiceButtons {
-  background-color: #EA9944;
   width: 6em;
+  height: 30px;
 }
 
 .practiceButtons p {
   font-size: medium;
 }
 
+.passTestAlert{
+  color: #EA9944;
+}
+
 /* Responsive Styling */
 @media (max-width: 768px) {
+  .goToDeck{
+    display: none;
+  }
+
+  .goBackIcon{
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 10%;
+  }
+
   .backButtonContainer {
     justify-content: center;
     position: relative;
     top: 0;
     left: 0;
-  }
-
-  #backToDeck {
-    width: 10em;
   }
 
   .cardsDifficultyText {
