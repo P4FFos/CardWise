@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "c9c3f5ff-c4cc-48c0-8c17-64aaa7aa038b",
+		"_postman_id": "b18f18c5-b236-463c-9240-9edb819dd01d",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38409323"
+		"_exporter_id": "38095200"
 	},
 	"item": [
 		{
@@ -16,9 +16,9 @@
 							"let currentDate = new Date().toISOString();",
 							"pm.environment.set(\"registrationDate\", currentDate);",
 							"pm.environment.set(\"lastLoginDate\", currentDate);",
-							"pm.environment.set(\"username\", \"user1\");",
-							"pm.environment.set(\"password\", \"password1\");",
-							"pm.environment.set(\"email\", \"email1\");",
+							"pm.environment.set(\"username\", \"user\");",
+							"pm.environment.set(\"password\", \"password\");",
+							"pm.environment.set(\"email\", \"email\");",
 							""
 						],
 						"type": "text/javascript",
@@ -40,13 +40,13 @@
 							"    pm.expect(jsonData.user).to.have.property(\"_id\");",
 							"});",
 							"pm.test(\"Response contains username\", function () {",
-							"    pm.expect(jsonData.user).to.have.property(\"username\", \"user1\");",
+							"    pm.expect(jsonData.user).to.have.property(\"username\", \"user\");",
 							"});",
 							"pm.test(\"Response contains password\", function () {",
-							"    pm.expect(jsonData.user).to.have.property(\"password\", \"password1\");",
+							"    pm.expect(jsonData.user).to.have.property(\"password\", \"password\");",
 							"});",
 							"pm.test(\"Response contains email\", function () {",
-							"    pm.expect(jsonData.user).to.have.property(\"email\", \"email1\");",
+							"    pm.expect(jsonData.user).to.have.property(\"email\", \"email\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -87,8 +87,8 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"username\", \"admin6\");",
-							"pm.environment.set(\"password\", \"password6\");",
+							"pm.environment.set(\"username\", \"admin\");",
+							"pm.environment.set(\"password\", \"password\");",
 							""
 						],
 						"type": "text/javascript",
@@ -112,12 +112,12 @@
 							"",
 							"pm.test(\"Response contains username\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.have.property(\"username\", \"admin6\");",
+							"    pm.expect(jsonData).to.have.property(\"username\", \"admin\");",
 							"});",
 							"",
 							"pm.test(\"Response contains password\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.have.property(\"password\", \"password6\");",
+							"    pm.expect(jsonData).to.have.property(\"password\", \"password\");",
 							"});"
 						],
 						"type": "text/javascript",
