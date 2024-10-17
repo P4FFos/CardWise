@@ -14,6 +14,11 @@ var userSchema = new Schema({
   streak: { type: Number, default: 0 },
   password: { type: String },
   email: { type: String },
+  emailSettings: {
+    notifications: { type: String, enum: ['reminder', 'none'], default: 'none'},
+    reminderInterval: { type: Number, default: 1},
+    lastReminderSent: { type: Date}
+  },
   achievements: [userAchievementSchema],
   decks: [{type: Schema.Types.ObjectId, ref: "deck"}]
 });
