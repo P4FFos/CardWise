@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c2f66756-59af-4155-a785-c1c92f7d34d5",
+		"_postman_id": "acbb91f5-72f1-431f-9eb9-5595afaf8b93",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "38409323"
@@ -16,9 +16,9 @@
 							"let currentDate = new Date().toISOString();",
 							"pm.environment.set(\"registrationDate\", currentDate);",
 							"pm.environment.set(\"lastLoginDate\", currentDate);",
-							"pm.environment.set(\"username\", \"user1\");",
-							"pm.environment.set(\"password\", \"password1\");",
-							"pm.environment.set(\"email\", \"email1\");",
+							"pm.environment.set(\"username\", \"user\");",
+							"pm.environment.set(\"password\", \"password\");",
+							"pm.environment.set(\"email\", \"email\");",
 							""
 						],
 						"type": "text/javascript",
@@ -40,13 +40,13 @@
 							"    pm.expect(jsonData.user).to.have.property(\"_id\");",
 							"});",
 							"pm.test(\"Response contains username\", function () {",
-							"    pm.expect(jsonData.user).to.have.property(\"username\", \"user1\");",
+							"    pm.expect(jsonData.user).to.have.property(\"username\", \"user\");",
 							"});",
 							"pm.test(\"Response contains password\", function () {",
-							"    pm.expect(jsonData.user).to.have.property(\"password\", \"password1\");",
+							"    pm.expect(jsonData.user).to.have.property(\"password\", \"password\");",
 							"});",
 							"pm.test(\"Response contains email\", function () {",
-							"    pm.expect(jsonData.user).to.have.property(\"email\", \"email1\");",
+							"    pm.expect(jsonData.user).to.have.property(\"email\", \"email\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -87,8 +87,8 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"username\", \"admin6\");",
-							"pm.environment.set(\"password\", \"password6\");",
+							"pm.environment.set(\"username\", \"admin1\");",
+							"pm.environment.set(\"password\", \"password1\");",
 							""
 						],
 						"type": "text/javascript",
@@ -112,12 +112,12 @@
 							"",
 							"pm.test(\"Response contains username\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.have.property(\"username\", \"admin6\");",
+							"    pm.expect(jsonData).to.have.property(\"username\", \"admin1\");",
 							"});",
 							"",
 							"pm.test(\"Response contains password\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.have.property(\"password\", \"password6\");",
+							"    pm.expect(jsonData).to.have.property(\"password\", \"password1\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1205,59 +1205,7 @@
 			"response": []
 		},
 		{
-			"name": "POST new test achievement",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = JSON.parse(pm.response.text());\r",
-							"pm.environment.set(\"test_achievement_id\", jsonData.achievement._id);\r",
-							"\r",
-							"pm.test(\"Resource is CREATED\", function(){\r",
-							"    pm.response.to.have.status(201);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Response should be a valid TestAchievement\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.achievement.type).to.eql(\"TestAchievement\");\r",
-							"    pm.expect(jsonData.achievement).to.have.property(\"name\", \"Pass 5 Tests\");\r",
-							"    pm.expect(jsonData.achievement).to.have.property(\"condition\", \"Pass at least 5 tests\");\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"type\": \"TestAchievement\",\r\n  \"name\": \"Pass 5 Tests\",\r\n  \"condition\": \"Pass at least 5 tests\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{host}}/api/v1/achievements",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"achievements"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST new user-specific test achievement",
+			"name": "POST new user-specific achievement",
 			"event": [
 				{
 					"listen": "test",
@@ -1271,9 +1219,8 @@
 							"    const jsonData = pm.response.json();\r",
 							"    \r",
 							"    pm.expect(jsonData).to.have.property(\"achievement\");\r",
-							"    pm.expect(jsonData.achievement).to.have.property(\"_id\");\r",
 							"    pm.expect(jsonData.achievement).to.have.property(\"name\");\r",
-							"    pm.expect(jsonData.achievement).to.have.property(\"condition\");\r",
+							"    pm.expect(jsonData.achievement).to.have.property(\"description\");\r",
 							"});\r",
 							""
 						],
@@ -1286,7 +1233,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/{{test_achievement_id}}",
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/s5",
 					"host": [
 						"{{host}}"
 					],
@@ -1296,114 +1243,7 @@
 						"users",
 						"{{userID}}",
 						"achievements",
-						"{{test_achievement_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST new streak achievement",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = JSON.parse(pm.response.text());\r",
-							"pm.environment.set(\"streak_achievement_id\", jsonData.achievement._id);\r",
-							"\r",
-							"pm.test(\"Resource is CREATED\", function(){\r",
-							"    pm.response.to.have.status(201);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Response should be a valid StreakAchievement\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.achievement.type).to.eql(\"StreakAchievement\");\r",
-							"    pm.expect(jsonData.achievement).to.have.property(\"name\", \"7 Day Streak\");\r",
-							"    pm.expect(jsonData.achievement).to.have.property(\"streakCounter\", 7);\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"type\": \"StreakAchievement\",\r\n  \"name\": \"7 Day Streak\",\r\n  \"streakCounter\": 7\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{host}}/api/v1/achievements",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"achievements"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST new user-specific streak achievement",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Response should have status 201 Created\", function() {\r",
-							"    pm.response.to.have.status(201);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Response body should have achievement details\", function() {\r",
-							"    const jsonData = pm.response.json();\r",
-							"    \r",
-							"    pm.expect(jsonData).to.have.property(\"achievement\");\r",
-							"    pm.expect(jsonData.achievement).to.have.property(\"_id\");\r",
-							"    pm.expect(jsonData.achievement).to.have.property(\"name\");\r",
-							"    pm.expect(jsonData.achievement).to.have.property(\"streakCounter\");\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"type\": \"StreakAchievement\",\r\n  \"name\": \"7 Day Streak\",\r\n  \"streakCounter\": 7\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/{{streak_achievement_id}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"users",
-						"{{userID}}",
-						"achievements",
-						"{{streak_achievement_id}}"
+						"s5"
 					]
 				}
 			},
@@ -1451,114 +1291,7 @@
 			"response": []
 		},
 		{
-			"name": "GET all global achievements",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Request is CREATED\", function(){\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Response contains achievements(s)\", function(){\r",
-							"    var jsonInfo = pm.response.json();\r",
-							"    pm.expect(jsonInfo.achievements).to.be.an(\"array\");\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/api/v1/achievements",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"achievements"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET test achievement",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Request is CREATED\", function(){\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/api/v1/achievements/{{test_achievement_id}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"achievements",
-						"{{test_achievement_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET streak achievement",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Request is CREATED\", function(){\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/api/v1/achievements/{{streak_achievement_id}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"achievements",
-						"{{streak_achievement_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Complete test achievement",
+			"name": "Complete achievement",
 			"event": [
 				{
 					"listen": "test",
@@ -1566,17 +1299,8 @@
 						"exec": [
 							"var jsonInfo = pm.response.json();\r",
 							"console.log(jsonInfo);\r",
-							"// pm.test(\"Request is CREATED\", function(){\r",
-							"//     pm.response.to.have.status(200);\r",
-							"// });\r",
-							"\r",
-							"// pm.test(\"Request should complete achievement\", function(){\r",
-							"//     pm.expect(jsonInfo.achievement.completed).to.eql(true);\r",
-							"// });\r",
-							"pm.test(\"User-specific achievement not found returns 404\", function() {\r",
-							"    if (pm.response.to.have.status(404) && pm.response.json().message === \"User-specific achievement not found.\") {\r",
-							"        pm.expect(pm.response.json()).to.have.property(\"message\", \"User-specific achievement not found.\");\r",
-							"    }\r",
+							"pm.test(\"Request is CREATED\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1603,7 +1327,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/{{test_achievement_id}}",
+					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/s5",
 					"host": [
 						"{{host}}"
 					],
@@ -1613,69 +1337,7 @@
 						"users",
 						"{{userID}}",
 						"achievements",
-						"{{test_achievement_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Complete streak achievement",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonInfo = pm.response.json();\r",
-							"console.log(jsonInfo);\r",
-							"// pm.test(\"Request is CREATED\", function(){\r",
-							"//     pm.response.to.have.status(200);\r",
-							"// });\r",
-							"\r",
-							"// pm.test(\"Request should complete achievement\", function(){\r",
-							"//     pm.expect(jsonInfo.achievement.completed).to.eql(true);\r",
-							"// });\r",
-							"pm.test(\"User-specific achievement not found returns 404\", function() {\r",
-							"    if (pm.response.to.have.status(404) && pm.response.json().message === \"User-specific achievement not found.\") {\r",
-							"        pm.expect(pm.response.json()).to.have.property(\"message\", \"User-specific achievement not found.\");\r",
-							"    }\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "X-HTTP-Method-Override",
-						"value": "PUT",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"type\": \"StreakAchievement\",\r\n    \"completed\" : true\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{host}}/api/v1/users/{{userID}}/achievements/{{streak_achievement_id}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"users",
-						"{{userID}}",
-						"achievements",
-						"{{streak_achievement_id}}"
+						"s5"
 					]
 				}
 			},
@@ -1726,6 +1388,56 @@
 						"v1",
 						"users",
 						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Admin account has been deleted (200 OK)\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "DELETE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/api/v1/admins/{{adminID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"admins",
+						"{{adminID}}"
 					]
 				}
 			},

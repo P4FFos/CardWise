@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 
 var deckSchema = new Schema({
     name: {type: String },
-    cards: [{type: Schema.Types.ObjectId, ref: "card"}]
+    cards: [{type: Schema.Types.ObjectId, ref: "card"}],
+    practiced: { type: Number, default: 0 },
 });
 
 // Create derived attribute cardAmount

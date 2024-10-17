@@ -1,0 +1,38 @@
+body {
+    background-color: #DEDBCC;
+}
+
+button {
+    background-color: #7CB6B2;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 30px;
+    margin: 5px;
+    font-family: 'IriaSans', sans-serif;
+}
+
+input {
+    background-color: #DEDBCC;
+    border-radius: 7px;
+    border: 2px solid #6A6A6A;
+    font-family: 'IriaSans', sans-serif;
+}
+
+label, p {
+    font-family: 'IriaSans', sans-serif;
+    color: #6A6A6A;
+}
+
+input:focus {
+    outline: none;
+}
+
+.main {
+    position: fixed;
+    width: 100%;
+}
+
+select:focus {
+    outline: none;
+}
