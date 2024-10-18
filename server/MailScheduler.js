@@ -4,7 +4,7 @@ const NodeMailer = require('./NodeMailer')
 
 const mailer = new NodeMailer()
 
-//var millisInOneDay = 1000 * 60 * 60 * 24
+var millisInOneDay = 1000 * 60 * 60 * 24
 
 //For Testing
 //var millisInOneMin = 1000 * 60
@@ -16,7 +16,7 @@ async function sendScheduledMail() {
             if (user.emailSettings.notifications === 'reminder') {
                 const now = new Date()
                 const lastReminderSent = user.emailSettings.lastReminderSent || new Date(0)
-                const daysSinceLastReminder = Math.floor((now - lastReminderSent) / (millisInOneMin))
+                const daysSinceLastReminder = Math.floor((now - lastReminderSent) / (millisInOneDay))
             
                 //For Testing
                 //const minutesSinceLastReminder = (user.emailSettings.reminderInterval || 1) * millisInOneMin
@@ -41,5 +41,6 @@ async function sendScheduledMail() {
         console.error("Error fetching users:", error)
     }
 }
+// Run every hour
 
 module.exports = sendScheduledMail

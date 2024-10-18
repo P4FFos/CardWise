@@ -170,7 +170,7 @@ router.put('/api/v1/users/:id', async function (req, res, next) {
             },
             "update email config": {
                 "rel": "update",
-                "href": `http://localhost:${port}/api/v1/users/${userID}/email-settings`,
+                "href": `http://localhost:${port}/api/v1/users/${userId}/email-settings`,
                 "method": "PATCH"
             },
             "delete": {
@@ -217,7 +217,7 @@ router.patch('/api/v1/users/:id/', async function (req, res, next) {
             },
             "update email config": {
                 "rel": "update",
-                "href": `http://localhost:${port}/api/v1/users/${userID}/email-settings`,
+                "href": `http://localhost:${port}/api/v1/users/${userId}/email-settings`,
                 "method": "PATCH"
             },
             "delete": {
