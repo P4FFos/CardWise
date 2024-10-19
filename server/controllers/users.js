@@ -237,6 +237,7 @@ router.patch('/api/v1/users/:id/email-settings', async function (req, res, next)
     const userId = req.params.id;
     const notifications = req.body.notifications
     const reminderInterval = req.body.reminderInterval
+    const timesPerDay = req.body.timesPerDay
 
     try {
         const user = await User.findById(userId)
@@ -246,6 +247,7 @@ router.patch('/api/v1/users/:id/email-settings', async function (req, res, next)
 
         user.emailSettings.notifications = notifications || user.emailSettings.notifications
         user.emailSettings.reminderInterval = reminderInterval || user.emailSettings.reminderInterval
+        user.emailSettings.timesPerDay = timesPerDay || user.emailSettings.timesPerDay
 
         await user.save()
 
