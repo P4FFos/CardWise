@@ -47,6 +47,8 @@
             </select>
             <label for="newTimeIntervall">Time Interval:</label>
             <input type="number" v-model="newTimeInterval">
+            <label for="newTimesPerDay">Times Per Day:</label>
+            <input type="number" v-model="newTimesPerDay">
             <button type="submit" class="button">Update Email Config</button>
           </form>
         </div>
@@ -77,6 +79,8 @@ export default {
       newUsername: '',
       newEmail: '',
       newTypeOfEmail: 'reminder',
+      newTimeInterval: null,
+      newTimesPerDay: null,
       newPassword: '',
       errorMessage: '',
       successMessage: '',
@@ -94,13 +98,15 @@ export default {
           lastLoginDate: new Date(response.data.user.lastLoginDate).toLocaleString(),
           registrationDate: new Date(response.data.user.registrationDate).toLocaleString(),
           notifications: response.data.user.notifications || 'reminder',
-          reminderInterval: response.data.user.reminderInterval || 1
+          reminderInterval: response.data.user.reminderInterval || 1,
+          timesPerDay: response.data.user.timesPerDay || 1
         }
         this.links = response.data._links
         this.newEmail = this.user.email
         this.newUsername = this.user.username
         this.newTypeOfEmail = this.user.notifications
         this.newTimeInterval = this.user.reminderInterval
+        this.newTimesPerDay = this.user.timesPerDay
       } catch (error) {
         this.errorMessage = 'Failed to get user data'
       }
@@ -144,7 +150,8 @@ export default {
         console.log(updateUrl)
         await Api.patch(updateUrl, {
           notifications: this.newTypeOfEmail,
-          reminderInterval: this.newTimeInterval
+          reminderInterval: this.newTimeInterval,
+          timesPerDay: this.newTimesPerDay
         })
         this.successMessage = 'Email configuration updated successfully'
         this.getUserData()
