@@ -17,7 +17,8 @@ var userSchema = new Schema({
   emailSettings: {
     notifications: { type: String, enum: ['reminder', 'none'], default: 'none'},
     reminderInterval: { type: Number, default: 1},
-    lastReminderSent: { type: Date}
+    lastReminderSent: { type: Date},
+    timesPerDay: { type: Number, default: 1}
   },
   achievements: [userAchievementSchema],
   decks: [{type: Schema.Types.ObjectId, ref: "deck"}]
