@@ -23,6 +23,10 @@ async function sendScheduledMail() {
                     
                     const startOfToday = new Date(now.toLocaleString("sv-SE", { timeZone: 'Europe/Stockholm'}));
                     startOfToday.setHours(0,0,0,0)
+                    
+                    const startOfTomorrow = new Date(startOfToday)
+                    startOfTomorrow.setDate(startOfTomorrow.getDate() + 1)
+                    startOfTomorrow.setHours(0,0,0,0)
 
                     console.log("Entered (now - lastReminderSent) >= millisBetweenReminders) if statement")       
                     const timesPerDay = user.emailSettings.timesPerDay
@@ -31,7 +35,7 @@ async function sendScheduledMail() {
                     
                     const emailSendTimes = []
                     for (var i = 0; i < timesPerDay; i++) {
-                        const emailTime = new Date(startOfToday.getTime() + (i * millisBetweenEmails))
+                        const emailTime = new Date(startOfTomorrow.getTime() + (i * millisBetweenEmails))
                         console.log(`index: ${i}. Time: ${emailTime.toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' })}`)
                         emailSendTimes.push(emailTime)
                     }
