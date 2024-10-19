@@ -23,38 +23,19 @@ async function sendScheduledMail() {
                     
                     const startOfToday = new Date(now.toLocaleString("sv-SE", { timeZone: 'Europe/Stockholm'}));
                     startOfToday.setHours(0,0,0,0)
-                    
+
                     const startOfTomorrow = new Date(startOfToday)
                     startOfTomorrow.setDate(startOfTomorrow.getDate() + 1)
                     startOfTomorrow.setHours(0,0,0,0)
 
-                    console.log("Entered (now - lastReminderSent) >= millisBetweenReminders) if statement")       
                     const timesPerDay = user.emailSettings.timesPerDay
                     const millisBetweenEmails = millisInOneDay / timesPerDay
                     
                     
-                    const emailSendTimes = []
-                    for (var i = 0; i < timesPerDay; i++) {
-                        const emailTime = new Date(startOfTomorrow.getTime() + (i * millisBetweenEmails))
-                        console.log(`index: ${i}. Time: ${emailTime.toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' })}`)
-                        emailSendTimes.push(emailTime)
-                    }
+                    const emailSendTimes = createEmailsForTheDay(timesPerDay, startOfTomorrow, millisBetweenEmails)
+                    
+                    const emailsSent = await sendEmailsForTheDay(emailSendTimes, now, lastReminderSent, user)
 
-                    var emailsSent = 0
-                    for (const emailTime of emailSendTimes) {
-                        if (now >= emailTime && (!lastReminderSent || emailTime > lastReminderSent)) {
-                            const subject = "Reminder to practice your decks!"
-                            const content = `Hi ${user.username}!\nIt is time to practice`
-                        
-                            try {
-                                await mailer.sendEmail(user.email, subject, content)
-                                console.log(`Email has been sent to ${user.email} at ${emailTime.toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' })}` )
-                                emailsSent++
-                            } catch (error) {
-                                console.error(`Error sending email to ${user.email}: `, error)
-                            } 
-                        }
-                    }
                     if (emailsSent > 0) {
                         user.emailSettings.lastReminderSent = new Date()
                         console.log(user.emailSettings.lastReminderSent)
@@ -66,6 +47,35 @@ async function sendScheduledMail() {
     } catch (error) {
         console.error("Error fetching users:", error)
     }
+}
+
+function createEmailsForTheDay(timesPerDay, startOfTomorrow, millisBetweenEmails) {
+    const emailSendTimes = []
+    for (var i = 0; i < timesPerDay; i++) {
+        const emailTime = new Date(startOfTomorrow.getTime() + (i * millisBetweenEmails))
+        console.log(`index: ${i}. Time: ${emailTime.toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' })}`)
+        emailSendTimes.push(emailTime)
+    }
+    return emailSendTimes
+}
+
+async function sendEmailsForTheDay(emailSendTimes, now, lastReminderSent, user) {
+    var emailsSent = 0
+    for (const emailTime of emailSendTimes) {
+        if (now >= emailTime && (!lastReminderSent || emailTime > lastReminderSent)) {
+            const subject = "Reminder to practice your decks!"
+            const content = `Hi ${user.username}!\nIt is time to practice`
+        
+            try {
+                await mailer.sendEmail(user.email, subject, content)
+                console.log(`Email has been sent to ${user.email} at ${emailTime.toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' })}` )
+                emailsSent++
+            } catch (error) {
+                console.error(`Error sending email to ${user.email}: `, error)
+            } 
+        }
+    }
+    return emailsSent
 }
 // Run every hour
 
