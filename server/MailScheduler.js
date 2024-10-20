@@ -42,18 +42,10 @@ async function sendScheduledMail() {
                 for (const notificationType of notifications) {
                     if (notificationType === "reminder") {
                         emailsSentForDay += await sendEmailsForTheDay(emailSendTimes, now, lastReminderSent, user, "reminder")
-                    } else if (notificationType === "emptyDeck") {
-                        const deckContent = user.decks.cards
-                        console.log("No cards in decks: " + deckContent)
-                        if (!deckContent || deckContent.length === 0) {
-                            emailsSentForDay += await sendEmailsForTheDay(emailSendTimes, now, lastReminderSent, user, "emptyDeck")
-                        }
-                    } else if (notificationType === "noDecks") {
-                        const decks = user.decks
-                        console.log("No decks: " + decks)
-                        if (!decks || Object.keys(decks).length === 0) {
-                            emailsSentForDay += await sendEmailsForTheDay(emailSendTimes, now, lastReminderSent, user, "noDecks")
-                        }
+                    } else if (notificationType === "emptyDeck" && (!user.decks.cards || user.decks.cards.length === 0)) {
+                        emailsSentForDay += await sendEmailsForTheDay(emailSendTimes, now, lastReminderSent, user, "emptyDeck")
+                    } else if (notificationType === "noDecks" && (!user.decks || Object.keys(user.decks).length === 0)) {
+                        emailsSentForDay += await sendEmailsForTheDay(emailSendTimes, now, lastReminderSent, user, "noDecks")
                     }
                 }
                 
