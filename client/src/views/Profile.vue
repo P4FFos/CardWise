@@ -37,6 +37,40 @@
           </form>
         </div>
 
+        <div>
+          <p>Email Configuration</p>
+          <form @submit.prevent="updateEmailConfig">
+            <label for="newTimeIntervall">Time Interval (days):</label>
+            <input type="number" v-model="newTimeInterval" :disabled="notificationTypes.includes('none')">
+            <label for="newTimesPerDay">Times Per Day:</label>
+            <input type="number" v-model="newTimesPerDay" :disabled="notificationTypes.includes('none')">
+            <label for="notificationTypes">Notification Type:</label>
+            <div>
+              <label>
+                <input type="checkbox" v-model="notificationTypes" value="reminder" :disabled="notificationTypes.includes('none')">
+                Daily Practice Reminder
+              </label>
+              <br/>
+              <label>
+                <input type="checkbox" v-model="notificationTypes" value="emptyDeck" :disabled="notificationTypes.includes('none')">
+                Notify if Deck is Empty
+              </label>
+              <br/>
+              <label>
+                <input type="checkbox" v-model="notificationTypes" value="noDecks" :disabled="notificationTypes.includes('none')">
+                Notify if No Decks Available
+              </label>
+              <br/>
+              <label>
+                <input type="checkbox" v-model="notificationTypes" value="none">
+                No Reminders
+              </label>
+              <br/>
+            </div>
+            <button type="submit" class="button">Update Email Config</button>
+          </form>
+        </div>
+
         <button @click="deleteAccount" class="delete-account-button">Delete Account</button>
 
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
@@ -56,10 +90,15 @@ export default {
         email: '',
         lastLoginDate: new Date(),
         registrationDate: new Date(),
+        notifications: [],
+        reminderInterval: 1,
         streak: 0
       },
       newUsername: '',
       newEmail: '',
+      notificationTypes: [],
+      newTimeInterval: null,
+      newTimesPerDay: null,
       newPassword: '',
       errorMessage: '',
       successMessage: '',
@@ -75,11 +114,17 @@ export default {
         this.user = {
           ...response.data.user,
           lastLoginDate: new Date(response.data.user.lastLoginDate).toLocaleString(),
-          registrationDate: new Date(response.data.user.registrationDate).toLocaleString()
+          registrationDate: new Date(response.data.user.registrationDate).toLocaleString(),
+          notifications: response.data.user.notifications || [],
+          reminderInterval: response.data.user.reminderInterval || 1,
+          timesPerDay: response.data.user.timesPerDay || 1
         }
         this.links = response.data._links
         this.newEmail = this.user.email
         this.newUsername = this.user.username
+        this.newTimeInterval = this.user.reminderInterval
+        this.newTimesPerDay = this.user.timesPerDay
+        this.notificationTypes = this.user.notifications
       } catch (error) {
         this.errorMessage = 'Failed to get user data'
       }
@@ -115,6 +160,21 @@ export default {
         this.getUserData()
       } catch (error) {
         this.errorMessage = 'Failed to update password'
+      }
+    },
+    async updateEmailConfig() {
+      try {
+        const updateUrl = this.links['update email config'].href
+        console.log(updateUrl)
+        await Api.patch(updateUrl, {
+          notifications: this.notificationTypes,
+          reminderInterval: this.newTimeInterval,
+          timesPerDay: this.newTimesPerDay
+        })
+        this.successMessage = 'Email configuration updated successfully'
+        this.getUserData()
+      } catch (error) {
+        this.errorMessage = 'Failed to update email configuration'
       }
     },
     async deleteAccount() {

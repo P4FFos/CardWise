@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var axios = require('axios');
+var mailer = require('../NodeMailer.js')
 var port = process.env.PORT || 3000;
 
 var User = require('../models/user.js');
@@ -107,6 +108,11 @@ router.get('/api/v1/users/:userID', async function(req, res, next) {
                     "href":`http://localhost:${port}/api/v1/users/${userID}`,
                     "method": "PATCH"
                 },
+                "update email config": {
+                    "rel": "update",
+                    "href": `http://localhost:${port}/api/v1/users/${userID}/email-settings`,
+                    "method": "PATCH"
+                },
                 "delete": {
                     "rel": "delete",
                     "href":`http://localhost:${port}/api/v1/users/${userID}/decks`,
@@ -162,6 +168,11 @@ router.put('/api/v1/users/:id', async function (req, res, next) {
                 "href":`http://localhost:${port}/api/v1/users/${userId}/username`,
                 "method": "PATCH"
             },
+            "update email config": {
+                "rel": "update",
+                "href": `http://localhost:${port}/api/v1/users/${userId}/email-settings`,
+                "method": "PATCH"
+            },
             "delete": {
                 "rel": "delete",
                 "href":`http://localhost:${port}/api/v1/users/${userId}`,
@@ -204,6 +215,11 @@ router.patch('/api/v1/users/:id/', async function (req, res, next) {
                 "href":`http://localhost:${port}/api/v1/users/${userId}`,
                 "method": "PUT"
             },
+            "update email config": {
+                "rel": "update",
+                "href": `http://localhost:${port}/api/v1/users/${userId}/email-settings`,
+                "method": "PATCH"
+            },
             "delete": {
                 "rel": "delete",
                 "href":`http://localhost:${port}/api/v1/users/${userId}`,
@@ -216,6 +232,34 @@ router.patch('/api/v1/users/:id/', async function (req, res, next) {
             }
         }});
 });
+
+router.patch('/api/v1/users/:id/email-settings', async function (req, res, next) {
+    const userId = req.params.id;
+    const notifications = req.body.notifications
+    const reminderInterval = req.body.reminderInterval
+    const timesPerDay = req.body.timesPerDay
+
+    try {
+        const user = await User.findById(userId)
+        if (!user) {
+            return res.status(404).json({message: 'User cannot be found'})
+        }
+
+        user.emailSettings.notifications = notifications || user.emailSettings.notifications
+        user.emailSettings.reminderInterval = reminderInterval || user.emailSettings.reminderInterval
+        user.emailSettings.timesPerDay = timesPerDay || user.emailSettings.timesPerDay
+
+        await user.save()
+
+        res.status(200).json({
+            user: user,
+            message: 'Email configurations successfully updated'
+        })
+    } catch (error) {
+        return next(error)
+    }
+
+})
 
 // delete user
 router.delete('/api/v1/users/:id', async function (req, res, next) {
