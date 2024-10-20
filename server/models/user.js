@@ -15,7 +15,7 @@ var userSchema = new Schema({
   password: { type: String },
   email: { type: String },
   emailSettings: {
-    notifications: { type: String, enum: ['reminder', 'none'], default: 'none'},
+    notifications: { type: [String], enum: ['reminder', 'emptyDeck', 'noDecks', 'none'], default: 'none'},
     reminderInterval: { type: Number, default: 1},
     lastReminderSent: { type: Date},
     timesPerDay: { type: Number, default: 1}
