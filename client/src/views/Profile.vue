@@ -40,15 +40,33 @@
         <div>
           <p>Email Configuration</p>
           <form @submit.prevent="updateEmailConfig">
-            <label for="newTypeOfEmail">Notification Type:</label>
-            <select v-model="newTypeOfEmail">
-              <option value="reminder">Reminder</option>
-              <option value="none">None</option>
-            </select>
-            <label for="newTimeIntervall">Time Interval:</label>
-            <input type="number" v-model="newTimeInterval">
+            <label for="newTimeIntervall">Time Interval (days):</label>
+            <input type="number" v-model="newTimeInterval" :disabled="notificationTypes.includes('none')">
             <label for="newTimesPerDay">Times Per Day:</label>
-            <input type="number" v-model="newTimesPerDay">
+            <input type="number" v-model="newTimesPerDay" :disabled="notificationTypes.includes('none')">
+            <label for="notificationTypes">Notification Type:</label>
+            <div>
+              <label>
+                <input type="checkbox" v-model="notificationTypes" value="reminder" :disabled="notificationTypes.includes('none')">
+                Daily Practice Reminder
+              </label>
+              <br/>
+              <label>
+                <input type="checkbox" v-model="notificationTypes" value="emptyDeck" :disabled="notificationTypes.includes('none')">
+                Notify if Deck is Empty
+              </label>
+              <br/>
+              <label>
+                <input type="checkbox" v-model="notificationTypes" value="noDecks" :disabled="notificationTypes.includes('none')">
+                Notify if No Decks Available
+              </label>
+              <br/>
+              <label>
+                <input type="checkbox" v-model="notificationTypes" value="none">
+                No Reminders
+              </label>
+              <br/>
+            </div>
             <button type="submit" class="button">Update Email Config</button>
           </form>
         </div>
@@ -72,13 +90,13 @@ export default {
         email: '',
         lastLoginDate: new Date(),
         registrationDate: new Date(),
-        notifications: '',
+        notifications: [],
         reminderInterval: 1,
         streak: 0
       },
       newUsername: '',
       newEmail: '',
-      newTypeOfEmail: 'reminder',
+      notificationTypes: [],
       newTimeInterval: null,
       newTimesPerDay: null,
       newPassword: '',
@@ -97,16 +115,16 @@ export default {
           ...response.data.user,
           lastLoginDate: new Date(response.data.user.lastLoginDate).toLocaleString(),
           registrationDate: new Date(response.data.user.registrationDate).toLocaleString(),
-          notifications: response.data.user.notifications || 'reminder',
+          notifications: response.data.user.notifications || [],
           reminderInterval: response.data.user.reminderInterval || 1,
           timesPerDay: response.data.user.timesPerDay || 1
         }
         this.links = response.data._links
         this.newEmail = this.user.email
         this.newUsername = this.user.username
-        this.newTypeOfEmail = this.user.notifications
         this.newTimeInterval = this.user.reminderInterval
         this.newTimesPerDay = this.user.timesPerDay
+        this.notificationTypes = this.user.notifications
       } catch (error) {
         this.errorMessage = 'Failed to get user data'
       }
@@ -149,7 +167,7 @@ export default {
         const updateUrl = this.links['update email config'].href
         console.log(updateUrl)
         await Api.patch(updateUrl, {
-          notifications: this.newTypeOfEmail,
+          notifications: this.notificationTypes,
           reminderInterval: this.newTimeInterval,
           timesPerDay: this.newTimesPerDay
         })
