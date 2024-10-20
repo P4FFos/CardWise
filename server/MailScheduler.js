@@ -35,7 +35,7 @@ async function sendScheduledMail() {
                 startOfTomorrow.setHours(0,0,0,0)
 
                 const millisBetweenEmails = millisInOneDay / timesPerDay
-                const emailSendTimes = createEmailsForTheDay(timesPerDay, startOfToday, millisBetweenEmails)
+                const emailSendTimes = createEmailsForTheDay(timesPerDay, startOfTomorrow, millisBetweenEmails)
                 
                 var emailsSentForDay = 0
 
