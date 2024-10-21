@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "acbb91f5-72f1-431f-9eb9-5595afaf8b93",
+		"_postman_id": "16bcafaa-cac0-4359-a6c0-8c903c8ee7d2",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38409323"
+		"_exporter_id": "38335183"
 	},
 	"item": [
 		{
@@ -361,6 +361,69 @@
 		},
 		{
 			"name": "Update user information",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = JSON.parse(pm.response.text());",
+							"",
+							"pm.test(\"Username is updated\", function () {",
+							"    pm.expect(jsonData.user.username).to.eql(\"user3\");",
+							"});",
+							"",
+							"pm.test(\"Password is updated\", function () {",
+							"    pm.expect(jsonData.user.password).to.eql(\"password3\");",
+							"});",
+							"",
+							"pm.test(\"Email is updated\", function () {",
+							"    pm.expect(jsonData.user.email).to.eql(\"email3\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "PUT",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"user3\", \n    \"password\" : \"password3\", \n    \"email\" : \"email3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/users/{{userID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user email config",
 			"event": [
 				{
 					"listen": "test",

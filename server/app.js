@@ -15,6 +15,7 @@ var achievementsController = require('./controllers/achievements.js');
 var usersController = require('./controllers/users.js');
 var cardsController = require('./controllers/cards.js');
 var adminsController = require('./controllers/admins.js');
+var sendScheduledMail = require('./MailScheduler.js')
 
 // Connect to MongoDB
 mongoose.connect(mongoURI).catch(function(err) {
@@ -48,6 +49,11 @@ app.use(achievementsController);
 app.use(usersController);
 app.use(cardsController);
 app.use(adminsController);
+
+//Checks every hour
+setInterval(sendScheduledMail, 3600000)
+//For Testing (checks every minute)
+//setInterval(sendScheduledMail, 60000);
 
 app.get('/api', function(req, res) {
     res.json({'message': 'Welcome to the CARDWISE!'});
