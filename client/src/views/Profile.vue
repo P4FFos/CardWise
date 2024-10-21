@@ -166,7 +166,6 @@ export default {
     async updateEmailConfig() {
       try {
         const updateUrl = this.links['update email config'].href
-        console.log(updateUrl)
         await Api.patch(updateUrl, {
           notifications: this.notificationTypes,
           reminderInterval: this.newTimeInterval,
