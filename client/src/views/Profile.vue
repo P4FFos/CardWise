@@ -1,77 +1,74 @@
 <template>
     <div class="profile-container">
-    <p class="goToMain" @click="goToMain"> Go back</p>
-      <img class="faceLogo" src="../assets/logos/face-profile.svg" alt="Logo"/>
-      <img class="goBackIcon" @click="goToMain" src="../assets/icons/backButton.svg" alt="Logo"/>
+      <p class="goToMain" @click="goToMain">Go back</p>
+      <img class="goBackIcon" @click="goToMain" src="../assets/icons/backButton.svg" alt="Logo" />
+      <img class="faceLogo" src="../assets/logos/face-profile.svg" alt="Logo" />
       <div class="profile-content">
         <h1>{{ user.username }}</h1>
-        <p class="fontForMainInfo"><strong>Streak</strong> {{ user.streak }} 🔥</p>
-
-        <h2 class="fontForHeadingText">Personal Details</h2>
-        <p class="fontForMainInfo"><strong>E-mail: </strong> {{ user.email }}</p>
-        <p class="fontForMainInfo"><strong>Last Login: </strong> {{ user.lastLoginDate }}</p>
+        <p class="fontForMainInfo"><strong>Streak:</strong> {{ user.streak }} 🔥</p>
+        <p class="fontForMainInfo"><strong>E-mail:</strong> {{ user.email }}</p>
+        <p class="fontForMainInfo"><strong>Last Login:</strong> {{ user.lastLoginDate }}</p>
         <p class="fontForRegularText">Account was created on {{ user.registrationDate }}</p>
 
         <h2 class="fontForHeadingText">Edit Profile</h2>
-        <div>
-          <form @submit.prevent="updateUsername">
-            <label for="username" class="fontForMainInfo">New Username:</label>
-            <input type="text" id="username" v-model="newUsername" required>
-            <button type="submit" class="button">Update Username</button>
-          </form>
-        </div>
-
-        <div>
-          <form @submit.prevent="updateEmail">
-            <label for="email" class="fontForMainInfo">New Email:</label>
-            <input type="email" id="email" v-model="newEmail" required>
-            <button type="submit" class="button">Update Email</button>
-          </form>
-        </div>
-
-        <div>
-          <form @submit.prevent="updatePassword">
-            <label for="newPassword" class="fontForMainInfo">New Password:</label>
-            <input type="password" id="newPassword" v-model="newPassword" required>
-            <button type="submit" class="button">Update Password</button>
-          </form>
-        </div>
-
-        <div>
-          <p>Email Configuration</p>
-          <form @submit.prevent="updateEmailConfig">
-            <label for="newTimeIntervall">Time Interval (days):</label>
-            <input type="number" v-model="newTimeInterval" :disabled="notificationTypes.includes('none')">
-            <label for="newTimesPerDay">Times Per Day:</label>
-            <input type="number" v-model="newTimesPerDay" :disabled="notificationTypes.includes('none')">
-            <label for="notificationTypes">Notification Type:</label>
-            <div>
-              <label>
-                <input type="checkbox" v-model="notificationTypes" value="reminder" :disabled="notificationTypes.includes('none')">
-                Daily Practice Reminder
-              </label>
-              <br/>
-              <label>
-                <input type="checkbox" v-model="notificationTypes" value="emptyDeck" :disabled="notificationTypes.includes('none')">
-                Notify if Deck is Empty
-              </label>
-              <br/>
-              <label>
-                <input type="checkbox" v-model="notificationTypes" value="noDecks" :disabled="notificationTypes.includes('none')">
-                Notify if No Decks Available
-              </label>
-              <br/>
-              <label>
-                <input type="checkbox" v-model="notificationTypes" value="none">
-                No Reminders
-              </label>
-              <br/>
-            </div>
-            <button type="submit" class="button">Update Email Config</button>
-          </form>
-        </div>
-
+        <form @submit.prevent="updateUsername">
+          <label for="username" class="fontForMainInfo">New Username:</label>
+          <input type="text" id="username" v-model="newUsername" required>
+          <button type="submit" class="button">Update Username</button>
+        </form>
+        <form @submit.prevent="updateEmail">
+          <label for="email" class="fontForMainInfo">New Email:</label>
+          <input type="email" id="email" v-model="newEmail" required>
+          <button type="submit" class="button">Update Email</button>
+        </form>
+        <form @submit.prevent="updatePassword">
+          <label for="newPassword" class="fontForMainInfo">New Password:</label>
+          <input type="password" id="newPassword" v-model="newPassword" required>
+          <button type="submit" class="button">Update Password</button>
+        </form>
         <button @click="deleteAccount" class="delete-account-button">Delete Account</button>
+
+        <button class="collapsible-btn" @click="toggleSection('notifications')">Notification Settings</button>
+
+        <div class="notificationsSettings">
+          <transition name="fade">
+            <div
+              v-if="activeSection === 'notifications'"
+              :class="['notification-section', activeSection === 'notifications' ? 'expanded' : 'collapsed']"
+            >
+              <form @submit.prevent="updateEmailConfig">
+                <div>
+                  <label for="newTimeIntervall" class="fontForMainInfo">Time Interval (days):</label>
+                  <input type="number" v-model="newTimeInterval" :disabled="notificationTypes.includes('none')" />
+                </div>
+                <div>
+                  <label for="newTimesPerDay" class="fontForMainInfo">Times Per Day:</label>
+                  <input type="number" v-model="newTimesPerDay" :disabled="notificationTypes.includes('none')" />
+                </div>
+                <label for="notificationTypes" class="fontForMainInfo">Notification Type:</label>
+                <div class="checkbox-container">
+                  <label>
+                    <input type="checkbox" v-model="notificationTypes" value="reminder" :disabled="notificationTypes.includes('none')" />
+                    Daily Practice Reminder
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="notificationTypes" value="emptyDeck" :disabled="notificationTypes.includes('none')" />
+                    Notify if Deck is Empty
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="notificationTypes" value="noDecks" :disabled="notificationTypes.includes('none')" />
+                    Notify if No Decks Available
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="notificationTypes" value="none" />
+                    No Reminders
+                  </label>
+                </div>
+                <button type="submit" class="button">Update Email Config</button>
+              </form>
+            </div>
+          </transition>
+        </div>
 
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
         <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
@@ -94,6 +91,7 @@ export default {
         reminderInterval: 1,
         streak: 0
       },
+      activeSection: '',
       newUsername: '',
       newEmail: '',
       notificationTypes: [],
@@ -106,6 +104,9 @@ export default {
     }
   },
   methods: {
+    toggleSection(section) {
+      this.activeSection = this.activeSection === section ? null : section
+    },
     async getUserData() {
       try {
         const userId = localStorage.getItem('userId')
@@ -199,6 +200,48 @@ export default {
 </script>
 
 <style scoped>
+
+  .notificationsSettings {
+    width: 100%;
+    position: relative;
+  }
+
+  .notification-section {
+    position: absolute;
+    left: 0;
+    padding: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    visibility: hidden;
+  }
+
+  .notification-section.expanded {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .collapsible-btn {
+    margin-bottom: 20px;
+    background-color: #f2f2f2;
+    border: none;
+    color: #363529;
+    cursor: pointer;
+    padding: 0.3em;
+    font-size: 1.25em;
+    width: 50%;
+    text-align: left;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 1.5em;
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 0.3s ease;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
+
   .goBackIcon{
     display: none;
   }
@@ -214,7 +257,7 @@ export default {
     font-weight: bold;
     margin: 0;
     margin-bottom: 1em;
-    font-size: 2em;
+    font-size: 1.5em;
   }
 
   p, .fontForMainInfo {
@@ -223,6 +266,22 @@ export default {
 
   p, .fontForRegularText {
     color: #6A6A6A;
+  }
+
+  .email-config {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .checkbox-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .checkbox-container label {
+    flex: 1 1 100%;
   }
 
   .profile-container {
@@ -244,7 +303,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    max-width: 600px;
+    max-width: 800px;
     text-align: left;
   }
 
@@ -314,46 +373,71 @@ export default {
     .fontForMainInfo {
       font-size: medium;
     }
-
-    .goToMain {
-    }
   }
 
   @media (max-width: 500px) {
-    .goToMain{
-      display: none;
+    h1 {
+        margin-top: 2em;
     }
 
-    .goBackIcon{
-      display: block;
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      width: 10%;
+    .goToMain {
+        display: none;
+    }
+
+    .goBackIcon {
+        display: block;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 10%;
     }
 
     .profile-content {
-      width: 100%;
-      display: flex;
-      align-items: center;
+        width: 100%;
+        display: flex;
+        align-items: center;
     }
 
     form {
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
     }
 
     label {
-      margin-bottom: 5px;
+        margin-bottom: 5px;
+        text-align: center;
     }
 
     input {
-      margin-bottom: 10px;
-      padding: 5px;
-      width: 100%;
-      max-width: 400px;
+        margin-bottom: 10px;
+        padding: 5px;
+        width: 100%;
+        max-width: 400px;
     }
-  }
+
+    .button {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .checkbox-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    }
+
+    .checkbox-container label {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+    .checkbox-container input[type="checkbox"] {
+        margin-right: 10px;
+    }
+}
+
 </style>
