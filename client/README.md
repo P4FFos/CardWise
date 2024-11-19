@@ -1,6 +1,3 @@
-# Client – Vue.js Frontend
-
-This [Vue.js](https://vuejs.org/) template provides sample code how to connect to the ExpressJS backend.
 
 ## Client Structure
 
@@ -20,10 +17,6 @@ This [Vue.js](https://vuejs.org/) template provides sample code how to connect t
 | [src/views/Home.vue](src/views/Home.vue) | Home page/view | Replace with your home page/view |
 | [package.json](package.json) | Project meta-information | —|
 | [vite.config.js](vite.config.js) | Vite configuration for command line builds | — |
-
-> NOTE: The (mandatory) exercises are essential for understanding this template and will *save* you time!
-
-Optional: Learn how to create such a project template in this [tutorial](https://vitejs.dev/guide/#scaffolding-your-first-vite-project).
 
 ## Requirements
 
@@ -66,11 +59,6 @@ npm run build
 npm run lint
 ```
 
-* [JavaScript Standard Style](https://standardjs.com/rules-en.html)
-* [Are Semicolons Necessary in JavaScript? (8' background explanation)](https://youtu.be/gsfbh17Ax9I)
-
-> The Vue.js community [favors](https://forum.vuejs.org/t/semicolon-less-code-my-thoughts/4229) omitting optional semicolons `;` in Javascript.
-
 ## Axios HTTP Library
 
 * [Documentation with Examples](https://github.com/axios/axios#axios)
@@ -82,16 +70,3 @@ npm run lint
   * [Link](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/link)
   * [Button](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/button)
   * [Form](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/form)
-
-> The [recommended way](https://getbootstrap.com/docs/5.3/getting-started/javascript/#usage-with-javascript-frameworks) of using Bootstrap together with framework like Vue, which assumes full knowledge of the DOM, is via a framework-specific package such as BootstrapVueNext.
-
-## Debug in VSCode with Chrome
-
-1. **[VSCode]** Set a breakpoint in your Javascript code
-2. **[Terminal]** Run `npm run serve` to serve the client
-3. **[VSCode]** Select *Debug > Start Debugging (F5)* to automatically start a debug session in Chrome[<sup>1</sup>](#1)
-4. **[Chrome]** Browse in Chrome to trigger your breakpoint and the focus will jump back to VSCode
-
-Find illustrated instructions in the [Vuejs Debug Docs](https://vuejs.org/v2/cookbook/debugging-in-vscode.html).
-
-<a class="anchor" id="1"><sup>1</sup></a> Chrome will launch with a separate user profile (not to mess up with your familiar daily Chrome profile) in a temp folder as described in the VSCode [Debugger for Chrome](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome). It is recommended to install the [vue-devtools](https://github.com/vuejs/vue-devtools) [Chrome Extension](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) there.

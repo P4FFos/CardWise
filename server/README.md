@@ -1,7 +1,3 @@
-# Server – ExpressJS Backend
-
-This [ExpressJS](https://expressjs.com/) template provides the basic infrastructure for a JSON API with MongoDB persistency with [Mongoose](https://mongoosejs.com/).
-
 ## Server Structure
 
 | File        | Purpose           | What you do?  |
@@ -14,10 +10,6 @@ This [ExpressJS](https://expressjs.com/) template provides the basic infrastruct
 | [docs/FAQ.md](docs/FAQ.md) | List of FAQs | Find answers to common questions |
 | [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | List of problems and solutions | Find solutions for common error messages |
 | [package.json](package.json) | Project meta-information | — |
-
-> NOTE: The (mandatory) exercises are essential for understanding this template and will *save* you time!
-
-Optional: Learn how to create such a project template in this [tutorial](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/skeleton_website).
 
 ## Requirements
 
@@ -56,25 +48,3 @@ Starts a new server on another port (default `3001`) and runs the `server` postm
 ```bash
 npm test
 ```
-
-> The test database is dropped before each test execution. Adjust your tests to support this clean state.
-
-## Postman Tests
-
-We use the API testing tool Postman to define example HTTP requests and test assertions. Your tests will be automatically executed in GitLab pipelines whenever you push to the `master` branch. Try to do that as often as possible.
-
-* [Set up Postman for your project](./docs/POSTMAN.md)
-
-> Remember to **export and commit** any test changes back to `tests/server.postman_collection.json` and make sure `npm test` succeeds for your final submission!
-
-## Error Handling
-
-* [Error Handling in Node.js](https://www.joyent.com/node-js/production/design/errors)
-* [Error Handling in Express.js](https://expressjs.com/en/guide/error-handling.html)
-
-## Debugging with VSCode
-
-1. Set a breakpoint by clicking on the left side of a line number
-2. Click *Run > Start Debugging* (Choose the "Debug Server" config if you opened the combined workspace)
-
-> Learn more in the [VSCode Debugging Docs](https://code.visualstudio.com/docs/editor/debugging).
