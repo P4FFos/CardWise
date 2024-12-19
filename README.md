@@ -1,14 +1,3 @@
-## Project Structure
-
-| File        | Purpose           | What you do?  |
-| ------------- | ------------- | ----- |
-| `server/` | Backend server code | All your server code |
-| [server/README.md](server/README.md) | Everything about the server | **READ ME** carefully! |
-| `client/` | Frontend client code | All your client code |
-| [client/README.md](client/README.md) | Everything about the client | **READ ME** carefully! |
-| [docs/LOCAL_DEPLOYMENT.md](docs/LOCAL_DEPLOYMENT.md) | Local production deployment | Deploy your app local in production mode |
-
-
 ## Getting started
 
 ```bash
@@ -20,12 +9,6 @@ npm run dev
 cd client && npm install
 npm run serve
 ```
-
-> Check out the detailed instructions for [backend](./server/README.md) and [frontend](./client/README.md).
-
-## Visual Studio Code (VSCode)
-
-Open the `server` and `client` in separate VSCode workspaces or open the combined [backend-frontend.code-workspace](./backend-frontend.code-workspace). Otherwise, workspace-specific settings don't work properly.
 
 ## Advanced Functionality Proposal
 During the development of this project, we realized that a notification system would be ideal for the purpose of the flashcard system. Since the system is supposed to promote learning we thought this would be a perfect way to ensure that the user of the system would be reminded to, for example, practice their new deck!
@@ -69,3 +52,8 @@ CardWise is a tool that utilises cards for learning purposes. The user creates d
 ## Teaser (MS3)
 
 ![Teaser](./images/teaser.png)
+
+## Contributors: 
+- @m4khailo
+- Danis Music
+- Daniel - @P4FFos
