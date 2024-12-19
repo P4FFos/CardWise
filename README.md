@@ -54,6 +54,6 @@ CardWise is a tool that utilises cards for learning purposes. The user creates d
 ![Teaser](./images/teaser.png)
 
 ## Contributors: 
-- @m4khailo
+- GitHub: @m4khailo
 - Danis Music
-- Daniel - @P4FFos
+- GitHub: @P4FFos
